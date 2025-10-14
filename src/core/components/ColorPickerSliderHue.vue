@@ -19,7 +19,7 @@ const hueValue = computed({
 </script>
 
 <template>
-  <SliderRoot v-model="hueValue" class="relative flex items-center select-none touch-none h-5" :max="360" :step="0.1">
+  <SliderRoot v-model="hueValue" class="relative flex items-center select-none touch-none h-5" :max="360" :step="1">
     <SliderTrack data-color-picker-hue-track class="relative grow rounded-full h-4" />
     <SliderThumb :style="{ background: thumbColor }"
       class="block w-4 h-4 rounded-full border-2 border-white shadow-[var(--elevation-thumb)] focus:outline-1 outline-[#0d99ff]"
@@ -29,7 +29,7 @@ const hueValue = computed({
 
 <style scoped>
 [data-color-picker-hue-track] {
-  box-shadow: inset rgba(0, 0, 0, 0.08) 0 0 0 1px;
+  box-shadow: inset #0000001a 0 0 0 1px;
   background: linear-gradient(to right, red, yellow, lime, cyan, blue, magenta, red);
 }
 </style>

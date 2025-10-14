@@ -25,7 +25,7 @@ const alphaValue = computed({
 
 <style scoped>
 [data-color-picker-alpha-track] {
-  box-shadow: inset rgba(0, 0, 0, 0.08) 0 0 0 1px;
+    box-shadow: inset #0000001a 0 0 0 1px;
   background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--color) 100%), repeating-conic-gradient(#ddd 0% 25%, transparent 0% 50%) 50% / 8px 8px;
 }
 </style>
