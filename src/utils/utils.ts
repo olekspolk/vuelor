@@ -1,32 +1,12 @@
-import { chunk, has } from './helpers'
-import { DEFAULT_COLOR } from './consts'
-import { Point, Gradient, Color, HSLA, RGBA, HSVA, Hex, Hexa } from './types'
+import { chunk, has } from './helpers.ts'
+import { DEFAULT_COLOR } from './consts.ts'
+import type { Point, Color, HSLA, RGBA, HSVA, Hex, Hexa } from './types.ts'
 
 export const pointsToCSSGradient = (points: Point[], angle = 135): string => {
   const colors = points
     .map(p => `rgba(${p.r},${p.g},${p.b},${p.a}) ${p.left.toFixed(2)}%`)
     .join(',')
   return `linear-gradient(${angle}deg, ${colors})`
-}
-
-export function parseGradient (str: string): Gradient {
-  const angleRegex = /([0-9]*)deg/
-  const angleResult = str.match(angleRegex)
-  const angle = angleResult ? parseInt(angleResult[1]) : 0
-  const pointRegex = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)\s*(\d+(\.\d+)?)%/g
-  const points =
-    [...str.matchAll(pointRegex)]
-    .map((item) => ({
-      r: parseInt(item[1]),
-      g: parseInt(item[2]),
-      b: parseInt(item[3]),
-      a: parseInt(item[4]),
-      left: parseFloat(item[5])
-    }))
-  return {
-    angle,
-    points
-  }
 }
 
 export function isHex (input: string): boolean {
@@ -92,7 +72,7 @@ export function HSVAtoRGBA (hsva: HSVA): RGBA {
     return v - v * s * Math.max(Math.min(k, 4 - k, 1), 0)
   }
   const rgb = [f(5), f(3), f(1)].map(v => Math.round(v * 255))
-  return { r: rgb[0], g: rgb[1], b: rgb[2], a }
+  return { r: rgb[0] as number, g: rgb[1] as number, b: rgb[2] as number, a }
 }
 
 /**
@@ -126,20 +106,19 @@ export function RGBAtoHSVA (rgba: RGBA): HSVA {
   const s = max === 0 ? 0 : (max - min) / max
   const hsv = [h, s, max]
 
-  return { h: hsv[0], s: hsv[1], v: hsv[2], a: rgba.a }
+  return { h: hsv[0] as number, s: hsv[1] as number, v: hsv[2] as number, a: rgba.a }
+}
+
+export const toHex = (v: number) => {
+  const h = Math.round(v).toString(16)
+  return ('00'.substring(0, 2 - h.length) + h).toUpperCase()
 }
 
 export function RGBAtoHex (rgba: RGBA): Hex {
-  const toHex = (v: number) => {
-    const h = Math.round(v).toString(16)
-    return ('00'.substring(0, 2 - h.length) + h).toUpperCase()
-  }
-
   return `#${[
     toHex(rgba.r),
     toHex(rgba.g),
     toHex(rgba.b),
-    toHex(Math.round(rgba.a * 255)),
   ].join('')}`
 }
 
@@ -149,12 +128,11 @@ export function RGBAtoCSS (rgba: RGBA): string {
 
 export function HexToRGBA (hex: Hex): RGBA {
   const rgba = chunk(hex.slice(1), 2).map((c: string) => parseInt(c, 16))
-
   return {
-    r: rgba[0],
-    g: rgba[1],
-    b: rgba[2],
-    a: Math.round((rgba[3] / 255) * 100) / 100,
+    r: rgba[0] as number,
+    g: rgba[1] as number,
+    b: rgba[2] as number,
+    a: Math.round((rgba[3] as number / 255) * 100) / 100,
   }
 }
 

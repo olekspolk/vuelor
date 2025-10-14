@@ -1,19 +1,19 @@
 export type Position = {
-    top: number,
-    left: number
+  top: number,
+  left: number
 }
 
 export type Point = {
-    left: number,
-    r: number,
-    g: number,
-    b: number,
-    a: number
+  left: number,
+  r: number,
+  g: number,
+  b: number,
+  a: number
 }
 
 export type Gradient = {
-    angle: number,
-    points: Point[]
+  angle: number,
+  points: Point[]
 }
 
 export type HSV = { h: number, s: number, v: number }
@@ -26,11 +26,11 @@ export type Hex = string
 export type Hexa = string
 
 export interface Color {
-    alpha: number
-    hex: Hex
-    hexa: Hexa
-    hsla: HSLA
-    hsva: HSVA
-    hue: number
-    rgba: RGBA
+  alpha: number
+  hex: Hex
+  hexa: Hexa
+  hsla: HSLA
+  hsva: HSVA
+  hue: number
+  rgba: RGBA
 }

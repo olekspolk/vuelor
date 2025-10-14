@@ -1,121 +1,80 @@
-<template>
-  <div class="color-picker_area">
-    <canvas
-      ref="canvas"
-      height="240"
-      width="240"
-    />
-    <ColorPickerPoint
-      ref="point"
-      mode="area"
-      :color="pointColor"
-      :value="position"
-      @move="handlePointMove"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
+import type { Position } from '../utils/types.ts';
+import { RGBAtoCSS } from '../utils/utils.ts';
+import ColorPickerCanvasThumb from './ColorPickerCanvasThumb.vue';
+import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
-<script lang="ts">
-import { Prop, Emit, Watch, Component, Vue } from 'vue-property-decorator';
-import { Position, Color} from './types'
-import { fromHSVA, RGBAtoCSS } from './utils'
+const rootContext = injectColorPickerContext()
+const canvas = ref<HTMLCanvasElement | null>(null);
+const ctx = ref<CanvasRenderingContext2D | null>(null);
 
-import ColorPickerPoint from './ColorPickerPoint.vue'
+const props = defineProps<{
+  class?: string;
+  step?: number;
+}>();
 
-@Component({
-  components: {
-    ColorPickerPoint
+const width = ref(208);
+const height = ref(208);
+const thumbPosition = ref({ top: 0, left: 0 });
+const thumbColor = computed(() => RGBAtoCSS({ ...rootContext.rgba.value, a: 1 }));
+
+onMounted(() => {
+  const cnv = canvas.value
+  if (cnv) {
+    ctx.value = cnv.getContext('2d')
+    width.value = cnv.width
+    height.value = cnv.height
+    updateThumbPosition()
+    updateCanvasFill()
   }
-})
-export default class ColorPickerCanvas extends Vue {
-  @Prop() readonly value!: Color
+});
 
-  ctx: CanvasRenderingContext2D | null = null
-  width: number = 240
-  height: number = 240
-  position: Position = { top: 0, left: 0 }
-  isInteracting: boolean = false
-
-  get hue (): number {
-    return this.value.hue
-  }
-
-  get pointColor (): string {
-    return RGBAtoCSS({ ...this.value.rgba, a: 1})
-  }
-
-  mounted () {
-    const canvas = this.$refs.canvas as HTMLCanvasElement
-    this.ctx = canvas.getContext('2d')
-    this.width = canvas.width
-    this.height = canvas.height
-    this.updatePointPosition()
-    this.updateCanvasFill()
-  }
-
-  handlePointMove (value: Position) {
-    this.isInteracting = true
-    const color = fromHSVA({
-      ...this.value.hsva,
-      s: value.left / 100,
-      v: (100 - value.top) / 100,
-    })
-    this.onInput(color)
-  }
-
-  updatePointPosition () {
-    if (this.isInteracting) {
-      this.isInteracting = false
-      return
-    }
-    this.position = {
-      top: 100 - this.value.hsva.v * 100,
-      left: this.value.hsva.s * 100
-    }
-  }
-
-  updateCanvasFill () {
-    if (!this.ctx) return
-
-    const color = `hsl(${this.value.hue},100%,50%)`
-    this.ctx.rect(0, 0, this.width, this.height)
-    this.ctx.fillStyle = color
-    this.ctx.fillRect(0, 0, this.width, this.height)
-
-    const grdWhite = this.ctx.createLinearGradient(0, 0, this.width, 0)
-    grdWhite.addColorStop(0, 'rgba(255,255,255,1)')
-    grdWhite.addColorStop(1, 'rgba(255,255,255,0)')
-    this.ctx.fillStyle = grdWhite
-    this.ctx.fillRect(0, 0, this.width, this.height)
-
-    const grdBlack = this.ctx.createLinearGradient(0, 0, 0, this.height)
-    grdBlack.addColorStop(0, 'rgba(0,0,0,0)')
-    grdBlack.addColorStop(1, 'rgba(0,0,0,1)')
-    this.ctx.fillStyle = grdBlack
-    this.ctx.fillRect(0, 0, this.width, this.height)
-  }
-
-  @Emit('input')
-  onInput (value: Color) {
-    return value
-  }
-
-  @Watch('hue')
-  onHueChanged () {
-    this.updateCanvasFill()
-  }
-
-  @Watch('value')
-  onValueChanged () {
-    this.updatePointPosition()
+function handleThumbMove(value: Position) {
+  rootContext.hsva.value = {
+    ...rootContext.hsva.value,
+    s: value.left / 100,
+    v: (100 - value.top) / 100,
   }
 }
+
+function updateThumbPosition() {
+  thumbPosition.value = {
+    top: 100 - rootContext.hsva.value.v * 100,
+    left: rootContext.hsva.value.s * 100
+  }
+}
+
+function updateCanvasFill() {
+  if (!ctx.value) return
+
+  const color = `hsl(${rootContext.hsva.value.h},100%,50%)`
+  ctx.value.rect(0, 0, width.value, height.value)
+  ctx.value.fillStyle = color
+  ctx.value.fillRect(0, 0, width.value, height.value)
+
+  const grdWhite = ctx.value.createLinearGradient(0, 0, width.value, 0)
+  grdWhite.addColorStop(0, 'rgba(255,255,255,1)')
+  grdWhite.addColorStop(1, 'rgba(255,255,255,0)')
+  ctx.value.fillStyle = grdWhite
+  ctx.value.fillRect(0, 0, width.value, height.value)
+
+  const grdBlack = ctx.value.createLinearGradient(0, 0, 0, height.value)
+  grdBlack.addColorStop(0, 'rgba(0,0,0,0)')
+  grdBlack.addColorStop(1, 'rgba(0,0,0,1)')
+  ctx.value.fillStyle = grdBlack
+  ctx.value.fillRect(0, 0, width.value, height.value)
+}
+
+watch(() => rootContext.hsva.value.h, updateCanvasFill)
+watch(() => rootContext.hsva.value, updateThumbPosition, { immediate: true })
 </script>
 
-<style scoped>
-.color-picker_area {
-  position: relative;
-  height: 240px;
-  width: 240px;
-}
-</style>
+<template>
+  <div class="relative">
+    <canvas class="rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-[#0000001a]" ref="canvas"
+      :height="height" :width="width" />
+    <ColorPickerCanvasThumb :step="props.step" :color="thumbColor" :modelValue="thumbPosition"
+      @move="handleThumbMove" />
+  </div>
+</template>
