@@ -6,8 +6,8 @@ const color = ref<string>('#ffffffff')
 provide('color', color)
 
 const menuItems = [
-  { name: 'Regular', path: '/' },
   { name: 'Mini', path: '/mini' },
+  { name: 'Regular', path: '/' },
   { name: 'Pro', path: '/pro' },
   { name: 'Max', path: '/max' },
 ]
