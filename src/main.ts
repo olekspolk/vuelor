@@ -1,5 +1,8 @@
-import { createApp } from 'vue'
-import ColorPicker from './ColorPicker.vue'
 import './index.css'
+import { createApp } from 'vue'
+import { router } from './router'
+import App from './App.vue'
 
-createApp(ColorPicker).mount('#app')
+const app = createApp(App)
+app.use(router)
+app.mount('#app')

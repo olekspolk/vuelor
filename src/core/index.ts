@@ -1,0 +1,7 @@
+export { default as ColorPickerRoot } from '../core/components/ColorPickerRoot.vue'
+export { default as ColorPickerCanvas } from '../core/components/ColorPickerCanvas.vue'
+export { default as ColorPickerSliderHue } from '../core/components/ColorPickerSliderHue.vue'
+export { default as ColorPickerSliderAlpha } from '../core/components/ColorPickerSliderAlpha.vue'
+export { default as ColorPickerInputHEX } from '../core/components/ColorPickerInputHEX.vue'
+export { default as ColorPickerInputRGB } from '../core/components/ColorPickerInputRGB.vue'
+export { default as ColorPickerInputHSL } from '../core/components/ColorPickerInputHSL.vue'
