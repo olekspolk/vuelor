@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import type { Position } from '../utils/types.ts'
+import { twMerge } from 'tailwind-merge'
 import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue'
 import { clamp, getPointerPosition } from '../utils/helpers.ts'
+import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const emit = defineEmits(['move'])
 
 const instance = getCurrentInstance()
+const rootContext = injectColorPickerContext()
 
 interface Props {
   modelValue: Position
@@ -79,7 +82,6 @@ function handleMousemove(event: MouseEvent) {
 function handleKeydown(event: KeyboardEvent) {
   let flag = false
   const step = event.shiftKey ? props.step * 10 : props.step
-  console.log(step)
   switch (event.key) {
     case 'ArrowUp':
       pos.value.y = clamp(pos.value.y - step, 0, bounding.value.height)
@@ -115,8 +117,10 @@ watch(() => props.modelValue, (value: Position) => setPosition(value))
 </script>
 
 <template>
-  <div :style="styles" tabindex="0"
-    class="absolute top-0 left-0 w-4 h-4 rounded-full shadow-[var(--elevation-thumb)] border-2 border-white focus:outline-1 outline-[#0d99ff]"
-    @keydown="handleKeydown">
-  </div>
+  <div
+    :style="styles"
+    tabindex="0"
+    :class="twMerge(rootContext.ui.slider.thumb, 'absolute top-0 left-0')"
+    @keydown="handleKeydown"
+  />
 </template>
