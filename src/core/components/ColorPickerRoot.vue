@@ -42,11 +42,11 @@ const hsva = ref<HSVA>({
   a: 0.5
 })
 
-const alpha = ref<number>(1)
+const alpha = ref<number>(100)
 
 const rgba = computed<RGBA>(() => HSVAtoRGBA(hsva.value))
 const hex = computed<Hexa>(() => RGBAtoHex(rgba.value))
-const hexa = computed<Hexa>(() => hex.value + toHex(alpha.value * 255))
+const hexa = computed<Hexa>(() => hex.value + toHex(alpha.value * 255 / 100))
 
 watch(() => hexa.value, (newVal: string) => {
   emit('update:modelValue', newVal)

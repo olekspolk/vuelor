@@ -15,7 +15,7 @@ const alphaValue = computed({
 
 <template>
   <SliderRoot :style="{ '--color': rootContext.hex.value }" v-model="alphaValue"
-    class="relative flex items-center select-none touch-none h-5" :max="1" :step="0.01">
+    class="relative flex items-center select-none touch-none h-5" :max="100" :step="1">
     <SliderTrack data-color-picker-alpha-track class="relative grow rounded-full h-4" />
     <SliderThumb :style="{ backgroundColor: rootContext.hexa.value }"
       class="block w-4 h-4 rounded-full border-2 border-white shadow-[var(--elevation-thumb)] focus:outline-1 outline-[#0d99ff]"

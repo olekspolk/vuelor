@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, inject } from 'vue'
+import { ref, computed, inject } from 'vue'
 import {
   SelectContent,
   SelectItem,
@@ -17,13 +17,32 @@ import {
   ColorPickerEyeDropper,
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
-  ColorPickerInputHEX
+  ColorPickerInputHEX,
+  ColorPickerInputHSL,
+  ColorPickerInputRGB,
 } from '../core'
 
 const color = inject('color') as string
 
 const format = ref('Hex')
-const options = ['Hex', 'RGB', 'CSS', 'HSL', 'HSB']
+const options = [
+  {
+    label: 'Hex',
+    component: ColorPickerInputHEX
+  },
+  {
+    label: 'HSL',
+    component: ColorPickerInputHSL
+  },
+  {
+    label: 'RGB',
+    component: ColorPickerInputRGB
+  }
+]
+
+const selectedFormatInput = computed(() => {
+  return options.find(option => option.label === format.value)?.component
+})
 </script>
 
 <template>
@@ -55,21 +74,21 @@ const options = ['Hex', 'RGB', 'CSS', 'HSL', 'HSB']
               <SelectItem
                 v-for="(option, index) in options"
                 :key="index"
+                :value="option.label"
                 class="text-xs leading-none text-white rounded-[5px] flex items-center h-[25px] pl-6 pr-2 relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#0d99ff]"
-                :value="option"
-              >
+                >
                 <SelectItemIndicator class="absolute left-1 inline-flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="#fff" fill-opacity="1" fill-rule="nonzero" stroke="none" d="M13.207 5.207 7 11.414 3.292 7.707l1.415-1.414L7 8.586l4.793-4.793z"></path></svg>
                 </SelectItemIndicator>
                 <SelectItemText>
-                  {{ option }}
+                  {{ option.label }}
                 </SelectItemText>
               </SelectItem>
             </SelectViewport>
           </SelectContent>
         </SelectPortal>
       </SelectRoot>
-      <ColorPickerInputHEX class="w-[144px]" />
+      <component :is="selectedFormatInput" class="w-[144px]" />
     </div>
   </ColorPickerRoot>
 </template>
