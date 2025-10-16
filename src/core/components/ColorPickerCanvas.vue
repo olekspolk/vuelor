@@ -72,9 +72,18 @@ watch(() => rootContext.hsva.value, updateThumbPosition, { immediate: true })
 
 <template>
   <div class="relative">
-    <canvas class="rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-[#0000001a]" ref="canvas"
-      :height="height" :width="width" />
-    <ColorPickerCanvasThumb :step="props.step" :color="thumbColor" :modelValue="thumbPosition"
-      @move="handleThumbMove" />
+    <canvas
+      ref="canvas"
+      class="rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-[#0000001a]"
+      :height="height"
+      :width="width"
+    />
+    <ColorPickerCanvasThumb
+      class="absolute top-0 left-0"
+      :step="props.step"
+      :color="thumbColor"
+      :modelValue="thumbPosition"
+      @move="handleThumbMove"
+    />
   </div>
 </template>

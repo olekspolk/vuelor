@@ -10,9 +10,6 @@ type ColorPickerRootContext = {
   hex: Ref<string>,
   hexa: Ref<string>,
   ui: {
-    slider: {
-      thumb: string
-    },
     input: {
       group: string,
       field: string
@@ -68,9 +65,6 @@ provideColorPickerContext({
   hex,
   hexa,
   ui: {
-    slider: {
-      thumb: 'block w-4 h-4 rounded-full border-2 border-white shadow-[var(--elevation-thumb)] focus:outline-1 outline-[#0d99ff]'
-    },
     input: {
       group: 'flex gap-[1px] rounded-[5px] hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff]',
       field: 'w-full flex-1 bg-[#f5f5f5] first:rounded-l-[5px] last:rounded-r-[5px] px-2 h-6 focus:outline-none text-[11px]'

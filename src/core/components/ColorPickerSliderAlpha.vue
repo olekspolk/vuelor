@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { twMerge } from 'tailwind-merge'
+import { tv } from 'tailwind-variants'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
+import { slider } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const rootContext = injectColorPickerContext()
@@ -12,6 +13,13 @@ const alphaValue = computed({
     rootContext.alpha.value = value as number
   },
 })
+
+const props = defineProps<{
+  class?: string,
+  ui?: Partial<typeof slider.slots>
+}>()
+
+const ui = tv(slider)()
 </script>
 
 <template>
@@ -20,15 +28,15 @@ const alphaValue = computed({
     :style="{ '--color': rootContext.hex.value }"
     :max="100"
     :step="1"
-    class="relative flex items-center select-none touch-none h-5"
+    :class="ui.root({ class: [props.ui?.root, props.class] })"
   >
     <SliderTrack
       data-color-picker-alpha-track
-      class="relative grow rounded-full h-4"
+      :class="ui.track({ class: props.ui?.track })"
     />
     <SliderThumb
       :style="{ backgroundColor: rootContext.hexa.value }"
-      :class="twMerge(rootContext.ui.slider.thumb)"
+      :class="ui.thumb({ class: props.ui?.thumb })"
       aria-label="Opacity"
     />
   </SliderRoot>

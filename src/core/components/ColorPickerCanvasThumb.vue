@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
 import type { Position } from '../utils/types.ts'
-import { twMerge } from 'tailwind-merge'
 import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue'
+import { tv } from 'tailwind-variants'
+import { slider } from '../theme'
 import { clamp, getPointerPosition } from '../utils/helpers.ts'
-import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const emit = defineEmits(['move'])
 
 const instance = getCurrentInstance()
-const rootContext = injectColorPickerContext()
 
 interface Props {
+  class?: string,
   modelValue: Position
   color: string
   step?: number
@@ -114,13 +114,15 @@ function setPosition(value: Position) {
 }
 
 watch(() => props.modelValue, (value: Position) => setPosition(value))
+
+const ui = tv(slider)()
 </script>
 
 <template>
   <div
     :style="styles"
     tabindex="0"
-    :class="twMerge(rootContext.ui.slider.thumb, 'absolute top-0 left-0')"
+    :class="ui.thumb({ class: props.class })"
     @keydown="handleKeydown"
   />
 </template>
