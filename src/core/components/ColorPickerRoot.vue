@@ -1,5 +1,4 @@
 <script lang="ts">
-import { tv } from 'tailwind-variants'
 import { createContext } from 'reka-ui'
 import type { Ref } from 'vue'
 import type { HSVA, Hexa, RGBA } from '../utils/types'
@@ -28,6 +27,8 @@ export type ColorPickerRootEmits = {
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { tv } from 'tailwind-variants'
+import { root } from '../theme'
 import { RGBAtoHex, toHex, HSVAtoRGBA } from '../utils/utils'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
@@ -62,11 +63,7 @@ provideColorPickerContext({
   hexa
 })
 
-const ui = tv({
-  slots: {
-    base: 'bg-white rounded-[13px] p-4 flex flex-col gap-2 shadow-[var(--elevation-card)]'
-  }
-})()
+const ui = tv(root)()
 </script>
 
 <template>

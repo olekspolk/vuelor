@@ -41,5 +41,3 @@ const ui = tv(input)()
     />
   </div>
 </template>
-
-<style scoped></style>
