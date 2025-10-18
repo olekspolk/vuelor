@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
-import type { Position } from '../utils/types.ts';
-import { RGBAtoCSS } from '../utils/utils.ts';
-import ColorPickerCanvasThumb from './ColorPickerCanvasThumb.vue';
+import { tv } from 'tailwind-variants'
+import { ref, computed, watch, onMounted } from 'vue'
+import type { Position } from '../utils/types.ts'
+import { RGBAtoCSS } from '../utils/utils.ts'
+import { canvas } from '../theme'
+import ColorPickerCanvasThumb from './ColorPickerCanvasThumb.vue'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const rootContext = injectColorPickerContext()
-const canvas = ref<HTMLCanvasElement | null>(null);
-const ctx = ref<CanvasRenderingContext2D | null>(null);
+const canvasRef = ref<HTMLCanvasElement | null>(null)
+const ctx = ref<CanvasRenderingContext2D | null>(null)
 
 const props = defineProps<{
-  class?: string;
-  step?: number;
-}>();
+  class?: string,
+  step?: number,
+  ui?: Partial<typeof canvas.slots>
+}>()
 
 const width = ref(208);
 const height = ref(208);
@@ -20,7 +23,7 @@ const thumbPosition = ref({ top: 0, left: 0 });
 const thumbColor = computed(() => RGBAtoCSS({ ...rootContext.rgba.value, a: 1 }));
 
 onMounted(() => {
-  const cnv = canvas.value
+  const cnv = canvasRef.value
   if (cnv) {
     ctx.value = cnv.getContext('2d')
     width.value = cnv.width
@@ -68,18 +71,19 @@ function updateCanvasFill() {
 
 watch(() => rootContext.hsva.value.h, updateCanvasFill)
 watch(() => rootContext.hsva.value, updateThumbPosition, { immediate: true })
+
+const ui = tv(canvas)()
 </script>
 
 <template>
-  <div class="relative">
+  <div :class="ui.root({ class: [props.ui?.root, props.class] })">
     <canvas
-      ref="canvas"
-      class="rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-[#0000001a]"
+      ref="canvasRef"
+      :class="ui.canvas({ class: props.ui?.canvas })"
       :height="height"
       :width="width"
     />
     <ColorPickerCanvasThumb
-      class="absolute top-0 left-0"
       :step="props.step"
       :color="thumbColor"
       :modelValue="thumbPosition"

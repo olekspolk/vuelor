@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
+import type { SliderRootProps } from 'reka-ui'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { slider } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
@@ -14,12 +15,19 @@ const alphaValue = computed({
   },
 })
 
-const props = defineProps<{
+interface SliderProps {
   class?: string,
+  orientation?: SliderRootProps['orientation'],
   ui?: Partial<typeof slider.slots>
-}>()
+}
 
-const ui = tv(slider)()
+const props = withDefaults(defineProps<SliderProps>(), {
+  orientation: 'horizontal'
+})
+
+const ui = tv(slider)({
+  orientation: props.orientation
+})
 </script>
 
 <template>

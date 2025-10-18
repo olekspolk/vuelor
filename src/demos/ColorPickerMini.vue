@@ -6,8 +6,17 @@ const color = inject('color') as string
 </script>
 
 <template>
-  <ColorPickerRoot v-model="color">
-    <ColorPickerCanvas />
-    <ColorPickerSliderHue />
-  </ColorPickerRoot>
+  <div class="flex items-center gap-4">
+    <ColorPickerRoot v-model="color">
+      <ColorPickerCanvas />
+      <ColorPickerSliderHue />
+    </ColorPickerRoot>
+    <ColorPickerRoot
+      v-model="color"
+      class="flex-row"
+    >
+      <ColorPickerCanvas />
+      <ColorPickerSliderHue orientation="vertical" />
+    </ColorPickerRoot>
+  </div>
 </template>

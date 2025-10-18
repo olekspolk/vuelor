@@ -1,4 +1,5 @@
 <script lang="ts">
+import { tv } from 'tailwind-variants'
 import { createContext } from 'reka-ui'
 import type { Ref } from 'vue'
 import type { HSVA, Hexa, RGBA } from '../utils/types'
@@ -8,18 +9,13 @@ type ColorPickerRootContext = {
   hsva: Ref<HSVA>
   rgba: Ref<RGBA>,
   hex: Ref<string>,
-  hexa: Ref<string>,
-  ui: {
-    input: {
-      group: string,
-      field: string
-    }
-  }
+  hexa: Ref<string>
 }
 
 export const [injectColorPickerContext, provideColorPickerContext] = createContext<ColorPickerRootContext>('ColorPickerRoot')
 
 export interface ColorPickerRootProps {
+  class?: string,
   disabled?: boolean,
   modelValue: string | null,
   format?: 'hex' | 'hexa' | 'rgba' | 'hsla' | 'hsl' | 'hsva' | 'hsv'
@@ -63,18 +59,18 @@ provideColorPickerContext({
   hsva,
   rgba,
   hex,
-  hexa,
-  ui: {
-    input: {
-      group: 'flex gap-[1px] rounded-[5px] hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff]',
-      field: 'w-full flex-1 bg-[#f5f5f5] first:rounded-l-[5px] last:rounded-r-[5px] px-2 h-6 focus:outline-none text-[11px]'
-    }
-  }
+  hexa
 })
+
+const ui = tv({
+  slots: {
+    base: 'bg-white rounded-[13px] p-4 flex flex-col gap-2 shadow-[var(--elevation-card)]'
+  }
+})()
 </script>
 
 <template>
-  <div class="bg-white rounded-[13px] p-4 flex flex-col gap-2 shadow-[var(--elevation-card)]">
+  <div :class="ui.base({ class: props.class })">
     <slot />
   </div>
 </template>

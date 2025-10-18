@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
+import type { SliderRootProps } from 'reka-ui'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { slider } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
@@ -19,12 +20,19 @@ const hueValue = computed({
   },
 })
 
-const props = defineProps<{
+interface SliderProps {
   class?: string,
+  orientation?: SliderRootProps['orientation'],
   ui?: Partial<typeof slider.slots>
-}>()
+}
 
-const ui = tv(slider)()
+const props = withDefaults(defineProps<SliderProps>(), {
+  orientation: 'horizontal'
+})
+
+const ui = tv(slider)({
+  orientation: props.orientation
+})
 </script>
 
 <template>
@@ -32,6 +40,7 @@ const ui = tv(slider)()
     v-model="hueValue"
     :max="360"
     :step="1"
+    :orientation="props.orientation || 'horizontal'"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
   >
     <SliderTrack
@@ -47,8 +56,12 @@ const ui = tv(slider)()
 </template>
 
 <style scoped>
-[data-color-picker-hue-track] {
+[data-orientation="horizontal"][data-color-picker-hue-track] {
   box-shadow: inset #0000001a 0 0 0 1px;
   background: linear-gradient(to right, red, yellow, lime, cyan, blue, magenta, red);
+}
+[data-orientation="vertical"][data-color-picker-hue-track] {
+  box-shadow: inset #0000001a 0 0 0 1px;
+  background: linear-gradient(to top, red, yellow, lime, cyan, blue, magenta, red);
 }
 </style>

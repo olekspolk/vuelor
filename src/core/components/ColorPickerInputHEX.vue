@@ -1,23 +1,31 @@
 <script setup lang="ts">
-import { twMerge } from 'tailwind-merge'
+import { tv } from 'tailwind-variants'
+import { input } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
+const props = defineProps<{
+  class?: string,
+  ui?: Partial<typeof input.slots>
+}>()
+
 const rootContext = injectColorPickerContext()
+
+const ui = tv(input)()
 </script>
 
 <template>
-  <div :class="twMerge(rootContext.ui.input.group)">
+  <div :class="ui.group({ class: [props.ui?.group, props.class] })">
     <input
       v-model="rootContext.hexa.value"
       type="text"
-      :class="twMerge(rootContext.ui.input.field)"
       aria-label="Hex"
+      :class="ui.field({ class: props.ui?.field })"
     />
     <input
       type="text"
       value="100%"
-      :class="twMerge(rootContext.ui.input.field, 'flex-0 w-12')"
       aria-label="Opacity"
+      :class="ui.field({ class: ['flex-0 w-12', props.ui?.field] })"
     />
   </div>
 </template>

@@ -28,6 +28,9 @@ const pos = ref({
 })
 
 const styles = computed<CSSProperties>(() => ({
+  top: '0',
+  left: '0',
+  position: 'absolute',
   backgroundColor: props.color,
   transform: `translate3d(calc(-50% + ${pos.value.x}px), calc(-50% + ${pos.value.y}px), 0px)`
 }))
@@ -120,8 +123,8 @@ const ui = tv(slider)()
 
 <template>
   <div
-    :style="styles"
     tabindex="0"
+    :style="styles"
     :class="ui.thumb({ class: props.class })"
     @keydown="handleKeydown"
   />
