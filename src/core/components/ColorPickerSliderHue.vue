@@ -1,14 +1,25 @@
+<script lang="ts">
+import type { SliderRootProps } from 'reka-ui'
+
+export interface HueSliderProps {
+  class?: string,
+  orientation?: SliderRootProps['orientation'],
+  ui?: Partial<typeof slider.slots>
+}
+</script>
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
-import type { SliderRootProps } from 'reka-ui'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { slider } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
-const rootContext = injectColorPickerContext()
+const props = withDefaults(defineProps<HueSliderProps>(), {
+  orientation: 'horizontal'
+})
 
-const thumbColor = computed(() => `hsl(${rootContext.hsva.value.h},100%,50%)`)
+const rootContext = injectColorPickerContext()
 
 const hueValue = computed({
   get: () => [rootContext.hsva.value.h],
@@ -20,48 +31,36 @@ const hueValue = computed({
   },
 })
 
-interface SliderProps {
-  class?: string,
-  orientation?: SliderRootProps['orientation'],
-  ui?: Partial<typeof slider.slots>
-}
-
-const props = withDefaults(defineProps<SliderProps>(), {
-  orientation: 'horizontal'
-})
-
-const ui = tv(slider)({
+const ui = computed(() => tv({
+  extend: slider,
+  variants: {
+    orientation: {
+      horizontal: {
+        track: 'bg-[linear-gradient(to_right,red,yellow,lime,cyan,blue,magenta,red)]'
+      },
+      vertical: {
+        track: 'bg-[linear-gradient(to_bottom,red,yellow,lime,cyan,blue,magenta,red)]'
+      }
+    }
+  }
+})({
   orientation: props.orientation
-})
+}))
 </script>
 
 <template>
   <SliderRoot
     v-model="hueValue"
     :max="360"
-    :step="1"
-    :orientation="props.orientation || 'horizontal'"
+    :inverted="props.orientation === 'vertical'"
+    :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
   >
-    <SliderTrack
-      data-color-picker-hue-track
-      :class="ui.track({ class: props.ui?.track })"
-    />
+    <SliderTrack :class="ui.track({ class: props.ui?.track })" />
     <SliderThumb
-      :style="{ background: thumbColor }"
-      :class="ui.thumb({ class: props.ui?.thumb })"
       aria-label="Hue"
+      :style="{ background: `hsl(${rootContext.hsva.value.h},100%,50%)` }"
+      :class="ui.thumb({ class: props.ui?.thumb })"
     />
   </SliderRoot>
 </template>
-
-<style scoped>
-[data-orientation="horizontal"][data-color-picker-hue-track] {
-  box-shadow: inset #0000001a 0 0 0 1px;
-  background: linear-gradient(to right, red, yellow, lime, cyan, blue, magenta, red);
-}
-[data-orientation="vertical"][data-color-picker-hue-track] {
-  box-shadow: inset #0000001a 0 0 0 1px;
-  background: linear-gradient(to top, red, yellow, lime, cyan, blue, magenta, red);
-}
-</style>

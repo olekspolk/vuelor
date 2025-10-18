@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import { inject } from 'vue'
-import { ColorPickerRoot, ColorPickerCanvas, ColorPickerSliderHue } from '../core'
+import {
+  ColorPickerRoot,
+  ColorPickerCanvas,
+  ColorPickerSliderHue,
+  ColorPickerSliderAlpha
+} from '../core'
 
 const color = inject('color') as string
 </script>
@@ -17,6 +22,13 @@ const color = inject('color') as string
     >
       <ColorPickerCanvas />
       <ColorPickerSliderHue orientation="vertical" />
+      <ColorPickerSliderAlpha
+        orientation="vertical"
+        :ui="{
+          track: 'rounded-sm',
+          thumb: 'w-6 h-2 border-4'
+        }"
+      />
     </ColorPickerRoot>
   </div>
 </template>

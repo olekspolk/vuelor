@@ -28,18 +28,26 @@ const props = withDefaults(defineProps<SliderProps>(), {
 const ui = tv(slider)({
   orientation: props.orientation
 })
+
+const trackStyle = computed(() => {
+  const gradientDirection = props.orientation === 'horizontal' ? 'to right' : 'to top'
+  return {
+    background: [
+      `linear-gradient(${gradientDirection}, rgba(0, 0, 0, 0) 0%, ${rootContext.hex.value} 100%)`,
+      'repeating-conic-gradient(#ddd 0% 25%, transparent 0% 50%) 50% / 8px 8px'
+    ].join(',')
+  }
+})
 </script>
 
 <template>
   <SliderRoot
     v-model="alphaValue"
-    :style="{ '--color': rootContext.hex.value }"
-    :max="100"
-    :step="1"
+    :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
   >
     <SliderTrack
-      data-color-picker-alpha-track
+      :style="trackStyle"
       :class="ui.track({ class: props.ui?.track })"
     />
     <SliderThumb
@@ -49,10 +57,3 @@ const ui = tv(slider)({
     />
   </SliderRoot>
 </template>
-
-<style scoped>
-[data-color-picker-alpha-track] {
-  box-shadow: inset #0000001a 0 0 0 1px;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--color) 100%), repeating-conic-gradient(#ddd 0% 25%, transparent 0% 50%) 50% / 8px 8px;
-}
-</style>
