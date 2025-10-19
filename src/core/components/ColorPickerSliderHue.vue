@@ -51,7 +51,7 @@ const ui = computed(() => tv({
 <template>
   <SliderRoot
     v-model="hueValue"
-    :max="360"
+    :max="359"
     :inverted="props.orientation === 'vertical'"
     :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"

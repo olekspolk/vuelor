@@ -1,8 +1,15 @@
 <script lang="ts" setup>
+import type { Ref } from 'vue'
 import { inject } from 'vue'
-import { ColorPickerRoot, ColorPickerCanvas, ColorPickerSliderHue, ColorPickerSliderAlpha, ColorPickerInputHEX } from '../core'
+import {
+  ColorPickerRoot,
+  ColorPickerCanvas,
+  ColorPickerSliderHue,
+  ColorPickerSliderAlpha,
+  ColorPickerInputHEX
+} from '../core'
 
-const color = inject('color') as string
+const color = inject('color') as Ref<string>
 </script>
 
 <template>

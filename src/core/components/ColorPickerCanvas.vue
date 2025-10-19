@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { tv } from 'tailwind-variants'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import type { Position } from '../utils/types.ts'
 import { RGBAtoCSS } from '../utils/utils.ts'
 import { canvas } from '../theme'
@@ -25,32 +25,20 @@ const props = withDefaults(defineProps<CanvasProps>(), {
   step: 1
 })
 
-const thumbPosition = ref({ top: 0, left: 0 });
 const thumbColor = computed(() => RGBAtoCSS({ ...rootContext.rgba.value, a: 1 }));
-
-onMounted(() => {
-  const cnv = canvasRef.value
-  if (cnv) {
-    ctx.value = cnv.getContext('2d')
-    updateThumbPosition()
-    updateCanvasFill()
-  }
-});
-
-function handleThumbMove(value: Position) {
-  rootContext.hsva.value = {
-    ...rootContext.hsva.value,
-    s: value.left / 100,
-    v: (100 - value.top) / 100,
-  }
-}
-
-function updateThumbPosition() {
-  thumbPosition.value = {
+const thumbPosition = computed({
+  get: () => ({
     top: 100 - rootContext.hsva.value.v * 100,
     left: rootContext.hsva.value.s * 100
+  }),
+  set: (value: Position) => {
+    rootContext.hsva.value = {
+      ...rootContext.hsva.value,
+      s: value.left / 100,
+      v: (100 - value.top) / 100,
+    }
   }
-}
+});
 
 function updateCanvasFill() {
   if (!ctx.value) return
@@ -74,7 +62,15 @@ function updateCanvasFill() {
 }
 
 watch(() => rootContext.hsva.value.h, updateCanvasFill)
-watch(() => rootContext.hsva.value, updateThumbPosition, { immediate: true })
+watch(() => canvasRef.value, (canvas) => {
+  if (canvas) {
+    const context = canvas.getContext('2d')
+    if (context) {
+      ctx.value = context
+      updateCanvasFill()
+    }
+  }
+})
 
 const ui = tv(canvas)()
 </script>
@@ -83,15 +79,14 @@ const ui = tv(canvas)()
   <div :class="ui.root({ class: [props.ui?.root, props.class] })">
     <canvas
       ref="canvasRef"
-      :class="ui.canvas({ class: props.ui?.canvas })"
       :height="props.height"
       :width="props.width"
+      :class="ui.canvas({ class: props.ui?.canvas })"
     />
     <ColorPickerCanvasThumb
       :step="props.step"
       :color="thumbColor"
-      :modelValue="thumbPosition"
-      @move="handleThumbMove"
+      v-model="thumbPosition"
     />
   </div>
 </template>
