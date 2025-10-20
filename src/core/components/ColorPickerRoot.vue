@@ -1,11 +1,14 @@
 <script lang="ts">
 import { createContext } from 'reka-ui'
 import type { Ref } from 'vue'
-import type { HSVA, Hexa, RGBA } from '../utils/types'
+import type { HSV, HSVA, HSL, Hexa, RGB, RGBA } from '../utils/color'
 
 type ColorPickerRootContext = {
   alpha: Ref<number>,
-  hsva: Ref<HSVA>
+  hsv: Ref<HSV>,
+  hsva: Ref<HSVA>,
+  hsl: Ref<HSL>,
+  rgb: Ref<RGB>,
   rgba: Ref<RGBA>,
   hex: Ref<string>,
   hexa: Ref<string>
@@ -31,11 +34,13 @@ import { tv } from 'tailwind-variants'
 import { root } from '../theme'
 import {
   toHex,
-  RGBAtoHex,
-  RGBAtoHSVA,
-  HexToRGBA,
-  HSVAtoRGBA
-} from '../utils/utils'
+  HSLtoHSV,
+  HSVtoHSL,
+  HSVtoRGB,
+  RGBtoHSV,
+  RGBtoHex,
+  HexToRGB
+} from '../utils/color.ts'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   modelValue: null,
@@ -44,21 +49,24 @@ const props = withDefaults(defineProps<ColorPickerRootProps>(), {
 
 const emit = defineEmits<ColorPickerRootEmits>()
 
-const hsva = ref<HSVA>({
-  h: 0,
-  s: 0,
-  v: 0,
-  a: 0
-})
-
 const alpha = ref<number>(100)
 
-const rgba = computed<RGBA>({
-  get: () => HSVAtoRGBA(hsva.value),
-  set: (value: RGBA) => (hsva.value = RGBAtoHSVA(value))
+const hsv = ref<HSV>({ h: 0, s: 0, v: 0 })
+const hsva = computed<HSVA>(() => ({ ...hsv.value, a: alpha.value / 100 }))
+
+const rgb = computed<RGB>({
+  get: () => HSVtoRGB(hsv.value),
+  set: (value: RGB) => (hsv.value = RGBtoHSV(value))
 })
 
-const hex = computed<Hexa>(() => RGBAtoHex(rgba.value))
+const rgba = computed<RGBA>(() => ({ ...rgb.value, a: alpha.value / 100 }))
+
+const hsl = computed<HSL>({
+  get: () => HSVtoHSL(hsv.value),
+  set: (value: HSL) => (hsv.value = HSLtoHSV(value))
+});
+
+const hex = computed<Hexa>(() => RGBtoHex(rgb.value))
 const hexa = computed<Hexa>(() => hex.value + toHex(alpha.value * 255 / 100))
 
 watch(() => hexa.value, (newVal: string) => {
@@ -68,8 +76,7 @@ watch(() => hexa.value, (newVal: string) => {
 watch(() => props.modelValue, (value: string | null) => {
   if (value !== hexa.value) {
     if (value) {
-      const rgbaValue = HexToRGBA(value)
-      rgba.value = rgbaValue
+      rgb.value = HexToRGB(value)
 
       if (value.length === 9) {
         alpha.value = Math.round((parseInt(value.slice(7, 9), 16) / 255) * 100)
@@ -82,9 +89,10 @@ watch(() => props.modelValue, (value: string | null) => {
 
 provideColorPickerContext({
   alpha,
-  // hsv
+  hsv,
   hsva,
-  // rgb
+  hsl,
+  rgb,
   rgba,
   hex,
   hexa

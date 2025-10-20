@@ -28,12 +28,12 @@ const props = withDefaults(defineProps<CanvasProps>(), {
 const thumbColor = computed(() => RGBAtoCSS({ ...rootContext.rgba.value, a: 1 }));
 const thumbPosition = computed({
   get: () => ({
-    top: 100 - rootContext.hsva.value.v * 100,
-    left: rootContext.hsva.value.s * 100
+    top: 100 - rootContext.hsv.value.v * 100,
+    left: rootContext.hsv.value.s * 100
   }),
   set: (value: Position) => {
-    rootContext.hsva.value = {
-      ...rootContext.hsva.value,
+    rootContext.hsv.value = {
+      ...rootContext.hsv.value,
       s: value.left / 100,
       v: (100 - value.top) / 100,
     }
@@ -43,7 +43,7 @@ const thumbPosition = computed({
 function updateCanvasFill() {
   if (!ctx.value) return
 
-  const color = `hsl(${rootContext.hsva.value.h},100%,50%)`
+  const color = `hsl(${rootContext.hsv.value.h},100%,50%)`
   ctx.value.rect(0, 0, props.width, props.height)
   ctx.value.fillStyle = color
   ctx.value.fillRect(0, 0, props.width, props.height)
@@ -61,7 +61,7 @@ function updateCanvasFill() {
   ctx.value.fillRect(0, 0, props.width, props.height)
 }
 
-watch(() => rootContext.hsva.value.h, updateCanvasFill)
+watch(() => rootContext.hsv.value.h, updateCanvasFill)
 watch(() => canvasRef.value, (canvas) => {
   if (canvas) {
     const context = canvas.getContext('2d')
