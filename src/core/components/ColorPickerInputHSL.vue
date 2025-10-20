@@ -32,21 +32,21 @@ const ui = tv(input)()
       type="text"
       aria-label="Hue"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.hsv.value.h"
+      :value="rootContext.hsl.value.h"
       @blur="parseChannelValue($event, 'h', 359)"
     />
     <input
       type="text"
       aria-label="Saturation"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="Math.floor(rootContext.hsv.value.s * 100)"
+      :value="Math.floor(rootContext.hsl.value.s * 100)"
       @blur="parseChannelValue($event, 's', 100)"
     />
     <input
       type="text"
       aria-label="Lightness"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="Math.floor(rootContext.hsv.value.v * 100)"
+      :value="Math.floor(rootContext.hsl.value.l * 100)"
       @blur="parseChannelValue($event, 'l', 100)"
     />
     <input
