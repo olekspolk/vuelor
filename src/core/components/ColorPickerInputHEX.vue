@@ -19,12 +19,15 @@ const ui = tv(input)()
       v-model="rootContext.hexa.value"
       type="text"
       aria-label="Hex"
+      :disabled="rootContext.disabled.value"
       :class="ui.field({ class: props.ui?.field })"
     />
     <input
+      v-if="rootContext.isAlphaEnabled.value"
       type="text"
       value="100%"
       aria-label="Opacity"
+      :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['flex-0 w-12', props.ui?.field] })"
     />
   </div>

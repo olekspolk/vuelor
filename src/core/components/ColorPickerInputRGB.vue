@@ -34,6 +34,7 @@ const ui = tv(input)()
     <input
       type="text"
       aria-label="Red"
+      :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
       :value="rootContext.rgb.value.r"
       @blur="parseChannelValue($event, 'r')"
@@ -41,6 +42,7 @@ const ui = tv(input)()
     <input
       type="text"
       aria-label="Green"
+      :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
       :value="rootContext.rgb.value.g"
       @blur="parseChannelValue($event, 'g')"
@@ -48,13 +50,16 @@ const ui = tv(input)()
     <input
       type="text"
       aria-label="Blue"
+      :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
       :value="rootContext.rgb.value.b"
       @blur="parseChannelValue($event, 'b')"
     />
     <input
+      v-if="rootContext.isAlphaEnabled.value"
       type="text"
       aria-label="Opacity"
+      :disabled="rootContext.disabled.value"
       :value="rootContext.alpha.value"
       :class="ui.field({ class: ['flex-0 w-12', props.ui?.field] })"
     />

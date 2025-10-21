@@ -43,6 +43,7 @@ const trackStyle = computed(() => {
 <template>
   <SliderRoot
     v-model="alphaValue"
+    :disabled="rootContext.disabled.value"
     :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
     @pointerup="rootContext.emitUpdateEnd()"

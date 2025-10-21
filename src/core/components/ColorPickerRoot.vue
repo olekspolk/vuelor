@@ -12,6 +12,8 @@ type ColorPickerRootContext = {
   rgba: Ref<RGBA>,
   hex: Ref<string>,
   hexa: Ref<string>,
+  disabled: Ref<boolean>,
+  isAlphaEnabled: Ref<boolean>,
   emitUpdateEnd: () => void
 }
 
@@ -41,7 +43,8 @@ import { useColor } from '../composables/useColor'
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   modelValue: null,
   defaultValue: '#FFFFFFFF',
-  format: 'hex'
+  format: 'hexa',
+  disabled: true
 })
 
 const emit = defineEmits<ColorPickerRootEmits>()
@@ -57,7 +60,7 @@ const state = computed(() => ({
   hsba: toRaw(color.hsva.value),
   hex: color.hex.value,
   hexa: color.hexa.value
-}));
+}))
 
 watch(() => state.value, (value) => emit('update', value))
 
@@ -76,9 +79,14 @@ watch(
   { immediate: true }
 )
 
+const disabled = computed(() => props.disabled ?? false)
+const isAlphaEnabled = computed(() => props.format.endsWith('a'))
+
 provideColorPickerContext({
   ...color,
-  emitUpdateEnd: () => emit('update:end', state.value)
+  disabled,
+  isAlphaEnabled,
+  emitUpdateEnd: () => !props.disabled && emit('update:end', state.value)
 })
 
 const ui = tv(root)()
