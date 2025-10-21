@@ -26,6 +26,8 @@ function parseChannelValue(e: Event, channel: 'r' | 'g' | 'b') {
   }
 }
 
+const round = (value: number) => Math.round(value)
+
 const ui = tv(input)()
 </script>
 
@@ -36,7 +38,7 @@ const ui = tv(input)()
       aria-label="Red"
       :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.rgb.value.r"
+      :value="round(rootContext.rgb.value.r)"
       @blur="parseChannelValue($event, 'r')"
     />
     <input
@@ -44,7 +46,7 @@ const ui = tv(input)()
       aria-label="Green"
       :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.rgb.value.g"
+      :value="round(rootContext.rgb.value.g)"
       @blur="parseChannelValue($event, 'g')"
     />
     <input
@@ -52,7 +54,7 @@ const ui = tv(input)()
       aria-label="Blue"
       :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.rgb.value.b"
+      :value="round(rootContext.rgb.value.b)"
       @blur="parseChannelValue($event, 'b')"
     />
     <input
