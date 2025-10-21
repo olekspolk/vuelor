@@ -9,7 +9,7 @@ const menuItems = [
   { name: 'Mini', path: '/mini' },
   { name: 'Regular', path: '/' },
   { name: 'Pro', path: '/pro' },
-  { name: 'Max', path: '/max' },
+  { name: 'Sliders', path: '/sliders' },
 ]
 
 const route = useRoute()

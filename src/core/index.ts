@@ -7,3 +7,6 @@ export { default as ColorPickerInputHex } from './components/ColorPickerInputHex
 export { default as ColorPickerInputRGB } from './components/ColorPickerInputRGB.vue'
 export { default as ColorPickerInputHSL } from './components/ColorPickerInputHSL.vue'
 export { default as ColorPickerInputHSB } from './components/ColorPickerInputHSB.vue'
+export { default as ColorPickerSliderRed } from './components/ColorPickerSliderRed.vue'
+export { default as ColorPickerSliderGreen } from './components/ColorPickerSliderGreen.vue'
+export { default as ColorPickerSliderBlue } from './components/ColorPickerSliderBlue.vue'
