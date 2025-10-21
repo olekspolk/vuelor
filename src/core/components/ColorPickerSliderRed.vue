@@ -12,7 +12,7 @@ export interface RedSliderProps {
 import { computed } from 'vue'
 import { tv } from 'tailwind-variants'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
-import { root, slider } from '../theme'
+import { slider } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const props = withDefaults(defineProps<RedSliderProps>(), {
