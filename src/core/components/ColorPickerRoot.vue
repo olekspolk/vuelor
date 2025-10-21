@@ -22,7 +22,7 @@ export interface ColorPickerRootProps {
   disabled?: boolean,
   defaultValue?: string,
   modelValue: string | null,
-  format?: 'hex' | 'hexa' | 'rgb' | 'rgba' | 'hsl' | 'hsla'
+  format?: 'hex' | 'hexa' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsb' | 'hsba'
 }
 
 export type ColorPickerRootEmits = {
@@ -53,6 +53,8 @@ const state = computed(() => ({
   rgba: toRaw(color.rgba.value),
   hsl: toRaw(color.hsl.value),
   hsla: toRaw(color.hsla.value),
+  hsb: toRaw(color.hsv.value),
+  hsba: toRaw(color.hsva.value),
   hex: color.hex.value,
   hexa: color.hexa.value
 }));

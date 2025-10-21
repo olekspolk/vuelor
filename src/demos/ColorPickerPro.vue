@@ -20,6 +20,7 @@ import {
   ColorPickerInputHEX,
   ColorPickerInputHSL,
   ColorPickerInputRGB,
+  ColorPickerInputHSB
 } from '../core'
 
 const color = inject('color') as string
@@ -31,12 +32,16 @@ const options = [
     component: ColorPickerInputHEX
   },
   {
+    label: 'RGB',
+    component: ColorPickerInputRGB
+  },
+  {
     label: 'HSL',
     component: ColorPickerInputHSL
   },
   {
-    label: 'RGB',
-    component: ColorPickerInputRGB
+    label: 'HSB',
+    component: ColorPickerInputHSB
   }
 ]
 
