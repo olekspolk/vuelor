@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { tv } from 'tailwind-variants'
 import { ref, computed, watch } from 'vue'
-import type { Position } from '../utils/types.ts'
-import { RGBAtoCSS } from '../utils/utils.ts'
 import { canvas } from '../theme'
+import { RGBAtoCSS } from '../utils/color.ts'
+import type { ThumbPosition } from './ColorPickerCanvasThumb.vue'
 import ColorPickerCanvasThumb from './ColorPickerCanvasThumb.vue'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
@@ -31,7 +31,7 @@ const thumbPosition = computed({
     top: 100 - rootContext.hsv.value.v * 100,
     left: rootContext.hsv.value.s * 100
   }),
-  set: (value: Position) => {
+  set: (value: ThumbPosition) => {
     rootContext.hsv.value = {
       ...rootContext.hsv.value,
       s: value.left / 100,

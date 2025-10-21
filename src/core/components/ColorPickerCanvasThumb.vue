@@ -1,10 +1,16 @@
+<script lang="ts">
+export type ThumbPosition = {
+  top: number,
+  left: number
+}
+</script>
+
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import type { Position } from '../utils/types.ts'
-import { ref, computed, onMounted, getCurrentInstance } from 'vue'
 import { tv } from 'tailwind-variants'
+import { ref, computed, onMounted, getCurrentInstance } from 'vue'
 import { slider } from '../theme'
-import { clamp, getPointerPosition } from '../utils/helpers.ts'
+import { clamp } from '../utils/helpers.ts'
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -12,7 +18,7 @@ const instance = getCurrentInstance()
 
 interface Props {
   class?: string,
-  modelValue: Position
+  modelValue: ThumbPosition
   color: string
   step?: number
 }
@@ -67,7 +73,10 @@ function handleMouseup() {
 
 function handleMousemove(event: MouseEvent) {
   event.preventDefault()
-  const pointer = getPointerPosition(event)
+  const pointer = {
+    pageX: event.pageX,
+    pageY: event.pageY
+  }
   const shiftY = pointer.pageY - bounding.value.top
   const shiftX = pointer.pageX - bounding.value.left
   emit('update:modelValue', {

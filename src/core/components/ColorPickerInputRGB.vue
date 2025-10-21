@@ -15,10 +15,10 @@ function parseChannelValue(e: Event, channel: 'r' | 'g' | 'b') {
   const target = e.target as HTMLInputElement
   const intValue = parseInt(target.value, 10)
   const value = isNaN(intValue)
-    ? rootContext.rgba.value[channel]
+    ? rootContext.rgb.value[channel]
     : clamp(intValue, 0, 255)
-  rootContext.rgba.value = {
-    ...rootContext.rgba.value,
+  rootContext.rgb.value = {
+    ...rootContext.rgb.value,
     [channel]: value
   }
 }
@@ -32,26 +32,26 @@ const ui = tv(input)()
       type="text"
       aria-label="Red"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.rgba.value.r"
+      :value="rootContext.rgb.value.r"
       @blur="parseChannelValue($event, 'r')"
     />
     <input
       type="text"
       aria-label="Green"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.rgba.value.g"
+      :value="rootContext.rgb.value.g"
       @blur="parseChannelValue($event, 'g')"
     />
     <input
       type="text"
       aria-label="Blue"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.rgba.value.b"
+      :value="rootContext.rgb.value.b"
       @blur="parseChannelValue($event, 'b')"
     />
     <input
       type="text"
-      aria-label="Alpha"
+      aria-label="Opacity"
       :value="rootContext.alpha.value"
       :class="ui.field({ class: ['flex-0 w-12', props.ui?.field] })"
     />

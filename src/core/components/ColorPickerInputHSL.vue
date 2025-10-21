@@ -23,6 +23,8 @@ function parseChannelValue(e: Event, channel: 'h' | 's' | 'l', max: number) {
   }
 }
 
+const round = (value: number) => Math.round(value * 100)
+
 const ui = tv(input)()
 </script>
 
@@ -39,19 +41,19 @@ const ui = tv(input)()
       type="text"
       aria-label="Saturation"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="Math.floor(rootContext.hsl.value.s * 100)"
+      :value="round(rootContext.hsl.value.s)"
       @blur="parseChannelValue($event, 's', 100)"
     />
     <input
       type="text"
       aria-label="Lightness"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="Math.floor(rootContext.hsl.value.l * 100)"
+      :value="round(rootContext.hsl.value.l)"
       @blur="parseChannelValue($event, 'l', 100)"
     />
     <input
       type="text"
-      aria-label="Alpha"
+      aria-label="Opacity"
       :class="ui.field({ class: ['flex-0 w-12', props.ui?.field] })"
       :value="rootContext.alpha.value"
     />

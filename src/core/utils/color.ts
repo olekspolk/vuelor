@@ -1,13 +1,5 @@
 import { chunk } from './helpers.ts'
-
-export type HSV = { h: number, s: number, v: number }
-export type HSVA = HSV & { a: number }
-export type RGB = { r: number, g: number, b: number }
-export type RGBA = RGB & { a: number }
-export type HSL = { h: number, s: number, l: number }
-export type HSLA = HSL & { a: number }
-export type Hex = string
-export type Hexa = string
+import type { Hex, HSL, HSV, RGB, RGBA } from './types.ts'
 
 export function HSLtoHSV (hsl: HSL): HSV {
   const { h, s, l } = hsl
@@ -92,4 +84,8 @@ export function HexToRGB (hex: Hex): RGB {
     g: rgb[1] as number,
     b: rgb[2] as number
   }
+}
+
+export function RGBAtoCSS (rgba: RGBA): string {
+  return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`
 }
