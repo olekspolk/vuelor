@@ -1,5 +1,5 @@
-import { chunk } from './helpers.ts'
 import type { Hex, HSL, HSV, RGB, RGBA } from './types.ts'
+import { chunk } from './helpers.ts'
 
 export function HSLtoHSV (hsl: HSL): HSV {
   const { h, s, l } = hsl

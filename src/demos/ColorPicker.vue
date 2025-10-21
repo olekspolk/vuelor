@@ -6,7 +6,7 @@ import {
   ColorPickerCanvas,
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
-  ColorPickerInputHEX
+  ColorPickerInputHex
 } from '../core'
 
 const color = inject('color') as Ref<string>
@@ -17,6 +17,6 @@ const color = inject('color') as Ref<string>
     <ColorPickerCanvas />
     <ColorPickerSliderHue />
     <ColorPickerSliderAlpha />
-    <ColorPickerInputHEX />
+    <ColorPickerInputHex />
   </ColorPickerRoot>
 </template>

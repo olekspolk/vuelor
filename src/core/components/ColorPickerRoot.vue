@@ -24,7 +24,7 @@ export interface ColorPickerRootProps {
   disabled?: boolean,
   defaultValue?: string,
   modelValue: string | null,
-  format?: 'hex' | 'hexa' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsb' | 'hsba'
+  format?: 'hex' | 'hexa' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva'
 }
 
 export type ColorPickerRootEmits = {
@@ -43,8 +43,7 @@ import { useColor } from '../composables/useColor'
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   modelValue: null,
   defaultValue: '#FFFFFFFF',
-  format: 'hexa',
-  disabled: true
+  format: 'hexa'
 })
 
 const emit = defineEmits<ColorPickerRootEmits>()
@@ -56,8 +55,8 @@ const state = computed(() => ({
   rgba: toRaw(color.rgba.value),
   hsl: toRaw(color.hsl.value),
   hsla: toRaw(color.hsla.value),
-  hsb: toRaw(color.hsv.value),
-  hsba: toRaw(color.hsva.value),
+  hsv: toRaw(color.hsv.value),
+  hsva: toRaw(color.hsva.value),
   hex: color.hex.value,
   hexa: color.hexa.value
 }))
