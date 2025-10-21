@@ -21,47 +21,45 @@ const props = withDefaults(defineProps<SliderProps>(), {
 
 const rootContext = injectColorPickerContext()
 
-const hueValue = computed({
-  get: () => [rootContext.hsv.value.h],
+const saturationValue = computed({
+  get: () => [rootContext.hsl.value.s],
   set: ([value]: number[]) => {
-    rootContext.hsv.value = {
-      ...rootContext.hsv.value,
-      h: value as number
+    rootContext.hsl.value = {
+      ...rootContext.hsl.value,
+      s: value as number
     }
   },
 })
 
-const ui = computed(() => tv({
-  extend: slider,
-  variants: {
-    orientation: {
-      horizontal: {
-        track: 'bg-[linear-gradient(to_right,red,yellow,lime,cyan,blue,magenta,red)]'
-      },
-      vertical: {
-        track: 'bg-[linear-gradient(to_bottom,red,yellow,lime,cyan,blue,magenta,red)]'
-      }
-    }
-  }
-})({
+const trackBackground = computed(() => {
+  const direction = props.orientation === 'vertical' ? 'to top' : 'to right'
+  const fromColor = `hsl(${rootContext.hsl.value.h} 0 ${rootContext.hsl.value.l * 100}%)`
+  const toColor = `hsl(${rootContext.hsl.value.h} 100% ${rootContext.hsl.value.l * 100}%)`
+  return `linear-gradient(${direction}, ${fromColor}, ${toColor})`
+})
+
+const ui = computed(() => tv(slider)({
   orientation: props.orientation
 }))
 </script>
 
 <template>
   <SliderRoot
-    v-model="hueValue"
+    v-model="saturationValue"
+    :max="1"
+    :step="0.01"
     :disabled="rootContext.disabled.value"
-    :max="359"
-    :inverted="props.orientation === 'vertical'"
     :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
     @pointerup="rootContext.emitUpdateEnd()"
   >
-    <SliderTrack :class="ui.track({ class: props.ui?.track })" />
+    <SliderTrack
+      :style="{ background: trackBackground }"
+      :class="ui.track({ class: props.ui?.track })"
+    />
     <SliderThumb
-      aria-label="Hue"
-      :style="{ background: `hsl(${rootContext.hsv.value.h},100%,50%)` }"
+      aria-label="Saturation"
+      :style="{ background: rootContext.hex.value }"
       :class="ui.thumb({ class: props.ui?.thumb })"
     />
   </SliderRoot>

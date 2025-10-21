@@ -4,9 +4,11 @@ import { inject } from 'vue'
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
-  ColorPickerSliderHue,
-  ColorPickerSliderAlpha,
   ColorPickerInputRGB,
+  ColorPickerInputHSL,
+  ColorPickerSliderHue,
+  ColorPickerSliderSaturation,
+  ColorPickerSliderLightness,
   ColorPickerSliderRed,
   ColorPickerSliderGreen,
   ColorPickerSliderBlue,
@@ -16,10 +18,16 @@ const color = inject('color') as Ref<string>
 </script>
 
 <template>
-  <ColorPickerRoot v-model="color">
+  <ColorPickerRoot
+    format="hex"
+    v-model="color"
+  >
     <ColorPickerCanvas />
+    <ColorPickerInputHSL />
     <ColorPickerSliderHue />
-    <ColorPickerSliderAlpha />
+    <ColorPickerSliderSaturation />
+    <ColorPickerSliderLightness />
+    <!-- RGB -->
     <ColorPickerInputRGB />
     <ColorPickerSliderRed />
     <ColorPickerSliderGreen />

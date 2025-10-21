@@ -21,47 +21,44 @@ const props = withDefaults(defineProps<SliderProps>(), {
 
 const rootContext = injectColorPickerContext()
 
-const hueValue = computed({
-  get: () => [rootContext.hsv.value.h],
+const value = computed({
+  get: () => [rootContext.hsl.value.l],
   set: ([value]: number[]) => {
-    rootContext.hsv.value = {
-      ...rootContext.hsv.value,
-      h: value as number
+    rootContext.hsl.value = {
+      ...rootContext.hsl.value,
+      l: value as number
     }
   },
 })
 
-const ui = computed(() => tv({
-  extend: slider,
-  variants: {
-    orientation: {
-      horizontal: {
-        track: 'bg-[linear-gradient(to_right,red,yellow,lime,cyan,blue,magenta,red)]'
-      },
-      vertical: {
-        track: 'bg-[linear-gradient(to_bottom,red,yellow,lime,cyan,blue,magenta,red)]'
-      }
-    }
-  }
-})({
+const trackBackground = computed(() => {
+  const direction = props.orientation === 'vertical' ? 'to top' : 'to right'
+  const color = `hsl(${rootContext.hsl.value.h}, ${rootContext.hsl.value.s * 100}%, 50%)`
+  return `linear-gradient(${direction}, hsl(0, 0%, 0%), ${color}, hsl(0, 0%, 100%))`
+})
+
+const ui = computed(() => tv(slider)({
   orientation: props.orientation
 }))
 </script>
 
 <template>
   <SliderRoot
-    v-model="hueValue"
+    v-model="value"
+    :max="1"
+    :step="0.01"
     :disabled="rootContext.disabled.value"
-    :max="359"
-    :inverted="props.orientation === 'vertical'"
     :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
     @pointerup="rootContext.emitUpdateEnd()"
   >
-    <SliderTrack :class="ui.track({ class: props.ui?.track })" />
+    <SliderTrack
+      :style="{ background: trackBackground }"
+      :class="ui.track({ class: props.ui?.track })"
+    />
     <SliderThumb
-      aria-label="Hue"
-      :style="{ background: `hsl(${rootContext.hsv.value.h},100%,50%)` }"
+      aria-label="Lightness"
+      :style="{ background: rootContext.hex.value }"
       :class="ui.thumb({ class: props.ui?.thumb })"
     />
   </SliderRoot>

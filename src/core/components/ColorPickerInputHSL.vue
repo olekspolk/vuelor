@@ -38,7 +38,7 @@ const ui = tv(input)()
       aria-label="Hue"
       :disabled="rootContext.disabled.value"
       :class="ui.field({ class: ['px-1', props.ui?.field] })"
-      :value="rootContext.hsl.value.h"
+      :value="Math.round(rootContext.hsl.value.h)"
       @blur="parseChannelValue($event, 'h', 359)"
     />
     <input
