@@ -3,6 +3,13 @@ export type ThumbPosition = {
   top: number,
   left: number
 }
+
+interface ThumbProps {
+  class?: string,
+  modelValue: ThumbPosition
+  color: string
+  step?: number
+}
 </script>
 
 <script setup lang="ts">
@@ -11,19 +18,14 @@ import { tv } from 'tailwind-variants'
 import { ref, computed, onMounted, getCurrentInstance } from 'vue'
 import { slider } from '../theme'
 import { clamp } from '../utils/helpers.ts'
+import { injectColorPickerContext } from './ColorPickerRoot.vue'
+
+const instance = getCurrentInstance()
+const rootContext = injectColorPickerContext()
 
 const emit = defineEmits(['update:modelValue'])
 
-const instance = getCurrentInstance()
-
-interface Props {
-  class?: string,
-  modelValue: ThumbPosition
-  color: string
-  step?: number
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<ThumbProps>(), {
   color: '#fff',
   step: 1
 })
@@ -69,6 +71,7 @@ function handleMousedown(e: MouseEvent) {
 function handleMouseup() {
   document.removeEventListener('mousemove', handleMousemove)
   document.removeEventListener('mouseup', handleMouseup)
+  rootContext.emitUpdateEnd()
 }
 
 function handleMousemove(event: MouseEvent) {
@@ -94,6 +97,7 @@ function handleKeydown(event: KeyboardEvent) {
         left: props.modelValue.left,
         top: clamp(props.modelValue.top - step, 0, 100)
       })
+      rootContext.emitUpdateEnd()
       break
     case 'ArrowDown':
       event.preventDefault()
@@ -101,6 +105,7 @@ function handleKeydown(event: KeyboardEvent) {
         left: props.modelValue.left,
         top: clamp(props.modelValue.top + step, 0, 100)
       })
+      rootContext.emitUpdateEnd()
       break
     case 'ArrowLeft':
       event.preventDefault()
@@ -108,6 +113,7 @@ function handleKeydown(event: KeyboardEvent) {
         left: clamp(props.modelValue.left - step, 0, 100),
         top: props.modelValue.top
       })
+      rootContext.emitUpdateEnd()
       break
     case 'ArrowRight':
       event.preventDefault()
@@ -115,6 +121,7 @@ function handleKeydown(event: KeyboardEvent) {
         left: clamp(props.modelValue.left + step, 0, 100),
         top: props.modelValue.top
       })
+      rootContext.emitUpdateEnd()
       break
   }
 }

@@ -17,9 +17,12 @@ function parseChannelValue(e: Event, channel: 'h' | 's' | 'l', max: number) {
   const value = isNaN(intValue)
     ? rootContext.hsl.value[channel]
     : clamp(intValue, 0, max)
-  rootContext.hsl.value = {
-    ...rootContext.hsl.value,
-    [channel]: channel === 'h' ? value : value / 100
+  if (rootContext.hsl.value[channel] !== value) {
+    rootContext.hsl.value = {
+      ...rootContext.hsl.value,
+      [channel]: channel === 'h' ? value : value / 100
+    }
+    rootContext.emitUpdateEnd()
   }
 }
 

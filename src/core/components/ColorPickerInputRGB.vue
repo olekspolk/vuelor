@@ -17,9 +17,12 @@ function parseChannelValue(e: Event, channel: 'r' | 'g' | 'b') {
   const value = isNaN(intValue)
     ? rootContext.rgb.value[channel]
     : clamp(intValue, 0, 255)
-  rootContext.rgb.value = {
-    ...rootContext.rgb.value,
-    [channel]: value
+  if (rootContext.rgb.value[channel] !== value) {
+    rootContext.rgb.value = {
+      ...rootContext.rgb.value,
+      [channel]: value
+    }
+    rootContext.emitUpdateEnd()
   }
 }
 

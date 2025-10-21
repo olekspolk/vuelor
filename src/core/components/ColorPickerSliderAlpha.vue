@@ -45,6 +45,7 @@ const trackStyle = computed(() => {
     v-model="alphaValue"
     :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
+    @pointerup="rootContext.emitUpdateEnd()"
   >
     <SliderTrack
       :style="trackStyle"

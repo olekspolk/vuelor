@@ -46,7 +46,10 @@ const selectedFormatInput = computed(() => {
 </script>
 
 <template>
-  <ColorPickerRoot v-model="color">
+  <ColorPickerRoot
+    v-model="color"
+    @update:end="console.log"
+  >
     <ColorPickerCanvas />
     <div class="flex items-center gap-3">
       <ColorPickerEyeDropper />

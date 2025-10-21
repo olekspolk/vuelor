@@ -55,6 +55,7 @@ const ui = computed(() => tv({
     :inverted="props.orientation === 'vertical'"
     :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
+    @pointerup="rootContext.emitUpdateEnd()"
   >
     <SliderTrack :class="ui.track({ class: props.ui?.track })" />
     <SliderThumb
