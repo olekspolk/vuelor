@@ -111,7 +111,7 @@ const selectedFormatInput = computed(() => {
           </SelectContent>
         </SelectPortal>
       </SelectRoot>
-      <component :is="selectedFormatInput" class="w-[144px]" />
+      <component :is="selectedFormatInput" />
     </div>
   </ColorPickerRoot>
 </template>
