@@ -28,7 +28,9 @@ function parseChannelValue(e: Event, channel: 'r' | 'g' | 'b') {
 
 const round = (value: number) => Math.round(value)
 
-const ui = tv(input)()
+const ui = tv(input)({
+  disabled: rootContext.disabled.value
+})
 </script>
 
 <template>

@@ -25,10 +25,6 @@ const props = withDefaults(defineProps<SliderProps>(), {
   orientation: 'horizontal'
 })
 
-const ui = tv(slider)({
-  orientation: props.orientation
-})
-
 const trackStyle = computed(() => {
   const gradientDirection = props.orientation === 'horizontal' ? 'to right' : 'to top'
   return {
@@ -37,6 +33,11 @@ const trackStyle = computed(() => {
       'repeating-conic-gradient(#ddd 0% 25%, transparent 0% 50%) 50% / 8px 8px'
     ].join(',')
   }
+})
+
+const ui = tv(slider)({
+  orientation: props.orientation,
+  disabled: rootContext.disabled.value
 })
 </script>
 

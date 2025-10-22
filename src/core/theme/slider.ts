@@ -12,7 +12,12 @@ export default {
       },
       vertical: {
         root: 'h-auto w-4 flex-col',
-        track: 'h-48 w-4'
+        track: 'h-full w-4'
+      }
+    },
+    disabled: {
+      true: {
+        root: 'pointer-events-none opacity-50'
       }
     }
   }

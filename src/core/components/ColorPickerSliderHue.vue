@@ -31,20 +31,14 @@ const hueValue = computed({
   },
 })
 
-const ui = computed(() => tv({
-  extend: slider,
-  variants: {
-    orientation: {
-      horizontal: {
-        track: 'bg-[linear-gradient(to_right,red,yellow,lime,cyan,blue,magenta,red)]'
-      },
-      vertical: {
-        track: 'bg-[linear-gradient(to_bottom,red,yellow,lime,cyan,blue,magenta,red)]'
-      }
-    }
-  }
-})({
-  orientation: props.orientation
+const trackBackground = computed(() => {
+  const direction = props.orientation === 'vertical' ? 'to bottom' : 'to right'
+  return `linear-gradient(${direction}, red, yellow, lime, cyan, blue, magenta, red)`
+})
+
+const ui = computed(() => tv(slider)({
+  orientation: props.orientation,
+  disabled: rootContext.disabled.value
 }))
 </script>
 
@@ -52,13 +46,16 @@ const ui = computed(() => tv({
   <SliderRoot
     v-model="hueValue"
     :disabled="rootContext.disabled.value"
-    :max="359"
+    :max="360"
     :inverted="props.orientation === 'vertical'"
     :orientation="props.orientation"
     :class="ui.root({ class: [props.ui?.root, props.class] })"
     @pointerup="rootContext.emitUpdateEnd()"
   >
-    <SliderTrack :class="ui.track({ class: props.ui?.track })" />
+    <SliderTrack
+      :style="{ background: trackBackground }"
+      :class="ui.track({ class: props.ui?.track })"
+    />
     <SliderThumb
       aria-label="Hue"
       :style="{ background: `hsl(${rootContext.hsv.value.h},100%,50%)` }"

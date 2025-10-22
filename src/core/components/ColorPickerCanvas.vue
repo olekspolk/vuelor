@@ -72,7 +72,9 @@ watch(() => canvasRef.value, (canvas) => {
   }
 })
 
-const ui = tv(canvas)()
+const ui = tv(canvas)({
+  disabled: rootContext.disabled.value
+})
 </script>
 
 <template>

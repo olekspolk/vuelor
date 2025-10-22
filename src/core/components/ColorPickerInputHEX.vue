@@ -10,7 +10,9 @@ const props = defineProps<{
 
 const rootContext = injectColorPickerContext()
 
-const ui = tv(input)()
+const ui = tv(input)({
+  disabled: rootContext.disabled.value
+})
 </script>
 
 <template>

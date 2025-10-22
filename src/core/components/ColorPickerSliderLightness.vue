@@ -37,9 +37,10 @@ const trackBackground = computed(() => {
   return `linear-gradient(${direction}, hsl(0, 0%, 0%), ${color}, hsl(0, 0%, 100%))`
 })
 
-const ui = computed(() => tv(slider)({
-  orientation: props.orientation
-}))
+const ui = tv(slider)({
+  orientation: props.orientation,
+  disabled: rootContext.disabled.value
+})
 </script>
 
 <template>

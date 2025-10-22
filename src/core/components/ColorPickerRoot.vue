@@ -43,7 +43,8 @@ import { useColor } from '../composables/useColor'
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   modelValue: null,
   defaultValue: '#FFFFFFFF',
-  format: 'hexa'
+  format: 'hexa',
+  disabled: false
 })
 
 const emit = defineEmits<ColorPickerRootEmits>()
