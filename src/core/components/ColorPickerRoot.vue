@@ -12,6 +12,7 @@ type ColorPickerRootContext = {
   rgba: Ref<RGBA>,
   hex: Ref<string>,
   hexa: Ref<string>,
+  uiSlots: Function,
   disabled: Ref<boolean>,
   isAlphaEnabled: Ref<boolean>,
   emitUpdateEnd: () => void
@@ -36,8 +37,9 @@ export type ColorPickerRootEmits = {
 
 <script setup lang="ts">
 import { computed, watch, toRaw } from 'vue'
-import { tv } from 'tailwind-variants'
-import { root } from '../theme'
+import tailwindcss from '../theme/tailwindcss'
+// import vanilacss from '../theme/vanilacss'
+import { createUiSlots } from '../utils/styles'
 import { useColor } from '../composables/useColor'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
@@ -82,18 +84,21 @@ watch(
 const disabled = computed(() => props.disabled ?? false)
 const isAlphaEnabled = computed(() => props.format.endsWith('a'))
 
+const uiSlots = createUiSlots(tailwindcss)
+
 provideColorPickerContext({
   ...color,
+  uiSlots,
   disabled,
   isAlphaEnabled,
   emitUpdateEnd: () => !props.disabled && emit('update:end', state.value)
 })
 
-const ui = tv(root)()
+const ui = uiSlots('picker');
 </script>
 
 <template>
-  <div :class="ui.base({ class: props.class })">
+  <div :class="ui.root(props.class)">
     <slot />
   </div>
 </template>

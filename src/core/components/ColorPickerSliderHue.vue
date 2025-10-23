@@ -1,18 +1,17 @@
 <script lang="ts">
 import type { SliderRootProps } from 'reka-ui'
+import type { UiSliderSlots } from '../utils/styles'
 
 export interface SliderProps {
   class?: string,
   orientation?: SliderRootProps['orientation'],
-  ui?: Partial<typeof slider.slots>
+  ui?: Partial<UiSliderSlots>
 }
 </script>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { tv } from 'tailwind-variants'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
-import { slider } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const props = withDefaults(defineProps<SliderProps>(), {
@@ -36,10 +35,7 @@ const trackBackground = computed(() => {
   return `linear-gradient(${direction}, red, yellow, lime, cyan, blue, magenta, red)`
 })
 
-const ui = computed(() => tv(slider)({
-  orientation: props.orientation,
-  disabled: rootContext.disabled.value
-}))
+const ui = rootContext.uiSlots('slider', 'shared')
 </script>
 
 <template>
@@ -49,17 +45,17 @@ const ui = computed(() => tv(slider)({
     :max="360"
     :inverted="props.orientation === 'vertical'"
     :orientation="props.orientation"
-    :class="ui.root({ class: [props.ui?.root, props.class] })"
+    :class="ui.root(props.ui?.root, props.class)"
     @pointerup="rootContext.emitUpdateEnd()"
   >
     <SliderTrack
       :style="{ background: trackBackground }"
-      :class="ui.track({ class: props.ui?.track })"
+      :class="ui.track(props.ui?.track)"
     />
     <SliderThumb
       aria-label="Hue"
       :style="{ background: `hsl(${rootContext.hsv.value.h},100%,50%)` }"
-      :class="ui.thumb({ class: props.ui?.thumb })"
+      :class="ui.thumb(props.ui?.thumb)"
     />
   </SliderRoot>
 </template>

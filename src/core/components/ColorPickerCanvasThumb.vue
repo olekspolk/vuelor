@@ -14,9 +14,7 @@ interface ThumbProps {
 
 <script setup lang="ts">
 import type { CSSProperties } from 'vue'
-import { tv } from 'tailwind-variants'
 import { ref, computed, onMounted, getCurrentInstance } from 'vue'
-import { slider } from '../theme'
 import { clamp } from '../utils/helpers.ts'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
@@ -125,15 +123,13 @@ function handleKeydown(event: KeyboardEvent) {
       break
   }
 }
-
-const ui = tv(slider)()
 </script>
 
 <template>
   <div
     tabindex="0"
     :style="styles"
-    :class="ui.thumb({ class: props.class })"
+    :class="props.class"
     @keydown="handleKeydown"
   />
 </template>

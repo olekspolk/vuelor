@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { tv } from 'tailwind-variants'
 import { ref, computed, watch } from 'vue'
-import { canvas } from '../theme'
 import { RGBAtoCSS } from '../utils/color.ts'
 import type { ThumbPosition } from './ColorPickerCanvasThumb.vue'
 import ColorPickerCanvasThumb from './ColorPickerCanvasThumb.vue'
@@ -16,7 +14,11 @@ interface CanvasProps {
   width?: number,
   class?: string,
   step?: number,
-  ui?: Partial<typeof canvas.slots>
+  ui?: {
+    root?: string,
+    area?: string,
+    thumb?: string
+  }
 }
 
 const props = withDefaults(defineProps<CanvasProps>(), {
@@ -72,22 +74,21 @@ watch(() => canvasRef.value, (canvas) => {
   }
 })
 
-const ui = tv(canvas)({
-  disabled: rootContext.disabled.value
-})
+const ui = rootContext.uiSlots('canvas', 'shared')
 </script>
 
 <template>
-  <div :class="ui.root({ class: [props.ui?.root, props.class] })">
+  <div :class="ui.root(props.ui?.root, props.class)">
     <canvas
       ref="canvasRef"
       :height="props.height"
       :width="props.width"
-      :class="ui.canvas({ class: props.ui?.canvas })"
+      :class="ui.area(props.ui?.area)"
     />
     <ColorPickerCanvasThumb
       :step="props.step"
       :color="thumbColor"
+      :class="ui.thumb(props.ui?.thumb)"
       v-model="thumbPosition"
     />
   </div>

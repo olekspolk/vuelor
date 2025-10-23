@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { tv } from 'tailwind-variants'
 import type { SliderRootProps } from 'reka-ui'
+import type { UiSliderSlots } from '../utils/styles'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
-import { slider } from '../theme'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const rootContext = injectColorPickerContext()
@@ -18,7 +17,7 @@ const alphaValue = computed({
 interface SliderProps {
   class?: string,
   orientation?: SliderRootProps['orientation'],
-  ui?: Partial<typeof slider.slots>
+  ui?: Partial<UiSliderSlots>
 }
 
 const props = withDefaults(defineProps<SliderProps>(), {
@@ -35,10 +34,7 @@ const trackStyle = computed(() => {
   }
 })
 
-const ui = tv(slider)({
-  orientation: props.orientation,
-  disabled: rootContext.disabled.value
-})
+const ui = rootContext.uiSlots('slider', 'shared')
 </script>
 
 <template>
@@ -46,16 +42,16 @@ const ui = tv(slider)({
     v-model="alphaValue"
     :disabled="rootContext.disabled.value"
     :orientation="props.orientation"
-    :class="ui.root({ class: [props.ui?.root, props.class] })"
+    :class="ui.root(props.ui?.root, props.class)"
     @pointerup="rootContext.emitUpdateEnd()"
   >
     <SliderTrack
       :style="trackStyle"
-      :class="ui.track({ class: props.ui?.track })"
+      :class="ui.track(props.ui?.track)"
     />
     <SliderThumb
       :style="{ backgroundColor: rootContext.hexa.value }"
-      :class="ui.thumb({ class: props.ui?.thumb })"
+      :class="ui.thumb(props.ui?.thumb)"
       aria-label="Opacity"
     />
   </SliderRoot>
