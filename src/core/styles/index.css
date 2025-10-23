@@ -19,6 +19,21 @@
   background-color: var(--vuelor-surface-color);
 }
 
+.vuelor-picker-eye-dropper {
+  border-radius: 5px;
+  padding: 0.25rem;
+  outline-color: var(--vuelor-primary-color);
+}
+
+.vuelor-picker-eye-dropper:hover {
+  background-color: #0000000d;
+}
+
+.vuelor-picker-eye-dropper:focus {
+  outline-style: solid;
+  outline-width: 1px;
+}
+
 .vuelor-picker-shared-thumb {
   display: block;
   width: 1rem;

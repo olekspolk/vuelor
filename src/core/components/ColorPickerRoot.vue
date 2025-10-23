@@ -43,7 +43,7 @@ import { createUiSlots } from '../utils/styles'
 import { useColor } from '../composables/useColor'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
-  styling: 'vanillacss',
+  styling: 'tailwindcss',
   defaultValue: '#FFFFFFFF',
   format: 'hexa',
   disabled: false

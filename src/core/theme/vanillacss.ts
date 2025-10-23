@@ -2,6 +2,9 @@ export default {
   picker: {
     root: 'vuelor-picker-root'
   },
+  dropper: {
+    base: 'vuelor-picker-eye-dropper'
+  },
   shared: {
     thumb: 'vuelor-picker-shared-thumb'
   },

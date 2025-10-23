@@ -2,6 +2,9 @@ export default {
   picker: {
     root: 'bg-white rounded-[13px] p-4 flex flex-col gap-2 shadow-[var(--elevation-card)]'
   },
+  dropper: {
+    base: 'hover:bg-[#0000000d] rounded-[5px] focus:outline-1 outline-[#0d99ff] p-1'
+  },
   shared: {
     thumb: 'block w-4 h-4 rounded-full border-4 border-white shadow-[var(--elevation-thumb)] focus:outline-1 outline-[#0d99ff]'
   },
