@@ -34,6 +34,7 @@ const ui = rootContext.uiSlots('input')
   <div :class="ui.group(props.ui?.group, props.class)">
     <input
       type="text"
+      name="red"
       aria-label="Red"
       :disabled="rootContext.disabled.value"
       :class="ui.field('px-1', props.ui?.field)"
@@ -42,6 +43,7 @@ const ui = rootContext.uiSlots('input')
     />
     <input
       type="text"
+      name="green"
       aria-label="Green"
       :disabled="rootContext.disabled.value"
       :class="ui.field('px-1', props.ui?.field)"
@@ -50,6 +52,7 @@ const ui = rootContext.uiSlots('input')
     />
     <input
       type="text"
+      name="blue"
       aria-label="Blue"
       :disabled="rootContext.disabled.value"
       :class="ui.field('px-1', props.ui?.field)"
@@ -59,6 +62,7 @@ const ui = rootContext.uiSlots('input')
     <input
       v-if="rootContext.isAlphaEnabled.value"
       type="text"
+      name="opacity"
       aria-label="Opacity"
       :disabled="rootContext.disabled.value"
       :value="rootContext.alpha.value"

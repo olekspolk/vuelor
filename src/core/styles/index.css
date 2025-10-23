@@ -1,0 +1,123 @@
+.vuelor-picker-root {
+  background-color: #fff;
+  border-radius: 13px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: var(--elevation-card);
+}
+
+.vuelor-picker-shared-thumb {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  border: 4px solid #fff;
+  box-shadow: var(--elevation-thumb);
+  outline-width: 0;
+}
+
+.vuelor-picker-shared-thumb:focus {
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: #0d99ff;
+}
+
+.vuelor-picker-canvas-root {
+  position: relative;
+}
+
+.vuelor-picker-canvas-root[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.vuelor-picker-canvas-area {
+  border-radius: 5px;
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: #0000001a;
+  outline-offset: -1px;
+}
+
+.vuelor-picker-slider-root {
+  position: relative;
+  height: 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+}
+
+.vuelor-picker-slider-root[data-orientation="vertical"] {
+  height: auto;
+  width: 1rem;
+  flex-direction: column;
+}
+
+.vuelor-picker-slider-root[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.vuelor-picker-slider-track {
+  position: relative;
+  height: 1rem;
+  width: 100%;
+  flex-grow: 1;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px #0000001a;
+}
+
+.vuelor-picker-slider-track[data-orientation="vertical"] {
+  height: 100%;
+  width: 1rem;
+}
+
+.vuelor-picker-input-group {
+  width: 100%;
+  display: flex;
+  gap: 1px;
+  border-radius: 5px;
+  outline-color: #e6e6e6;
+  outline-width: 0;
+  outline-style: solid;
+}
+
+.vuelor-picker-input-group:hover {
+  outline-width: 1px;
+}
+
+.vuelor-picker-input-group:focus-within {
+  outline-width: 1px;
+  outline-color: #0d99ff;
+}
+
+.vuelor-picker-input-group[data-disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.vuelor-picker-input-field {
+  width: 1.75rem;
+  flex: 1 1 0%;
+  background-color: #f5f5f5;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  height: 1.5rem;
+  font-size: 11px;
+  outline: none;
+  border: none;
+}
+
+.vuelor-picker-input-field:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.vuelor-picker-input-field:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}

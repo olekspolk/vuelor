@@ -34,6 +34,7 @@ const ui = rootContext.uiSlots('input')
   <div :class="ui.group(props.ui?.group, props.class)">
     <input
       type="text"
+      name="hue"
       aria-label="Hue"
       :disabled="rootContext.disabled.value"
       :class="ui.field('px-1', props.ui?.field)"
@@ -42,6 +43,7 @@ const ui = rootContext.uiSlots('input')
     />
     <input
       type="text"
+      name="saturation"
       aria-label="Saturation"
       :disabled="rootContext.disabled.value"
       :class="ui.field('px-1', props.ui?.field)"
@@ -50,6 +52,7 @@ const ui = rootContext.uiSlots('input')
     />
     <input
       type="text"
+      name="lightness"
       aria-label="Lightness"
       :disabled="rootContext.disabled.value"
       :class="ui.field('px-1', props.ui?.field)"
@@ -59,6 +62,7 @@ const ui = rootContext.uiSlots('input')
     <input
       v-if="rootContext.isAlphaEnabled.value"
       type="text"
+      name="opacity"
       aria-label="Opacity"
       :disabled="rootContext.disabled.value"
       :class="ui.field('flex-0 w-12', props.ui?.field)"

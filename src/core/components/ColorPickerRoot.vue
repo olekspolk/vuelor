@@ -22,6 +22,7 @@ export const [injectColorPickerContext, provideColorPickerContext] = createConte
 
 export interface ColorPickerRootProps {
   class?: string,
+  styling?: 'tailwindcss' | 'vanillacss',
   disabled?: boolean,
   defaultValue?: string,
   modelValue: string | null,
@@ -36,14 +37,13 @@ export type ColorPickerRootEmits = {
 </script>
 
 <script setup lang="ts">
+import theme from '../theme'
 import { computed, watch, toRaw } from 'vue'
-import tailwindcss from '../theme/tailwindcss'
-// import vanilacss from '../theme/vanilacss'
 import { createUiSlots } from '../utils/styles'
 import { useColor } from '../composables/useColor'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
-  modelValue: null,
+  styling: 'vanillacss',
   defaultValue: '#FFFFFFFF',
   format: 'hexa',
   disabled: false
@@ -84,7 +84,7 @@ watch(
 const disabled = computed(() => props.disabled ?? false)
 const isAlphaEnabled = computed(() => props.format.endsWith('a'))
 
-const uiSlots = createUiSlots(tailwindcss)
+const uiSlots = createUiSlots(theme[props.styling])
 
 provideColorPickerContext({
   ...color,
