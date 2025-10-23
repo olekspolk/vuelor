@@ -4,21 +4,7 @@ type ClassArg = string | undefined | null | false
 type GroupsConfig = Record<string, Record<string, string>>
 type PartialDeep<T> = { [K in keyof T]?: T[K] extends object ? PartialDeep<T[K]> : T[K] }
 
-export type UiSliderSlots = {
-  root: string
-  track: string
-  thumb: string
-}
-
-export type UiInputSlots = {
-  group: string
-  field: string
-}
-
-export function createUiSlots<T extends GroupsConfig>(
-  config: T,
-  global?: PartialDeep<T>
-) {
+export function createUiSlots<T extends GroupsConfig>(config: T, global?: PartialDeep<T>) {
   return <K extends keyof T>(...groups: K[]) => {
     const ui: Record<string, (...classes: ClassArg[]) => string> = {}
 
@@ -45,4 +31,15 @@ export function createUiSlots<T extends GroupsConfig>(
       [S in Extract<SlotsUnion, string>]: (...classes: ClassArg[]) => string
     }
   }
+}
+
+export type UiSliderSlots = {
+  root: string
+  track: string
+  thumb: string
+}
+
+export type UiInputSlots = {
+  group: string
+  field: string
 }
