@@ -3,14 +3,14 @@
 ColorPicker component based on reka-ui and tailwindCSS.
 
 ```vue
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue'
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
-  ColorPickerInputHEX
+  ColorPickerInputHex
 } from 'vuelor/picker'
 
 const color = ref(null)
@@ -21,7 +21,7 @@ const color = ref(null)
     <ColorPickerCanvas />
     <ColorPickerSliderHue />
     <ColorPickerSliderAlpha />
-    <ColorPickerInputHEX />
+    <ColorPickerInputHex />
   </ColorPickerRoot>
 </template>
 ```
