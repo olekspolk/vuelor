@@ -21,6 +21,7 @@ type ColorPickerRootContext = {
 export const [injectColorPickerContext, provideColorPickerContext] = createContext<ColorPickerRootContext>('ColorPickerRoot')
 
 export interface ColorPickerRootProps {
+  ui?: Record<string, any>,
   class?: string,
   styling?: 'tailwindcss' | 'vanillacss',
   disabled?: boolean,
@@ -84,7 +85,7 @@ watch(
 const disabled = computed(() => props.disabled ?? false)
 const isAlphaEnabled = computed(() => props.format.endsWith('a'))
 
-const uiSlots = createUiSlots(theme[props.styling])
+const uiSlots = createUiSlots(theme[props.styling], props.ui)
 
 provideColorPickerContext({
   ...color,

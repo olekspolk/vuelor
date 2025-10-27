@@ -10,12 +10,17 @@
   --vuelor-primary-color: #0d99ff;
   --vuelor-surface-color: #ffffff;
 
+  display: block;
+  width: 240px;
+  margin: 0 auto;
+
+  color: #000;
   border-radius: 13px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  box-shadow: var(--elevation-card);
+  box-shadow: var(--vuelor-elevation-card);
   background-color: var(--vuelor-surface-color);
 }
 
@@ -40,7 +45,7 @@
   height: 1rem;
   border-radius: 9999px;
   border: 4px solid var(--vuelor-surface-color);
-  box-shadow: var(--elevation-thumb);
+  box-shadow: var(--vuelor-elevation-thumb);
   outline-width: 0;
 }
 

@@ -1,15 +1,15 @@
 export default {
   picker: {
-    root: 'bg-white rounded-[13px] p-4 flex flex-col gap-2 shadow-[var(--elevation-card)]'
+    root: 'bg-white rounded-[13px] p-4 flex flex-col gap-2 shadow-vuelor-card'
   },
   dropper: {
     base: 'hover:bg-[#0000000d] rounded-[5px] focus:outline-1 outline-[#0d99ff] p-1'
   },
   shared: {
-    thumb: 'block w-4 h-4 rounded-full border-4 border-white shadow-[var(--elevation-thumb)] focus:outline-1 outline-[#0d99ff]'
+    thumb: 'block w-4 h-4 rounded-full border-4 border-white shadow-vuelor-thumb focus:outline-1 outline-[#0d99ff]'
   },
   canvas: {
-    root: 'relative data-disabled:pointer-events-none data-disabled:opacity-50',
+    root: 'relative touch-none data-disabled:pointer-events-none data-disabled:opacity-50',
     area: 'rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-[#0000001a]'
   },
   slider: {

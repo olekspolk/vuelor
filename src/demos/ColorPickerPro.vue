@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, inject } from 'vue'
+import { ref, inject } from 'vue'
 import {
   SelectContent,
   SelectItem,
@@ -23,38 +23,21 @@ import {
   ColorPickerInputHSB
 } from '../core'
 
+const INPUTS = {
+  Hex: ColorPickerInputHex,
+  RGB: ColorPickerInputRGB,
+  HSL: ColorPickerInputHSL,
+  HSB: ColorPickerInputHSB
+}
+
 const color = inject('color') as string
 
-const format = ref('Hex')
-const options = [
-  {
-    label: 'Hex',
-    component: ColorPickerInputHex
-  },
-  {
-    label: 'RGB',
-    component: ColorPickerInputRGB
-  },
-  {
-    label: 'HSL',
-    component: ColorPickerInputHSL
-  },
-  {
-    label: 'HSB',
-    component: ColorPickerInputHSB
-  }
-]
-
-const selectedFormatInput = computed(() => {
-  return options.find(option => option.label === format.value)?.component
-})
+const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('Hex')
+const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB'] as const
 </script>
 
 <template>
-  <ColorPickerRoot
-    v-model="color"
-    @update:end="console.log"
-  >
+  <ColorPickerRoot v-model="color">
     <ColorPickerCanvas />
     <div class="flex items-center gap-3">
       <ColorPickerEyeDropper>
@@ -96,9 +79,9 @@ const selectedFormatInput = computed(() => {
           >
             <SelectViewport class="py-2">
               <SelectItem
-                v-for="(option, index) in options"
+                v-for="(option, index) in formatOptions"
                 :key="index"
-                :value="option.label"
+                :value="option"
                 class="text-xs leading-none text-white rounded-[5px] flex items-center h-[25px] pl-6 pr-2 relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#0d99ff]"
                 >
                 <SelectItemIndicator class="absolute left-1 inline-flex items-center justify-center">
@@ -113,14 +96,14 @@ const selectedFormatInput = computed(() => {
                   </svg>
                 </SelectItemIndicator>
                 <SelectItemText>
-                  {{ option.label }}
+                  {{ option }}
                 </SelectItemText>
               </SelectItem>
             </SelectViewport>
           </SelectContent>
         </SelectPortal>
       </SelectRoot>
-      <component :is="selectedFormatInput" />
+      <component :is="INPUTS[format]" />
     </div>
   </ColorPickerRoot>
 </template>
