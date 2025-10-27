@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { computed, useTemplateRef, watchEffect } from 'vue'
 import { RGBAtoCSS } from '../utils/color.ts'
 import type { ThumbPosition } from './ColorPickerCanvasThumb.vue'
+import { fillCanvas } from '../utils/canvas.ts'
 import ColorPickerCanvasThumb from './ColorPickerCanvasThumb.vue'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const rootContext = injectColorPickerContext()
-const canvasRef = ref<HTMLCanvasElement | null>(null)
-const ctx = ref<CanvasRenderingContext2D | null>(null)
+const canvasRef = useTemplateRef<HTMLCanvasElement | null>('canvasRef')
 
 interface CanvasProps {
   height?: number,
@@ -40,38 +40,11 @@ const thumbPosition = computed({
       v: (100 - value.top) / 100,
     }
   }
-});
+})
 
-function updateCanvasFill() {
-  if (!ctx.value) return
-
-  const color = `hsl(${rootContext.hsv.value.h},100%,50%)`
-  ctx.value.rect(0, 0, props.width, props.height)
-  ctx.value.fillStyle = color
-  ctx.value.fillRect(0, 0, props.width, props.height)
-
-  const grdWhite = ctx.value.createLinearGradient(0, 0, props.width, 0)
-  grdWhite.addColorStop(0, 'rgba(255,255,255,1)')
-  grdWhite.addColorStop(1, 'rgba(255,255,255,0)')
-  ctx.value.fillStyle = grdWhite
-  ctx.value.fillRect(0, 0, props.width, props.height)
-
-  const grdBlack = ctx.value.createLinearGradient(0, 0, 0, props.height)
-  grdBlack.addColorStop(0, 'rgba(0,0,0,0)')
-  grdBlack.addColorStop(1, 'rgba(0,0,0,1)')
-  ctx.value.fillStyle = grdBlack
-  ctx.value.fillRect(0, 0, props.width, props.height)
-}
-
-watch(() => rootContext.hsv.value.h, updateCanvasFill)
-watch(() => canvasRef.value, (canvas) => {
-  if (canvas) {
-    const context = canvas.getContext('2d')
-    if (context) {
-      ctx.value = context
-      updateCanvasFill()
-    }
-  }
+watchEffect(() => {
+  const ctx = canvasRef.value?.getContext('2d')
+  ctx && fillCanvas(ctx, rootContext.hsv.value.h)
 })
 
 const ui = rootContext.uiSlots('canvas', 'shared')
