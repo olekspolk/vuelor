@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { computed, useTemplateRef, watchEffect } from 'vue'
-import { RGBAtoCSS } from '../utils/color.ts'
-import type { ThumbPosition } from './ColorPickerCanvasThumb.vue'
+import { useTemplateRef, watchEffect } from 'vue'
 import { fillCanvas } from '../utils/canvas.ts'
-import ColorPickerCanvasThumb from './ColorPickerCanvasThumb.vue'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
+import { useThumb } from '../composables/useThumb.ts'
 
 const rootContext = injectColorPickerContext()
 const canvasRef = useTemplateRef<HTMLCanvasElement | null>('canvasRef')
@@ -13,7 +11,6 @@ interface CanvasProps {
   height?: number,
   width?: number,
   class?: string,
-  step?: number,
   ui?: {
     root?: string,
     area?: string,
@@ -23,24 +20,10 @@ interface CanvasProps {
 
 const props = withDefaults(defineProps<CanvasProps>(), {
   height: 208,
-  width: 208,
-  step: 1
+  width: 208
 })
 
-const thumbColor = computed(() => RGBAtoCSS({ ...rootContext.rgba.value, a: 1 }));
-const thumbPosition = computed({
-  get: () => ({
-    top: 100 - rootContext.hsv.value.v * 100,
-    left: rootContext.hsv.value.s * 100
-  }),
-  set: (value: ThumbPosition) => {
-    rootContext.hsv.value = {
-      ...rootContext.hsv.value,
-      s: value.left / 100,
-      v: (100 - value.top) / 100,
-    }
-  }
-})
+const { thumbStyles, handleKeyDown } = useThumb(canvasRef)
 
 watchEffect(() => {
   const ctx = canvasRef.value?.getContext('2d')
@@ -58,11 +41,11 @@ const ui = rootContext.uiSlots('canvas', 'shared')
       :width="props.width"
       :class="ui.area(props.ui?.area)"
     />
-    <ColorPickerCanvasThumb
-      :step="props.step"
-      :color="thumbColor"
+    <span
+      tabindex="0"
+      :style="thumbStyles"
       :class="ui.thumb(props.ui?.thumb)"
-      v-model="thumbPosition"
+      @keydown="handleKeyDown"
     />
   </div>
 </template>
