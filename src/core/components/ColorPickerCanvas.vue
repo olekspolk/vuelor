@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { useTemplateRef, watchEffect } from 'vue'
-import { fillCanvas } from '../utils/canvas.ts'
+import type { CSSProperties } from 'vue'
+import { computed, useTemplateRef, watchEffect } from 'vue'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
+import { drawHsvGradient, drawHslGradient } from '../utils/canvas.ts'
 import { useThumb } from '../composables/useThumb.ts'
 
 const rootContext = injectColorPickerContext()
 const canvasRef = useTemplateRef<HTMLCanvasElement | null>('canvasRef')
 
 interface CanvasProps {
+  type?: 'HSV' | 'HSL',
   height?: number,
   width?: number,
   class?: string,
@@ -19,22 +21,54 @@ interface CanvasProps {
 }
 
 const props = withDefaults(defineProps<CanvasProps>(), {
+  type: 'HSL',
   height: 208,
-  width: 208
+  width: 208,
 })
 
-const { thumbStyles, handleKeyDown } = useThumb(canvasRef)
+const style = computed<CSSProperties>(() => {
+  return {
+    position: 'relative',
+    height: `${props.height}px`,
+    width: `${props.width}px`,
+  }
+})
 
 watchEffect(() => {
   const ctx = canvasRef.value?.getContext('2d')
-  ctx && fillCanvas(ctx, rootContext.hsv.value.h)
+  if (ctx) {
+    switch (props.type) {
+      case 'HSL':
+        drawHslGradient(ctx, rootContext.hsv.value.h)
+        break
+      case 'HSV':
+        drawHsvGradient(ctx, rootContext.hsv.value.h)
+        break
+    }
+  }
 })
+
+const formatType = computed<'HSV' | 'HSL'>(() => props.type)
+
+const {
+  thumbStyles,
+  handleWheel,
+  handleKeyDown,
+  handlePointerDown
+} = useThumb(canvasRef, formatType)
 
 const ui = rootContext.uiSlots('canvas', 'shared')
 </script>
 
 <template>
-  <div :class="ui.root(props.ui?.root, props.class)">
+  <div
+    :style="style"
+    :class="ui.root(props.ui?.root, props.class)"
+    @contextmenu.prevent
+    @wheel="handleWheel"
+    @keydown="handleKeyDown"
+    @pointerdown="handlePointerDown"
+  >
     <canvas
       ref="canvasRef"
       :height="props.height"
@@ -45,7 +79,6 @@ const ui = rootContext.uiSlots('canvas', 'shared')
       tabindex="0"
       :style="thumbStyles"
       :class="ui.thumb(props.ui?.thumb)"
-      @keydown="handleKeyDown"
     />
   </div>
 </template>

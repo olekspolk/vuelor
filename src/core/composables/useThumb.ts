@@ -4,7 +4,7 @@ import { clamp } from '../utils/helpers.ts'
 import { RGBAtoCSS } from '../utils/color.ts'
 import { injectColorPickerContext } from '../components/ColorPickerRoot.vue'
 
-export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>) {
+export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HSV' | 'HSL'>) {
   const rootContext = injectColorPickerContext()
 
   const bounding = ref({
@@ -14,27 +14,49 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>) {
     height: 1
   })
 
+  const { hsl, hsv } = rootContext
+
+  const top = computed({
+    get: () => type.value === 'HSV' ? (1 - hsv.value.v) : (1 - hsl.value.l),
+    set: (val: number) => {
+      if (type.value === 'HSV') {
+        hsv.value = { ...hsv.value, v: clamp(1 - val, 0, 1)}
+      } else {
+        hsl.value = { ...hsl.value, l: clamp(1 - val, 0, 1)}
+      }
+    }
+  })
+
+  const left = computed({
+    get: () => type.value === 'HSV' ? hsv.value.s : hsl.value.s,
+    set: (val: number) => {
+      if (type.value === 'HSV') {
+        hsv.value = { ...hsv.value, s: clamp(val, 0, 1)}
+      } else {
+        hsl.value = { ...hsl.value, s: clamp(val, 0, 1)}
+      }
+    }
+  })
+
   const thumbStyles = computed<CSSProperties>(() => {
-    const X = rootContext.hsv.value.s * bounding.value.width
-    const Y = (1 - rootContext.hsv.value.v) * bounding.value.height
+    const thumbX = left.value * bounding.value.width
+    const thumbY = top.value * bounding.value.height
     return {
       top: 0,
       left: 0,
       position: 'absolute',
       backgroundColor: RGBAtoCSS({ ...rootContext.rgba.value, a: 1 }),
-      transform: `translate3d(calc(-50% + ${X}px), calc(-50% + ${Y}px), 0px)`
+      transform: `translate3d(calc(-50% + ${thumbX}px), calc(-50% + ${thumbY}px), 0px)`
     }
   })
 
   onMounted(() => {
     updateBounding()
     window.addEventListener('resize', updateBounding)
-    canvasRef.value?.addEventListener('pointerdown', handlePointerDown)
   })
 
   onUnmounted(() => {
     window.removeEventListener('resize', updateBounding)
-    canvasRef.value?.removeEventListener('pointerdown', handlePointerDown)
   })
 
   function updateBounding() {
@@ -52,13 +74,10 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>) {
 
   function handlePointerMove(event: PointerEvent) {
     event.preventDefault()
-    const shiftY = event.clientY - bounding.value.top
-    const shiftX = event.clientX - bounding.value.left
-    rootContext.hsv.value = {
-      ...rootContext.hsv.value,
-      s: clamp(shiftX, 0, bounding.value.width) / bounding.value.width,
-      v: (1 - clamp(shiftY, 0, bounding.value.height) / bounding.value.height),
-    }
+    const canvasY = event.clientY - bounding.value.top
+    const canvasX = event.clientX - bounding.value.left
+    left.value = clamp(canvasX, 0, bounding.value.width) / bounding.value.width
+    top.value = clamp(canvasY, 0, bounding.value.height) / bounding.value.height
   }
 
   function handlePointerUp() {
@@ -72,41 +91,41 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>) {
     switch (event.key) {
       case 'ArrowUp':
         event.preventDefault()
-        rootContext.hsv.value = {
-          ...rootContext.hsv.value,
-          v: Math.min(rootContext.hsv.value.v + step, 1)
-        }
+        top.value -= step
         rootContext.emitUpdateEnd()
         break
       case 'ArrowDown':
         event.preventDefault()
-        rootContext.hsv.value = {
-          ...rootContext.hsv.value,
-          v: Math.max(rootContext.hsv.value.v - step, 0)
-        }
+        top.value += step
         rootContext.emitUpdateEnd()
         break
       case 'ArrowLeft':
         event.preventDefault()
-        rootContext.hsv.value = {
-          ...rootContext.hsv.value,
-          s: Math.max(rootContext.hsv.value.s - step, 0)
-        }
+        left.value -= step
         rootContext.emitUpdateEnd()
         break
       case 'ArrowRight':
         event.preventDefault()
-        rootContext.hsv.value = {
-          ...rootContext.hsv.value,
-          s: Math.min(rootContext.hsv.value.s + step, 1)
-        }
+        left.value += step
         rootContext.emitUpdateEnd()
         break
     }
   }
 
+  function handleWheel(event: WheelEvent) {
+    const step = event.deltaY * 0.1
+    const hue = (rootContext.hsv.value.h + step) % 360
+    event.preventDefault()
+    rootContext.hsv.value = {
+      ...rootContext.hsv.value,
+      h: hue < 0 ? 360 : hue
+    }
+  }
+
   return {
     thumbStyles,
-    handleKeyDown
+    handleWheel,
+    handleKeyDown,
+    handlePointerDown
   }
 }
