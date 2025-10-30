@@ -32,41 +32,56 @@ const ui = rootContext.uiSlots('input')
 
 <template>
   <div :class="ui.group(props.ui?.group, props.class)">
-    <input
-      type="text"
-      name="red"
-      aria-label="Red"
-      :disabled="rootContext.disabled.value"
-      :class="ui.field('px-1', props.ui?.field)"
-      :value="round(rootContext.rgb.value.r)"
-      @blur="parseChannelValue($event, 'r')"
-    />
-    <input
-      type="text"
-      name="green"
-      aria-label="Green"
-      :disabled="rootContext.disabled.value"
-      :class="ui.field('px-1', props.ui?.field)"
-      :value="round(rootContext.rgb.value.g)"
-      @blur="parseChannelValue($event, 'g')"
-    />
-    <input
-      type="text"
-      name="blue"
-      aria-label="Blue"
-      :disabled="rootContext.disabled.value"
-      :class="ui.field('px-1', props.ui?.field)"
-      :value="round(rootContext.rgb.value.b)"
-      @blur="parseChannelValue($event, 'b')"
-    />
-    <input
+    <div :class="ui.item(props.ui?.item)">
+      <span :class="ui.label(props.ui?.label)">R</span>
+      <input
+        type="text"
+        name="red"
+        aria-label="Red"
+        :disabled="rootContext.disabled.value"
+        :class="ui.field(props.ui?.field)"
+        :value="round(rootContext.rgb.value.r)"
+        @blur="parseChannelValue($event, 'r')"
+      />
+    </div>
+    <div :class="ui.item(props.ui?.item)">
+      <span :class="ui.label(props.ui?.label)">G</span>
+      <input
+        type="text"
+        name="green"
+        aria-label="Green"
+        :disabled="rootContext.disabled.value"
+        :class="ui.field(props.ui?.field)"
+        :value="round(rootContext.rgb.value.g)"
+        @blur="parseChannelValue($event, 'g')"
+      />
+    </div>
+    <div :class="ui.item(props.ui?.item)">
+      <span :class="ui.label(props.ui?.label)">B</span>
+      <input
+        type="text"
+        name="blue"
+        aria-label="Blue"
+        :disabled="rootContext.disabled.value"
+        :class="ui.field(props.ui?.field)"
+        :value="round(rootContext.rgb.value.b)"
+        @blur="parseChannelValue($event, 'b')"
+      />
+    </div>
+    <div
       v-if="rootContext.isAlphaEnabled.value"
-      type="text"
-      name="opacity"
-      aria-label="Opacity"
-      :disabled="rootContext.disabled.value"
-      :value="rootContext.alpha.value"
-      :class="ui.field('flex-0 w-12', props.ui?.field)"
-    />
+      data-alpha-input
+      :class="ui.item(props.ui?.item)"
+    >
+      <input
+        type="text"
+        name="opacity"
+        aria-label="Opacity"
+        :value="rootContext.alpha.value"
+        :disabled="rootContext.disabled.value"
+        :class="ui.field(props.ui?.field)"
+      />
+      <span :class="ui.label(props.ui?.label)">%</span>
+    </div>
   </div>
 </template>

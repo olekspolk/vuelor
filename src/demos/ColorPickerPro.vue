@@ -32,7 +32,7 @@ const INPUTS = {
 
 const color = inject('color') as string
 
-const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('Hex')
+const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('RGB')
 const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB'] as const
 
 const canvasType = computed<'HSL' | 'HSV'>(() => {

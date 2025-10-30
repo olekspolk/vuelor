@@ -42,4 +42,6 @@ export type UiSliderSlots = {
 export type UiInputSlots = {
   group: string
   field: string
+  item: string
+  label: string
 }
