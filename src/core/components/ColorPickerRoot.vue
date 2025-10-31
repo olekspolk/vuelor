@@ -1,7 +1,7 @@
 <script lang="ts">
 import { createContext } from 'reka-ui'
 import type { Ref } from 'vue'
-import type { HSV, HSVA, HSL, RGB, RGBA } from '../utils/types'
+import type { HSV, HSVA, HSL, RGB, RGBA, Format, ColorObject } from '../utils/types'
 
 type ColorPickerRootContext = {
   alpha: Ref<number>,
@@ -26,20 +26,19 @@ export interface ColorPickerRootProps {
   styling?: 'tailwindcss' | 'vanillacss',
   disabled?: boolean,
   defaultValue?: string,
-  modelValue: string | null,
-  format?: 'hex' | 'hexa' | 'rgb' | 'rgba' | 'hsl' | 'hsla' | 'hsv' | 'hsva'
+  modelValue: string | ColorObject | null,
+  format?: Format
 }
 
 export type ColorPickerRootEmits = {
-  (e: 'update', value: any): void,
   (e: 'update:end', value: any): void,
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string | ColorObject): void
 }
 </script>
 
 <script setup lang="ts">
 import theme from '../theme'
-import { computed, watch, toRaw } from 'vue'
+import { computed, watch } from 'vue'
 import { createUiSlots } from '../utils/styles'
 import { useColor } from '../composables/useColor'
 
@@ -54,29 +53,24 @@ const emit = defineEmits<ColorPickerRootEmits>()
 
 const color = useColor()
 
-const state = computed(() => ({
-  rgb: toRaw(color.rgb.value),
-  rgba: toRaw(color.rgba.value),
-  hsl: toRaw(color.hsl.value),
-  hsla: toRaw(color.hsla.value),
-  hsv: toRaw(color.hsv.value),
-  hsva: toRaw(color.hsva.value),
-  hex: color.hex.value,
-  hexa: color.hexa.value
-}))
-
-watch(() => state.value, (value) => emit('update', value))
-
 watch(
-  () => color.hexa.value,
-  (value: string) => emit('update:modelValue', value)
+  () => [color.hexa.value, color.hsv.value],
+  () => emit('update:modelValue', color.toFormat(props.format))
 )
 
 watch(
   () => props.modelValue,
-  (value: string | null) => {
+  (value: string | ColorObject | null) => {
+    if (value === null) {
+      color.hexa.value = props.defaultValue
+      return
+    }
+    if (typeof value === 'object') {
+      color.set(value)
+      return
+    }
     if (value !== color.hexa.value) {
-      color.hexa.value = value || props.defaultValue
+      color.hexa.value = value
     }
   },
   { immediate: true }
@@ -92,7 +86,11 @@ provideColorPickerContext({
   uiSlots,
   disabled,
   isAlphaEnabled,
-  emitUpdateEnd: () => !props.disabled && emit('update:end', state.value)
+  emitUpdateEnd: () => {
+    if (!props.disabled) {
+      emit('update:end', color.toFormat(props.format))
+    }
+  }
 })
 
 const ui = uiSlots('picker');

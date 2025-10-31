@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { Ref } from 'vue'
 import { ref, computed, inject } from 'vue'
 import {
   SelectContent,
@@ -30,7 +31,7 @@ const INPUTS = {
   HSB: ColorPickerInputHSB
 }
 
-const color = inject('color') as string
+const color = inject('color') as Ref<string>
 
 const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('RGB')
 const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB'] as const
@@ -41,7 +42,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 </script>
 
 <template>
-  <ColorPickerRoot v-model="color">
+  <ColorPickerRoot format="object" v-model="color">
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">
       <ColorPickerEyeDropper>

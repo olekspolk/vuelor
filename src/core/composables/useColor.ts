@@ -1,5 +1,5 @@
-import { ref, computed } from 'vue'
-import type { HSV, HSVA, HSL, Hexa, RGB, RGBA } from '../utils/types'
+import { ref, toRaw, computed } from 'vue'
+import type { HSV, HSVA, HSL, HSLA, Hexa, RGB, RGBA, Format, ColorObject } from '../utils/types'
 import { toHex, HSLtoHSV, HSVtoHSL, HSVtoRGB, RGBtoHSV, RGBtoHex, HexToRGB } from '../utils/color.ts'
 
 type ColorState = {
@@ -27,7 +27,7 @@ function fromHSV (hsv: HSV): ColorState {
 }
 
 export function useColor () {
-  const color = ref<ColorState>({
+  const state = ref<ColorState>({
     hsv: { h: 0, s: 0, v: 0 } as HSV,
     hsl: { h: 0, s: 0, l: 0 } as HSL,
     rgb: { r: 0, g: 0, b: 0 } as RGB,
@@ -36,55 +36,55 @@ export function useColor () {
   const alpha = ref(100)
 
   const rgb = computed<RGB>({
-    get: () => color.value.rgb,
-    set: (value) => (color.value = fromRGB(value))
+    get: () => state.value.rgb,
+    set: (value) => (state.value = fromRGB(value))
   })
 
   const rgba = computed<RGBA>({
-    get: () => ({ ...color.value.rgb, a: alpha.value / 100 }),
+    get: () => ({ ...state.value.rgb, a: alpha.value / 100 }),
     set: (value) => {
       alpha.value = (value.a ?? 1) * 100
-      color.value = fromRGB({ r: value.r, g: value.g, b: value.b })
+      state.value = fromRGB({ r: value.r, g: value.g, b: value.b })
     }
   })
 
   const hsl = computed<HSL>({
-    get: () => color.value.hsl,
-    set: (value) => (color.value = fromHSL(value))
+    get: () => state.value.hsl,
+    set: (value) => (state.value = fromHSL(value))
   })
 
-  const hsla = computed<HSVA>({
-    get: () => ({ ...color.value.hsv, a: alpha.value / 100 }),
+  const hsla = computed<HSLA>({
+    get: () => ({ ...state.value.hsl, a: alpha.value / 100 }),
     set: (value) => {
       alpha.value = (value.a ?? 1) * 100
-      color.value = fromHSV({ h: value.h, s: value.s, v: value.v })
+      state.value = fromHSL({ h: value.h, s: value.s, l: value.l })
     }
   })
 
   const hsv = computed<HSV>({
-    get: () => color.value.hsv,
-    set: (value) => (color.value = fromHSV(value))
+    get: () => state.value.hsv,
+    set: (value) => (state.value = fromHSV(value))
   })
 
   const hsva = computed<HSVA>({
-    get: () => ({ ...color.value.hsv, a: alpha.value / 100 }),
+    get: () => ({ ...state.value.hsv, a: alpha.value / 100 }),
     set: (value) => {
       alpha.value = (value.a ?? 1) * 100
-      color.value = fromHSV({ h: value.h, s: value.s, v: value.v })
+      state.value = fromHSV({ h: value.h, s: value.s, v: value.v })
     }
   })
 
   const hex = computed<Hexa>({
-    get: () => RGBtoHex(color.value.rgb),
+    get: () => RGBtoHex(state.value.rgb),
     set: (value) => {
       const rgb = HexToRGB(value)
-      color.value = fromRGB(rgb)
+      state.value = fromRGB(rgb)
     }
   })
 
   const hexa = computed<Hexa>({
     get: () => {
-      const hex = RGBtoHex(color.value.rgb)
+      const hex = RGBtoHex(state.value.rgb)
       const a = toHex(alpha.value / 100 * 255)
       return hex + a
     },
@@ -93,11 +93,99 @@ export function useColor () {
       const aHex = value.slice(7, 9)
       const a = aHex ? parseInt(aHex, 16) / 255 : 1
       alpha.value = a * 100
-      color.value = fromRGB(rgb)
+      state.value = fromRGB(rgb)
     }
   })
 
+  function set(value: ColorObject) {
+    state.value = {
+      hsv: value.hsv,
+      hsl: value.hsl,
+      rgb: value.rgb
+    }
+  }
+
+  function toRGBString(): string {
+    const { r, g, b } = state.value.rgb
+    return `rgb(${r}, ${g}, ${b})`
+  }
+
+  function toRGBAString(): string {
+    const { r, g, b } = state.value.rgb
+    const a = (alpha.value / 100).toFixed(2)
+    return `rgba(${r}, ${g}, ${b}, ${a})`
+  }
+
+  function toHSLString(): string {
+    const { h, s, l } = state.value.hsl
+    const sPerc = (s * 100).toFixed(1)
+    const lPerc = (l * 100).toFixed(1)
+    return `hsl(${h}, ${sPerc}%, ${lPerc}%)`
+  }
+
+  function toHSLAString(): string {
+    const { h, s, l } = state.value.hsl
+    const sPerc = (s * 100).toFixed(1)
+    const lPerc = (l * 100).toFixed(1)
+    const a = (alpha.value / 100).toFixed(2)
+    return `hsla(${h}, ${sPerc}%, ${lPerc}%, ${a})`
+  }
+
+  function toHSVString(): string {
+    const { h, s, v } = state.value.hsv
+    const sPerc = (s * 100).toFixed(1)
+    const vPerc = (v * 100).toFixed(1)
+    return `hsv(${h}, ${sPerc}%, ${vPerc}%)`
+  }
+
+  function toHSVAString(): string {
+    const { h, s, v } = state.value.hsv
+    const sPerc = (s * 100).toFixed(1)
+    const vPerc = (v * 100).toFixed(1)
+    const a = (alpha.value / 100).toFixed(2)
+    return `hsva(${h}, ${sPerc}%, ${vPerc}%, ${a})`
+  }
+
+  function toObject(): ColorObject {
+    return {
+      rgb: toRaw(rgb.value),
+      rgba: toRaw(rgba.value),
+      hsl: toRaw(hsl.value),
+      hsla: toRaw(hsla.value),
+      hsv: toRaw(hsv.value),
+      hsva: toRaw(hsva.value),
+      hex: hex.value,
+      hexa: hexa.value
+    }
+  }
+
+  function toFormat(format: Format): string | ColorObject {
+    switch (format) {
+      case 'hex':
+        return hex.value
+      case 'hexa':
+        return hexa.value
+      case 'rgb':
+        return toRGBString()
+      case 'rgba':
+        return toRGBAString()
+      case 'hsl':
+        return toHSLString()
+      case 'hsla':
+        return toHSLAString()
+      case 'hsv':
+        return toHSVString()
+      case 'hsva':
+        return toHSVAString()
+      case 'object':
+        return toObject()
+      default:
+        return hex.value
+    }
+  }
+
   return {
+    state,
     alpha,
     rgb,
     rgba,
@@ -106,6 +194,15 @@ export function useColor () {
     hsv,
     hsva,
     hex,
-    hexa
+    hexa,
+    set,
+    toRGBString,
+    toRGBAString,
+    toHSLString,
+    toHSLAString,
+    toHSVString,
+    toHSVAString,
+    toObject,
+    toFormat
   }
 }

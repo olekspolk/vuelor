@@ -12,11 +12,12 @@ const color = inject('color') as string
 
 <template>
   <div class="flex items-center gap-4">
-    <ColorPickerRoot v-model="color">
+    <ColorPickerRoot format="object" v-model="color">
       <ColorPickerCanvas />
       <ColorPickerSliderHue />
     </ColorPickerRoot>
     <ColorPickerRoot
+      format="object"
       v-model="color"
       class="flex-row"
     >
