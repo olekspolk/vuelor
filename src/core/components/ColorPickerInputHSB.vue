@@ -23,7 +23,9 @@ function parseChannelValue(e: Event, channel: 'h' | 's' | 'v', max: number) {
     }
     rootContext.emitUpdateEnd()
   } else {
-    target.value = Math.round(value * 100).toString()
+    target.value = channel !== 'h'
+      ? Math.round(value * 100).toString()
+      : value.toString()
   }
 }
 
@@ -56,7 +58,7 @@ const ui = rootContext.uiSlots('input')
         aria-label="Hue"
         :disabled="rootContext.disabled.value"
         :class="ui.field(props.ui?.field)"
-        :value="rootContext.hsv.value.h"
+        :value="Math.round(rootContext.hsv.value.h)"
         @blur="parseChannelValue($event, 'h', 360)"
       />
     </div>
