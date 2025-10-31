@@ -19,7 +19,7 @@ export default {
   input: {
     group: 'w-full flex gap-[1px] rounded-[5px] hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     item: 'flex flex-1 data-[alpha-input]:grow-0 items-center px-1.5 gap-1 bg-[#f5f5f5] first:rounded-l-[5px] last:rounded-r-[5px]',
-    label: 'hidden text-black text-[11px] opacity-40',
+    label: 'hidden select-none text-black text-[11px] opacity-40',
     field: 'w-full h-6 min-w-5 text-[11px] focus:outline-none'
   }
 }
