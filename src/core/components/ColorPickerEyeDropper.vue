@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const props = defineProps<{
@@ -7,8 +8,12 @@ const props = defineProps<{
 
 const rootContext = injectColorPickerContext()
 
+const isSupported = computed(() => {
+  return typeof window !== 'undefined' && !!(window as any).EyeDropper
+})
+
 function openEyeDropper () {
-  if (typeof window === 'undefined' || !(window as any).EyeDropper) {
+  if (!isSupported.value) {
     console.warn('EyeDropper API is not available in this environment.')
     return
   }
@@ -31,6 +36,7 @@ const ui = rootContext.uiSlots('dropper')
 
 <template>
   <button
+    v-if="isSupported"
     :class="ui.base(props.class)"
     @click="openEyeDropper"
   >
