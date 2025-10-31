@@ -26,15 +26,13 @@ function handleAlphaInput(e: Event) {
   const target = e.target as HTMLInputElement
   const intValue = parseInt(target.value, 10)
   const value = isNaN(intValue)
-    ? Math.round(rootContext.rgba.value.a * 100)
+    ? rootContext.alpha.value
     : clamp(intValue, 0, 100)
-  const alpha = value / 100
-  if (Math.round(rootContext.rgba.value.a * 100) !== value) {
-    rootContext.rgba.value = {
-      ...rootContext.rgba.value,
-      a: alpha
-    }
+  if (rootContext.alpha.value !== value) {
+    rootContext.alpha.value = value
     rootContext.emitUpdateEnd()
+  } else {
+    target.value = value.toString()
   }
 }
 
@@ -67,6 +65,7 @@ const ui = rootContext.uiSlots('input')
         :value="rootContext.alpha.value"
         :disabled="rootContext.disabled.value"
         :class="ui.field(props.ui?.field)"
+        @blur="handleAlphaInput"
       />
       <span :class="ui.label(props.ui?.label)">%</span>
     </div>

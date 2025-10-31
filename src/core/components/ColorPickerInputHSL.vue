@@ -22,6 +22,22 @@ function parseChannelValue(e: Event, channel: 'h' | 's' | 'l', max: number) {
       [channel]: channel === 'h' ? value : value / 100
     }
     rootContext.emitUpdateEnd()
+  } else {
+    target.value = Math.round(value * 100).toString()
+  }
+}
+
+function handleAlphaInput(e: Event) {
+  const target = e.target as HTMLInputElement
+  const intValue = parseInt(target.value, 10)
+  const value = isNaN(intValue)
+    ? rootContext.alpha.value
+    : clamp(intValue, 0, 100)
+  if (rootContext.alpha.value !== value) {
+    rootContext.alpha.value = value
+    rootContext.emitUpdateEnd()
+  } else {
+    target.value = value.toString()
   }
 }
 
@@ -83,6 +99,7 @@ const ui = rootContext.uiSlots('input')
         :value="rootContext.alpha.value"
         :disabled="rootContext.disabled.value"
         :class="ui.field(props.ui?.field)"
+        @blur="handleAlphaInput"
       />
       <span :class="ui.label(props.ui?.label)">%</span>
     </div>
