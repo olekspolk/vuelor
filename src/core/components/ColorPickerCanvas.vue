@@ -21,7 +21,7 @@ interface CanvasProps {
 }
 
 const props = withDefaults(defineProps<CanvasProps>(), {
-  type: 'HSL',
+  type: 'HSV',
   height: 208,
   width: 208,
 })
