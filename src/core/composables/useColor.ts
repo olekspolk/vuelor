@@ -1,6 +1,7 @@
 import { ref, toRaw, computed } from 'vue'
 import type { HSV, HSVA, HSL, HSLA, Hexa, RGB, RGBA, Format, ColorObject } from '../utils/types'
 import { toHex, HSLtoHSV, HSVtoHSL, HSVtoRGB, RGBtoHSV, RGBtoHex, HexToRGB } from '../utils/color.ts'
+import { parseHex, parseRGB, parseRGBA, parseHSL, parseHSLA, parseHSV, parseHSVA } from '../utils/parsers.ts'
 
 type ColorState = {
   hsv: HSV
@@ -97,14 +98,6 @@ export function useColor () {
     }
   })
 
-  function set(value: ColorObject) {
-    state.value = {
-      hsv: value.hsv,
-      hsl: value.hsl,
-      rgb: value.rgb
-    }
-  }
-
   function toRGBString(): string {
     const { r, g, b } = state.value.rgb
     return `rgb(${r}, ${g}, ${b})`
@@ -184,6 +177,52 @@ export function useColor () {
     }
   }
 
+  function fromFormat(value: string | ColorObject, format: Format) {
+    switch (format) {
+      case 'hex': {
+        rgba.value = parseHex(value as string)
+        break
+      }
+      case 'hexa': {
+        rgba.value = parseHex(value as string)
+        break
+      }
+      case 'rgb': {
+        rgb.value = parseRGB(value as string)
+        break
+      }
+      case 'rgba': {
+        rgba.value = parseRGBA(value as string)
+        break
+      }
+      case 'hsl': {
+        hsl.value = parseHSL(value as string)
+        break
+      }
+      case 'hsla': {
+        hsla.value = parseHSLA(value as string)
+        break
+      }
+      case 'hsv': {
+        hsv.value = parseHSV(value as string)
+        break
+      }
+      case 'hsva': {
+        hsva.value = parseHSVA(value as string)
+        break
+      }
+      case 'object': {
+        state.value = {
+          hsv: (value as ColorObject).hsv,
+          hsl: (value as ColorObject).hsl,
+          rgb: (value as ColorObject).rgb
+        }
+        alpha.value = ((value as ColorObject).hsva.a ?? 1) * 100
+        break
+      }
+    }
+  }
+
   return {
     state,
     alpha,
@@ -195,7 +234,6 @@ export function useColor () {
     hsva,
     hex,
     hexa,
-    set,
     toRGBString,
     toRGBAString,
     toHSLString,
@@ -203,6 +241,7 @@ export function useColor () {
     toHSVString,
     toHSVAString,
     toObject,
-    toFormat
+    toFormat,
+    fromFormat
   }
 }

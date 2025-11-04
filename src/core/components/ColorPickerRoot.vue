@@ -18,6 +18,8 @@ type ColorPickerRootContext = {
   emitUpdateEnd: () => void
 }
 
+type ModelValue = string | ColorObject | null
+
 export const [injectColorPickerContext, provideColorPickerContext] = createContext<ColorPickerRootContext>('ColorPickerRoot')
 
 export interface ColorPickerRootProps {
@@ -26,7 +28,7 @@ export interface ColorPickerRootProps {
   styling?: 'tailwindcss' | 'vanillacss',
   disabled?: boolean,
   defaultValue?: string,
-  modelValue: string | ColorObject | null,
+  modelValue: ModelValue,
   format?: Format
 }
 
@@ -39,12 +41,13 @@ export type ColorPickerRootEmits = {
 <script setup lang="ts">
 import theme from '../theme'
 import { computed, watch } from 'vue'
+import { isColorsEqual } from '../utils/color'
 import { createUiSlots } from '../utils/styles'
 import { useColor } from '../composables/useColor'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   styling: 'tailwindcss',
-  defaultValue: '#FFFFFFFF',
+  defaultValue: '#B63DDAFF',
   format: 'hexa',
   disabled: false
 })
@@ -60,24 +63,18 @@ watch(
 
 watch(
   () => props.modelValue,
-  (value: string | ColorObject | null) => {
+  (value: ModelValue, oldValue: ModelValue | undefined) => {
     if (value === null) {
       color.hexa.value = props.defaultValue
-      return
-    }
-    if (typeof value === 'object') {
-      color.set(value)
-      return
-    }
-    if (value !== color.hexa.value) {
-      color.hexa.value = value
+    } else if (!isColorsEqual(value, oldValue)) {
+      color.fromFormat(value, props.format)
     }
   },
   { immediate: true }
 )
 
 const disabled = computed(() => props.disabled ?? false)
-const isAlphaEnabled = computed(() => props.format.endsWith('a'))
+const isAlphaEnabled = computed(() => ['hexa', 'rgba', 'hsva', 'object'].includes(props.format!))
 
 const uiSlots = createUiSlots(theme[props.styling], props.ui)
 
@@ -93,7 +90,7 @@ provideColorPickerContext({
   }
 })
 
-const ui = uiSlots('picker');
+const ui = uiSlots('picker')
 </script>
 
 <template>

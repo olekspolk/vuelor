@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UiInputSlots } from '../utils/styles'
 import { clamp } from '../utils/helpers.ts'
-import { parseHexColor } from '../utils/parsers.ts'
+import { parseHex } from '../utils/parsers.ts'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const props = defineProps<{
@@ -13,7 +13,7 @@ const rootContext = injectColorPickerContext()
 
 function handleHexInput(e: Event) {
   const target = e.target as HTMLInputElement
-  const rgbaValue = parseHexColor(target.value)
+  const rgbaValue = parseHex(target.value)
   if (rgbaValue) {
     rootContext.rgba.value = rgbaValue
     rootContext.emitUpdateEnd()
