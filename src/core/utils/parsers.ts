@@ -64,6 +64,10 @@ function baseParser(str: string) {
   }
 }
 
+function parsedToPercentage(value: string): number {
+  return value.endsWith('%') ? parseFloat(value) / 100 : parseFloat(value)
+}
+
 export function parseRGB (str: string): RGB {
   const parsed = baseParser(str)
   if (parsed && (parsed.type?.toLowerCase() === 'rgb')) {
@@ -90,13 +94,51 @@ export function parseRGBA (str: string): RGBA {
 }
 
 export function parseHSL (str: string): HSL {
+  const parsed = baseParser(str)
+  if (parsed && (parsed.type?.toLowerCase() === 'hsl')) {
+    return {
+      h: parseFloat(parsed.values[0] as string),
+      s: parsedToPercentage(parsed.values[1] as string),
+      l: parsedToPercentage(parsed.values[2] as string)
+    }
+  }
+  return { h: 0, s: 0, l: 0 }
 }
 
 export function parseHSLA (str: string): HSLA {
+  const parsed = baseParser(str)
+  if (parsed && (parsed.type?.toLowerCase() === 'hsl')) {
+    return {
+      h: parseFloat(parsed.values[0] as string),
+      s: parsedToPercentage(parsed.values[1] as string),
+      l: parsedToPercentage(parsed.values[2] as string),
+      a: parsed.values[3] ? parseFloat(parsed.values[3] as string) : 1
+    }
+  }
+  return { h: 0, s: 0, l: 0, a: 1 }
 }
 
 export function parseHSV (str: string): HSV {
+  const parsed = baseParser(str)
+  if (parsed && (parsed.type?.toLowerCase() === 'hsv')) {
+    return {
+      h: parseFloat(parsed.values[0] as string),
+      s: parsedToPercentage(parsed.values[1] as string),
+      v: parsedToPercentage(parsed.values[2] as string)
+    }
+  }
+  return { h: 0, s: 0, v: 0 }
 }
 
 export function parseHSVA (str: string): HSVA {
+  const parsed = baseParser(str)
+  if (parsed && (parsed.type?.toLowerCase() === 'hsv')) {
+    return {
+      h: parseFloat(parsed.values[0] as string),
+      s: parsedToPercentage(parsed.values[1] as string),
+      v: parsedToPercentage(parsed.values[2] as string),
+      a: parsed.values[3] ? parseFloat(parsed.values[3] as string) : 1
+    }
+  }
+  return { h: 0, s: 0, v: 0, a: 1 }
 }
