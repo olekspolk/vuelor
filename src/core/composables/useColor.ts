@@ -217,7 +217,7 @@ export function useColor () {
           hsl: (value as ColorObject).hsl,
           rgb: (value as ColorObject).rgb
         }
-        alpha.value = ((value as ColorObject).hsva.a ?? 1) * 100
+        alpha.value = ((value as ColorObject).hsva?.a ?? 1) * 100
         break
       }
     }

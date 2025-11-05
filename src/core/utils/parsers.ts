@@ -107,7 +107,7 @@ export function parseHSL (str: string): HSL {
 
 export function parseHSLA (str: string): HSLA {
   const parsed = baseParser(str)
-  if (parsed && (parsed.type?.toLowerCase() === 'hsl')) {
+  if (parsed && (parsed.type?.toLowerCase() === 'hsla')) {
     return {
       h: parseFloat(parsed.values[0] as string),
       s: parsedToPercentage(parsed.values[1] as string),
@@ -132,7 +132,7 @@ export function parseHSV (str: string): HSV {
 
 export function parseHSVA (str: string): HSVA {
   const parsed = baseParser(str)
-  if (parsed && (parsed.type?.toLowerCase() === 'hsv')) {
+  if (parsed && (parsed.type?.toLowerCase() === 'hsva')) {
     return {
       h: parseFloat(parsed.values[0] as string),
       s: parsedToPercentage(parsed.values[1] as string),
