@@ -2,7 +2,7 @@
 import { ref, provide } from 'vue'
 import { useRoute } from 'vue-router'
 
-const color = ref<string>('#ff0000ff')
+const color = ref<string | null>(null)
 provide('color', color)
 
 const menuItems = [
