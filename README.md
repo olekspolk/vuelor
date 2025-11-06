@@ -2,6 +2,10 @@
 
 Fully customizable ColorPicker for Vue.js based on RekaUI and TailwindCSS.
 
+```bash
+npm i @vuelor/picker
+```
+
 ```vue
 <script setup>
 import { ref } from 'vue'

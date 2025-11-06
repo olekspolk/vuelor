@@ -11,10 +11,6 @@ Install the component from your command line.
 npm i @vuelor/picker
 ```
 
-::: warning
-The package is under development and has not been published yet.
-:::
-
 ## 2. Import the parts
 
 This isn’t a **"drop-in"** color picker. Instead, it’s a collection of building blocks that let you craft exactly what you want.
