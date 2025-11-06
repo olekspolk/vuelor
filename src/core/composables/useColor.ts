@@ -44,7 +44,7 @@ export function useColor () {
   const rgba = computed<RGBA>({
     get: () => ({ ...state.value.rgb, a: alpha.value / 100 }),
     set: (value) => {
-      alpha.value = (value.a ?? 1) * 100
+      alpha.value = Math.round((value.a ?? 1) * 100)
       state.value = fromRGB({ r: value.r, g: value.g, b: value.b })
     }
   })
@@ -57,7 +57,7 @@ export function useColor () {
   const hsla = computed<HSLA>({
     get: () => ({ ...state.value.hsl, a: alpha.value / 100 }),
     set: (value) => {
-      alpha.value = (value.a ?? 1) * 100
+      alpha.value = Math.round((value.a ?? 1) * 100)
       state.value = fromHSL({ h: value.h, s: value.s, l: value.l })
     }
   })
@@ -70,7 +70,7 @@ export function useColor () {
   const hsva = computed<HSVA>({
     get: () => ({ ...state.value.hsv, a: alpha.value / 100 }),
     set: (value) => {
-      alpha.value = (value.a ?? 1) * 100
+      alpha.value = Math.round((value.a ?? 1) * 100)
       state.value = fromHSV({ h: value.h, s: value.s, v: value.v })
     }
   })
@@ -93,7 +93,7 @@ export function useColor () {
       const rgb = HexToRGB(value.slice(0, 7))
       const aHex = value.slice(7, 9)
       const a = aHex ? parseInt(aHex, 16) / 255 : 1
-      alpha.value = a * 100
+      alpha.value = Math.round(a * 100)
       state.value = fromRGB(rgb)
     }
   })
