@@ -1,6 +1,8 @@
-<script lang="ts" setup>
-import type { Ref } from 'vue'
-import { ref, computed, inject } from 'vue'
+# ColorPicker Pro
+
+```vue
+<script setup>
+import { ref } from 'vue'
 import {
   SelectContent,
   SelectItem,
@@ -22,7 +24,7 @@ import {
   ColorPickerInputHSL,
   ColorPickerInputRGB,
   ColorPickerInputHSB
-} from '../core'
+} from '@vuelor/picker'
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -31,24 +33,20 @@ const INPUTS = {
   HSB: ColorPickerInputHSB
 }
 
-const color = inject('color') as Ref<string>
+const color = ref(null)
 
-const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('RGB')
-const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB'] as const
-
-const canvasType = computed<'HSL' | 'HSV'>(() => {
-  return format.value === 'HSL' ? 'HSL' : 'HSV'
-})
+const format = ref('Hex')
+const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB']
 </script>
 
 <template>
-  <ColorPickerRoot format="object" v-model="color">
-    <ColorPickerCanvas :type="canvasType" />
+  <ColorPickerRoot v-model="color">
+    <ColorPickerCanvas />
     <div class="flex items-center gap-3">
       <ColorPickerEyeDropper>
         <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
           <path
-            fill="currentColor"
+            fill="#000"
             fill-rule="evenodd"
             clip-rule="evenodd"
             d="M17.52 6.471a1.62 1.62 0 0 0-2.295.003l-1.87 1.88-.354.355-.355-.354-.01-.01a.9.9 0 0 0-1.272 0l-.02.02a.9.9 0 0 0 0 1.273l.51.51 2 2 .51.51a.9.9 0 0 0 1.272 0l.02-.02a.9.9 0 0 0 0-1.273l-.01-.01-.352-.353.351-.353 1.879-1.888a1.62 1.62 0 0 0-.003-2.29m-3.004-.702a2.621 2.621 0 1 1 3.717 3.697l-1.57 1.579a1.9 1.9 0 0 1-.3 2.3l-.02.02a1.9 1.9 0 0 1-2.687 0l-.156-.157-5.647 5.642a.5.5 0 0 1-.353.147H5.504a.5.5 0 0 1-.5-.5L5 16.503a.5.5 0 0 1 .146-.354l5.647-5.647-.157-.156a1.9 1.9 0 0 1 0-2.687l.02-.02a1.9 1.9 0 0 1 2.299-.3zm-3.016 5.44 1.293 1.292-5.5 5.496h-1.29L6 16.707z"
@@ -69,7 +67,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
           <SelectValue placeholder="Format" />
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path
-              fill="currentColor"
+              fill="black"
               fill-rule="evenodd"
               clip-rule="evenodd"
               d="M9.646 11.146a.5.5 0 0 1 .708 0L12 12.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708"
@@ -79,7 +77,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 
         <SelectPortal>
           <SelectContent
-            class="w-[96px] px-2 bg-[#1e1e1e] rounded-[13px] shadow will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade z-[100]"
+            class="w-[96px] px-2 bg-[#1e1e1e] rounded-[13px] shadow-sm will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade z-[100]"
             :side-offset="5"
           >
             <SelectViewport class="py-2">
@@ -112,3 +110,4 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
     </div>
   </ColorPickerRoot>
 </template>
+```

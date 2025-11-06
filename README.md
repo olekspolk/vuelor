@@ -1,6 +1,6 @@
-# vuelor/picker
+# Vuelor
 
-ColorPicker component based on reka-ui and tailwindCSS.
+Fully customizable ColorPicker for Vue.js based on RekaUI and TailwindCSS.
 
 ```vue
 <script setup>
@@ -11,7 +11,7 @@ import {
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
   ColorPickerInputHex
-} from 'vuelor/picker'
+} from '@vuelor/picker'
 
 const color = ref(null)
 </script>

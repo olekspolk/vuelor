@@ -1,15 +1,17 @@
-<script lang="ts" setup>
-import type { Ref } from 'vue'
-import { inject } from 'vue'
+# vuelor/picker
+
+```vue
+<script setup>
+import { ref } from 'vue'
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
   ColorPickerInputHex
-} from '../core'
+} from '@vuelor/picker'
 
-const color = inject('color') as Ref<string>
+const color = ref(null)
 </script>
 
 <template>
@@ -20,3 +22,4 @@ const color = inject('color') as Ref<string>
     <ColorPickerInputHex />
   </ColorPickerRoot>
 </template>
+```

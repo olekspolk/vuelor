@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.vuelor button,
+.vuelor input {
+  color: #000;
+}
+
+.vuelor button {
+  border-style: solid;
+}
+
+.vuelor * {
+  outline-width: 0;
+  outline-style: solid;
+}
+
+.vuelor canvas,
+.vuelor span:focus,
+.vuelor button:focus {
+  outline-width: 1px;
+  outline-style: solid;
+}
+
+.image-bg {
+  background-color: var(--vuelor-selected-color, var(--vp-home-hero-name-color));
+  z-index: -1;
+}
+
+@media screen and (max-width: 959px) {
+  .image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image {
+    margin: 0 0 40px 0 !important;
+  }
+}
