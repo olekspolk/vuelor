@@ -1,9 +1,7 @@
-import { fileURLToPath, URL } from 'node:url'
-
-import { defineConfig } from 'vite'
 import { resolve } from 'path'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
+import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
@@ -15,21 +13,20 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': resolve(__dirname, 'src')
     },
   },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: "VuelorColorPicker",
+      name: 'VuelorColorPicker',
       fileName: (format) => `index.${format}.js`,
-      formats: ['es', 'cjs', 'umd'],
     },
     rollupOptions: {
-      external: ["vue"],
+      external: ['vue', 'reka-ui', '@tailwindcss/vite'],
       output: {
         globals: {
-          vue: "Vue",
+          vue: 'Vue',
         },
       },
     },
