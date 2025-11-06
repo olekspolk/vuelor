@@ -96,6 +96,10 @@ provideColorPickerContext({
   }
 })
 
+defineExpose({
+  color
+})
+
 const ui = uiSlots('picker')
 </script>
 
