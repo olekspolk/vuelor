@@ -18,6 +18,8 @@ export default {
   },
   input: {
     group: 'vuelor-picker-input-group',
+    item: 'vuelor-picker-input-item',
+    label: 'vuelor-picker-input-label',
     field: 'vuelor-picker-input-field'
   }
 }
