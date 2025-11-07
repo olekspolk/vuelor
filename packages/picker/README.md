@@ -1,4 +1,33 @@
+<br />
+<p align="center">
+  <a href="https://github.com/olekspolk/vuelor">
+    <img src="https://vuelor.dev/poster.png" alt="Logo" width="415" />
+  </a>
+</p>
+<br />
+<h1 align="center">Vuelor</h1>
+
+<p align="center">
 Vuelor — a truly flexible, accessible, and Tailwind-ready color picker with developer experiance in mind.
+</p>
+
+<p align="center">
+ <a href="https://vuelor.dev">Documentation</a> | <a href="https://vuelor.dev/guide/getting-started.html">Getting Started</a> | <a href="https://vuelor.dev/examples/">Examples</a> | <a href="https://vuelor.dev/guide/introduction.html">Why Vuelor?</a>
+</p>
+
+## Installation
+
+```bash
+npm install @vuelor/picker
+```
+
+```bash
+pnpm add @vuelor/picker
+```
+
+```bash
+yarn add @vuelor/picker
+```
 
 ## Import the parts
 
