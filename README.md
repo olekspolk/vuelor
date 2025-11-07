@@ -1,1 +1,0 @@
-./packages/picker/README.md
