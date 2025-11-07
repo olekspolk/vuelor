@@ -4,7 +4,6 @@
     <img src="https://vuelor.dev/poster.png" alt="Logo" width="415" />
   </a>
 </p>
-<br />
 <h1 align="center">Vuelor</h1>
 
 <p align="center">
