@@ -67,7 +67,7 @@ Import CSS styles and add `styling="vanillacss"` property.
 
 ```vue
 <script setup>
-import '@vuelor/picker/styles.css'
+import '@vuelor/picker/style'
 
 import { ref } from 'vue'
 import {
