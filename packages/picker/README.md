@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/olekspolk/vuelor">
-    <img src="https://vuelor.dev/poster.png" alt="Logo" width="415" />
+    <img src="https://vuelor.dev/poster.png?v=2" alt="Examples" width="615" />
   </a>
 </p>
 <h1 align="center">Vuelor</h1>
