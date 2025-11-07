@@ -16,9 +16,16 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: resolve(__dirname, 'src/index.ts'),
+        style: resolve(__dirname, 'src/style.ts')
+      },
       name: 'VuelorColorPicker',
-      fileName: (format) => `index.${format}.js`
+      fileName: (format, entryName) => {
+        if (entryName === 'index') return `index.${format}.js`
+        if (entryName === 'style') return `style.${format}.js`
+        return `${entryName}.${format}.js`
+      }
     },
     rollupOptions: {
       external: ['vue', 'reka-ui'],
