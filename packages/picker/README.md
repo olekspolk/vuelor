@@ -11,7 +11,7 @@ Vuelor — a truly flexible, accessible, and Tailwind-ready color picker with de
 </p>
 
 <p align="center">
- <a href="https://vuelor.dev">Documentation</a> | <a href="https://vuelor.dev/guide/getting-started.html">Getting Started</a> | <a href="https://vuelor.dev/examples/">Examples</a> | <a href="https://vuelor.dev/guide/introduction.html">Why Vuelor?</a>
+ <a href="https://vuelor.dev">Documentation</a> | <a href="https://vuelor.dev/guide/getting-started.html">Getting Started</a> | <a href="https://vuelor.dev/examples/">Examples</a>
 </p>
 
 ## Installation
