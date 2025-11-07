@@ -54,6 +54,13 @@ export default {
 }
 ```
 
+## 4. Update CSS file to include external tailwind source
+
+```css
+@import "tailwindcss";
+@source "../node_modules/@vuelor/picker";
+```
+
 ## For non-tailwind projects
 
 Import CSS styles and add `styling="vanillacss"` property.

@@ -43,3 +43,10 @@ export default {
   }
 }
 ```
+
+## Update CSS file to include external tailwind source
+
+```css
+@import "tailwindcss";
+@source "../node_modules/@vuelor/picker";
+```

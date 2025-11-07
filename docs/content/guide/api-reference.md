@@ -2,21 +2,21 @@
 
 ## Components
 
-| Name |
-| ---- |
-| `ColorPickerRoot.vue` |
-| `ColorPickerCanvas.vue` |
-| `ColorPickerEyeDropper.vue` |
-| `ColorPickerInputHSB.vue` |
-| `ColorPickerInputHSL.vue` |
-| `ColorPickerInputRGB.vue` |
-| `ColorPickerSliderAlpha.vue` |
-| `ColorPickerSliderRed.vue` |
-| `ColorPickerSliderGreen.vue` |
-| `ColorPickerSliderBlue.vue` |
-| `ColorPickerSliderHue.vue` |
+| Name                              |
+| ----------------------------------|
+| `ColorPickerRoot.vue`             |
+| `ColorPickerCanvas.vue`           |
+| `ColorPickerEyeDropper.vue`       |
+| `ColorPickerInputHSB.vue`         |
+| `ColorPickerInputHSL.vue`         |
+| `ColorPickerInputRGB.vue`         |
+| `ColorPickerSliderAlpha.vue`      |
+| `ColorPickerSliderRed.vue`        |
+| `ColorPickerSliderGreen.vue`      |
+| `ColorPickerSliderBlue.vue`       |
+| `ColorPickerSliderHue.vue`        |
 | `ColorPickerSliderSaturation.vue` |
-| `ColorPickerSliderLightness.vue` |
+| `ColorPickerSliderLightness.vue`  |
 
 
 ## API
