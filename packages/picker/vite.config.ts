@@ -25,7 +25,8 @@ export default defineConfig({
         if (entryName === 'index') return `index.${format}.js`
         if (entryName === 'style') return `style.${format}.js`
         return `${entryName}.${format}.js`
-      }
+      },
+      formats: ['es'],
     },
     rollupOptions: {
       external: ['vue', 'reka-ui'],
@@ -35,7 +36,6 @@ export default defineConfig({
         },
       },
     },
-    sourcemap: true,
     cssCodeSplit: true,
   }
 })
