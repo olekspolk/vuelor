@@ -1,3 +1,5 @@
+import './style/index.css'
+
 export { default as ColorPickerRoot } from './components/ColorPickerRoot.vue'
 export { default as ColorPickerCanvas } from './components/ColorPickerCanvas.vue'
 export { default as ColorPickerEyeDropper } from './components/ColorPickerEyeDropper.vue'
@@ -12,4 +14,3 @@ export { default as ColorPickerSliderLightness } from './components/ColorPickerS
 export { default as ColorPickerSliderRed } from './components/ColorPickerSliderRed.vue'
 export { default as ColorPickerSliderGreen } from './components/ColorPickerSliderGreen.vue'
 export { default as ColorPickerSliderBlue } from './components/ColorPickerSliderBlue.vue'
-export type { Format, ColorObject } from './utils/types'
