@@ -1,7 +1,7 @@
 export default {
   content: [
     './content/**/*.{md,vue}',
-    './.vitepress/**/*.{js,ts,vue}'
+    './components/**/*.{js,ts,vue}'
   ],
   theme: {
     extend: {
