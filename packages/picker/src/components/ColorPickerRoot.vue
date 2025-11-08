@@ -34,16 +34,16 @@ export interface ColorPickerRootProps {
 
 export type ColorPickerRootEmits = {
   (e: 'update:end', value: any): void,
-  (e: 'update:modelValue', value: string | ColorObject): void
+  (e: 'update:modelValue', value: ModelValue): void
 }
 </script>
 
 <script setup lang="ts">
 import theme from '../theme'
 import { computed, watch } from 'vue'
-import { isColorsEqual } from '../utils/color'
 import { createUiSlots } from '../utils/styles'
 import { useColor } from '../composables/useColor'
+import { useVModel } from '../composables/useVModel'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   styling: 'tailwindcss',
@@ -56,33 +56,26 @@ const emit = defineEmits<ColorPickerRootEmits>()
 
 const color = useColor()
 
-watch(
-  () => [color.hexa.value, color.hsv.value],
-  () => emit('update:modelValue', color.toFormat(props.format))
-)
+const modelValue = useVModel<ModelValue>(props, emit, (value: ModelValue) => {
+  if ((value === null) ||
+    (props.format === 'object' && typeof value !== 'object') ||
+    (props.format !== 'object' && typeof value === 'object')) {
+    color.hexa.value = props.defaultValue
+  } else {
+    color.fromFormat(value, props.format)
+  }
+})
 
 watch(
-  () => props.modelValue,
-  (value: ModelValue) => {
-    if (
-      (value === null) ||
-      (props.format === 'object' && typeof value !== 'object') ||
-      (props.format !== 'object' && typeof value === 'object')
-    ) {
-      // Reset to default value if input value is null or of wrong type
-      color.hexa.value = props.defaultValue
-    } else if (!isColorsEqual(value, color.toFormat(props.format))) {
-      // Update internal color state if modelValue has changed from outside
-      color.fromFormat(value, props.format)
-    }
-  },
-  { immediate: true }
+  () => [color.hexa.value, color.hsv.value],
+  () => (modelValue.value = color.toFormat(props.format))
 )
 
 const disabled = computed(() => props.disabled ?? false)
 const isAlphaEnabled = computed(() => ['hexa', 'rgba', 'hsva', 'object'].includes(props.format!))
 
 const uiSlots = createUiSlots(theme[props.styling], props.ui)
+const ui = uiSlots('picker')
 
 provideColorPickerContext({
   ...color,
@@ -99,8 +92,6 @@ provideColorPickerContext({
 defineExpose({
   color
 })
-
-const ui = uiSlots('picker')
 </script>
 
 <template>

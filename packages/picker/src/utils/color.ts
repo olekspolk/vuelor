@@ -1,11 +1,11 @@
-import type { Hex, HSL, HSV, RGB, RGBA, ColorObject } from './types.ts'
+import type { Hex, HSL, HSV, RGB, RGBA } from './types.ts'
 import { chunk } from './helpers.ts'
 
 export function HSLtoHSV (hsl: HSL): HSV {
   const { h, s, l } = hsl
   const v = l + s * Math.min(l, 1 - l)
   const sprime = v === 0 ? 0 : 2 - (2 * l / v)
-  return { h, s: sprime, v}
+  return { h, s: sprime, v }
 }
 
 export function HSVtoHSL (hsv: HSV): HSL {
@@ -88,27 +88,4 @@ export function HexToRGB (hex: Hex): RGB {
 
 export function RGBAtoCSS (rgba: RGBA): string {
   return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`
-}
-
-export function isColorsEqual(colorA: string | ColorObject | null | undefined, colorB: string | ColorObject | null | undefined): boolean {
-  if (colorA === undefined || colorB === undefined) return false
-  if (colorA === null || colorB === null) return false
-
-  if (colorA === colorB) return true
-
-  if (typeof colorA === 'string' && typeof colorB === 'string') {
-    return colorA === colorB
-  }
-
-  if (typeof colorA === 'object' && typeof colorB === 'object') {
-    return colorA.hsva.h === colorB.hsva.h &&
-      colorA.hsva.s === colorB.hsva.s &&
-      colorA.hsva.v === colorB.hsva.v &&
-      colorA.hsva.a === colorB.hsva.a &&
-      colorA.rgb.r === colorB.rgb.r &&
-      colorA.rgb.g === colorB.rgb.g &&
-      colorA.rgb.b === colorB.rgb.b
-  }
-
-  return false
 }
