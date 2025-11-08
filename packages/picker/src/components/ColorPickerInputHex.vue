@@ -41,6 +41,7 @@ const ui = rootContext.uiSlots('input')
 
 <template>
   <div :class="ui.group(props.ui?.group, props.class)">
+    <slot name="before" />
     <div :class="ui.item(props.ui?.item)">
       <span :class="ui.label(props.ui?.label)">#</span>
       <input
