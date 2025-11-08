@@ -7,6 +7,7 @@ import ColorPickerSlidersHSL from './examples/ColorPickerSlidersHSL.vue'
 import ColorPicker from './examples/ColorPicker.vue'
 import ColorPickerWithTabs from './examples/ColorPickerWithTabs.vue'
 import ColorPickerWithTabsVerticalSliders from './examples/ColorPickerWithTabsVerticalSliders.vue'
+import ColorPiclerPopover from './examples/ColorPiclerPopover.vue'
 
 const color = ref(null)
 </script>
@@ -33,6 +34,9 @@ const color = ref(null)
     </div>
     <div class="item">
       <ColorPickerWithTabsVerticalSliders v-model="color" />
+    </div>
+    <div class="item">
+      <ColorPiclerPopover v-model="color" />
     </div>
   </div>
 </template>
