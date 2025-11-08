@@ -119,5 +119,5 @@ export default {
 ```
 
 ::: info
-You can view an example CSS file at [vuelor/picker/style](https://github.com/olekspolk/vuelor/packages/picker/src/style/index.css)
+You can view an example CSS file at [@vuelor/picker/style.css](https://github.com/olekspolk/vuelor/blob/main/packages/picker/src/style/index.css)
 :::

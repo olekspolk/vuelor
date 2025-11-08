@@ -84,7 +84,7 @@ Import CSS styles and add `styling="vanillacss"` property.
 
 ```vue
 <script setup>
-import '@vuelor/picker/style'
+import '@vuelor/picker/style.css'
 
 import { ref } from 'vue'
 import {
