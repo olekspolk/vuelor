@@ -5,7 +5,7 @@ export function useVModel<T>(
   emit: { (e: 'update:modelValue', value: T): void },
   onUpdate: (value: T) => void
 ) {
-  const lastEmittedValue = ref<T | null>(null)
+  const lastEmittedValue = ref<T | undefined>(undefined)
 
   watch(
     () => props.modelValue,
