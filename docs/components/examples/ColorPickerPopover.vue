@@ -41,7 +41,7 @@ const color = computed({
 <template>
   <ColorPickerRoot
     format="object"
-    class="p-0 rounded-none bg-transparent shadow-none w-auto"
+    class="p-0 rounded-none bg-transparent !shadow-none w-auto"
     :ui="{
       shared: { thumb: 'border' },
       slider: { track: 'h-3' },
@@ -50,10 +50,13 @@ const color = computed({
     v-model="color"
   >
     <PopoverRoot>
-      <ColorPickerInputHex class="w-52 shadow bg-[#f5f5f5]" >
+      <ColorPickerInputHex class="w-52 shadow bg-[#f5f5f5] rounded-[5px]" >
         <template #before>
           <PopoverTrigger class="px-1 rounded-l-[5px] bg-white">
-            <div class="w-[18px] h-[18px] rounded-[3px] bg-red-500" />
+            <div
+              :style="{ backgroundColor: color?.hexa ?? '#B63DDAFF' }"
+              class="w-[18px] h-[18px] rounded-[3px]"
+            />
           </PopoverTrigger>
         </template>
       </ColorPickerInputHex>
