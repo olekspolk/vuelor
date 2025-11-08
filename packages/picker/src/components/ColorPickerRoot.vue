@@ -63,7 +63,7 @@ watch(
 
 watch(
   () => props.modelValue,
-  (value: ModelValue, oldValue: ModelValue | undefined) => {
+  (value: ModelValue) => {
     if (
       (value === null) ||
       (props.format === 'object' && typeof value !== 'object') ||
@@ -71,7 +71,7 @@ watch(
     ) {
       // Reset to default value if input value is null or of wrong type
       color.hexa.value = props.defaultValue
-    } else if (!isColorsEqual(value, oldValue)) {
+    } else if (!isColorsEqual(value, color.toFormat(props.format))) {
       // Update internal color state if modelValue has changed from outside
       color.fromFormat(value, props.format)
     }
