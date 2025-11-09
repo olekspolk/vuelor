@@ -32,7 +32,7 @@ const value = computed({
 
 const trackBackground = computed(() => {
   const direction = props.orientation === 'vertical' ? 'to top' : 'to right'
-  const color = `hsl(${rootContext.hsl.value.h}, ${rootContext.hsl.value.s * 100}%, 50%)`
+  const color = `hsl(${Math.floor(rootContext.hsl.value.h)}, ${Math.floor(rootContext.hsl.value.s * 100)}%, 50%)`
   return `linear-gradient(${direction}, hsl(0, 0%, 0%), ${color}, hsl(0, 0%, 100%))`
 })
 
