@@ -1,6 +1,6 @@
 {
   "name": "@vuelor/picker",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-beta.1",
   "type": "module",
   "license": "MIT",
   "description": "A powerful and customizable color picker component for Vue 3 and Nuxt.js, built with Reka UI and Tailwind CSS.",
@@ -41,6 +41,7 @@
     "vue": ">= 3.2.0"
   },
   "dependencies": {
+    "reka-ui": "^2.5.1",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
