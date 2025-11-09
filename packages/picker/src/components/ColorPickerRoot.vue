@@ -33,7 +33,7 @@ export interface ColorPickerRootProps {
 }
 
 export type ColorPickerRootEmits = {
-  (e: 'update:end', value: any): void,
+  (e: 'update:end', value: ModelValue): void,
   (e: 'update:modelValue', value: ModelValue): void
 }
 </script>
@@ -71,7 +71,7 @@ watch(
   () => (modelValue.value = color.toFormat(props.format))
 )
 
-const disabled = computed(() => props.disabled ?? false)
+const disabled = computed(() => props.disabled)
 const isAlphaEnabled = computed(() => ['hexa', 'rgba', 'hsva', 'object'].includes(props.format!))
 
 const uiSlots = createUiSlots(theme[props.styling], props.ui)
