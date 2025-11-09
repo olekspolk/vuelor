@@ -41,7 +41,6 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
   <ColorPickerRoot
     v-model="color"
     format="object"
-    :ui="{ input: { label: 'block' } }"
   >
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">

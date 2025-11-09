@@ -26,8 +26,8 @@ const color = computed({
 
 <template>
   <ColorPickerRoot
-    format="object"
     v-model="color"
+    format="object"
     class="bg-transparent p-0 !shadow-none flex-row gap-3 w-auto"
   >
     <ColorPickerCanvas

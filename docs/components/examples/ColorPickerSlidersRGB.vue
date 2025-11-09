@@ -36,8 +36,8 @@ const color = computed({
       <ColorPickerInputRGB
         :ui="{
           group: 'flex-col w-12',
-          label: 'block w-5',
-          item: 'bg-transparent last:flex-row-reverse'
+          item: 'bg-transparent last:flex-row-reverse',
+          label: 'w-5'
         }"
       />
       <div class="flex flex-col justify-around flex-1">

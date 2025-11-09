@@ -45,7 +45,7 @@ const color = computed({
     :ui="{
       shared: { thumb: 'border' },
       slider: { track: 'h-3' },
-      input: { label: 'block', item: 'bg-white' }
+      input: { item: 'bg-white' }
     }"
     v-model="color"
   >

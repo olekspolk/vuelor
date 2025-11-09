@@ -28,19 +28,16 @@ const color = computed({
 
 <template>
   <ColorPickerRoot
+    v-model="color"
     class="p-3"
     format="object"
-    v-model="color"
   >
     <ColorPickerSliderHue />
     <ColorPickerSliderSaturation />
     <ColorPickerSliderLightness />
     <ColorPickerSliderAlpha />
     <ColorPickerInputHSL
-      :ui="{
-        label: 'block',
-        item: 'bg-transparent'
-      }"
+      :ui="{ item: 'bg-transparent' }"
     />
   </ColorPickerRoot>
 </template>

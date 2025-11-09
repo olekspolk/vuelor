@@ -12,8 +12,10 @@ watch(color, (hex) => {
 </script>
 
 <template>
-  <ColorPicker
-    v-model="color"
-    format="hex"
-  />
+  <div class="vuelor">
+    <ColorPicker
+      v-model="color"
+      format="hex"
+    />
+  </div>
 </template>

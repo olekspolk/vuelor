@@ -68,8 +68,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
     :ui="{
       input: {
         group: '!outline-none gap-2',
-        item: '!rounded-[6px] hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff]',
-        label: 'block'
+        item: '!rounded-[6px] hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff]'
       },
       shared: {
         thumb: 'border-[3px] w-3.5 h-3.5'
