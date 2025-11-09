@@ -7,7 +7,7 @@
 <h1 align="center">Vuelor</h1>
 
 <p align="center">
-Vuelor — a truly flexible, accessible, and Tailwind-ready color picker with developer experiance in mind.
+Vuelor — a truly flexible, accessible, and Tailwind-ready color picker with developer experience in mind.
 </p>
 
 <p align="center">
