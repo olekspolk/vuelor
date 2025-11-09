@@ -24,7 +24,7 @@
 }
 
 .image-bg {
-  background-color: var(--vuelor-selected-color, var(--vp-home-hero-name-color));
+  background-color: var(--vuelor-selected-color, #B63DDAFF);
   z-index: -1;
 }
 
