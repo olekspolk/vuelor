@@ -32,8 +32,8 @@ const saturationValue = computed({
 
 const trackBackground = computed(() => {
   const direction = props.orientation === 'vertical' ? 'to top' : 'to right'
-  const fromColor = `hsl(${rootContext.hsl.value.h} 0 ${rootContext.hsl.value.l * 100}%)`
-  const toColor = `hsl(${rootContext.hsl.value.h} 100% ${rootContext.hsl.value.l * 100}%)`
+  const fromColor = `hsl(${rootContext.hsl.value.h}, 0, ${rootContext.hsl.value.l * 100}%)`
+  const toColor = `hsl(${rootContext.hsl.value.h}, 100%, ${rootContext.hsl.value.l * 100}%)`
   return `linear-gradient(${direction}, ${fromColor}, ${toColor})`
 })
 
