@@ -32,21 +32,21 @@ const color = computed({
   >
     <ColorPickerCanvas
       :ui="{
-        area: 'rounded',
+        area: 'rounded-none',
         thumb: 'border-2'
       }"
     />
     <ColorPickerSliderHue
       orientation="vertical"
       :ui="{
-        track: 'rounded',
+        track: 'rounded-none',
         thumb: 'w-6 h-2 border-4'
       }"
     />
     <ColorPickerSliderAlpha
       orientation="vertical"
       :ui="{
-        track: 'rounded',
+        track: 'rounded-none',
         thumb: 'w-6 h-2 border-4'
       }"
     />

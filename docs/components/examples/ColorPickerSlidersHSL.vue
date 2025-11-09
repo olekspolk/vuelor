@@ -31,13 +31,12 @@ const color = computed({
     v-model="color"
     class="p-3"
     format="object"
+    :ui="{ shared: { thumb: 'border-2' } }"
   >
     <ColorPickerSliderHue />
     <ColorPickerSliderSaturation />
     <ColorPickerSliderLightness />
     <ColorPickerSliderAlpha />
-    <ColorPickerInputHSL
-      :ui="{ item: 'bg-transparent' }"
-    />
+    <ColorPickerInputHSL :ui="{ item: 'bg-transparent' }" />
   </ColorPickerRoot>
 </template>

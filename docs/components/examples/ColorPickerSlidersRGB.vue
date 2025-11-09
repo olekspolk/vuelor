@@ -28,9 +28,10 @@ const color = computed({
 
 <template>
   <ColorPickerRoot
-    class="p-3 pl-2"
-    format="object"
     v-model="color"
+    format="object"
+    class="p-3 pl-2"
+    :ui="{ shared: { thumb: 'border-2' } }"
   >
     <div class="flex gap-2">
       <ColorPickerInputRGB

@@ -40,14 +40,14 @@ const color = computed({
 
 <template>
   <ColorPickerRoot
+    v-model="color"
     format="object"
     class="p-0 rounded-none bg-transparent !shadow-none w-auto"
     :ui="{
-      shared: { thumb: 'border' },
+      shared: { thumb: 'border-2 h-3 w-3' },
       slider: { track: 'h-3' },
       input: { item: 'bg-white' }
     }"
-    v-model="color"
   >
     <PopoverRoot>
       <ColorPickerInputHex class="w-52 shadow bg-[#f5f5f5] rounded-[5px]" >
@@ -64,9 +64,10 @@ const color = computed({
       <PopoverPortal>
         <PopoverContent
           align="start"
-          class="vuelor bg-white rounded shadow-lg"
+          :sideOffset="5"
+          class="vuelor bg-white rounded-[5px] shadow-vuelor-card"
         >
-          <ColorPickerCanvas :ui="{ area: 'rounded-none rounded-t' }" />
+          <ColorPickerCanvas :ui="{ area: 'rounded-none rounded-t-[5px]' }" />
           <div class="p-3 pl-2 flex items-center gap-3">
             <ColorPickerEyeDropper>
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
