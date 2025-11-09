@@ -4,6 +4,7 @@ import type { UiSliderSlots } from '../utils/styles'
 
 export interface SliderProps {
   class?: string,
+  inverted?: boolean,
   orientation?: SliderRootProps['orientation'],
   ui?: Partial<UiSliderSlots>
 }
@@ -31,7 +32,7 @@ const hueValue = computed({
 })
 
 const trackBackground = computed(() => {
-  const direction = props.orientation === 'vertical' ? 'to bottom' : 'to right'
+  const direction = props.orientation === 'vertical' ? 'to top' : 'to right'
   return `linear-gradient(${direction}, red, yellow, lime, cyan, blue, magenta, red)`
 })
 
@@ -43,7 +44,7 @@ const ui = rootContext.uiSlots('slider', 'shared')
     v-model="hueValue"
     :disabled="rootContext.disabled.value"
     :max="360"
-    :inverted="props.orientation === 'vertical'"
+    :inverted="props.inverted"
     :orientation="props.orientation"
     :class="ui.root(props.ui?.root, props.class)"
     @pointerup="rootContext.emitUpdateEnd()"
