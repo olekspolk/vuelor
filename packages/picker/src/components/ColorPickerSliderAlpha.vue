@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<SliderProps>(), {
 })
 
 const trackStyle = computed(() => {
-  const gradientDirection = props.orientation === 'horizontal' ? 'to right' : 'to top'
+  const gradientDirection = props.orientation === 'vertical' ? 'to top' : 'to right'
   return {
     background: [
       `linear-gradient(${gradientDirection}, rgba(0, 0, 0, 0) 0%, ${rootContext.hex.value} 100%)`,
