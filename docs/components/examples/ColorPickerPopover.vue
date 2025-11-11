@@ -68,7 +68,7 @@ const color = computed({
           class="vuelor bg-white rounded-[5px] shadow-vuelor-card"
         >
           <ColorPickerCanvas :ui="{ area: 'rounded-none rounded-t-[5px]' }" />
-          <div class="p-3 pl-2 flex items-center gap-3">
+          <div class="p-3 flex items-center gap-3">
             <ColorPickerEyeDropper>
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path
