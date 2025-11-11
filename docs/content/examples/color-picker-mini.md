@@ -38,24 +38,11 @@ const color = ref(null)
 <template>
   <ColorPickerRoot
     v-model="color"
-    format="object"
     class="flex-row gap-3 w-auto"
   >
     <ColorPickerCanvas />
-    <ColorPickerSliderHue
-      orientation="vertical"
-      :ui="{
-        track: 'rounded-sm',
-        thumb: 'w-6 h-2 border-4'
-      }"
-    />
-    <ColorPickerSliderAlpha
-      orientation="vertical"
-      :ui="{
-        track: 'rounded-sm',
-        thumb: 'w-6 h-2 border-4'
-      }"
-    />
+    <ColorPickerSliderHue orientation="vertical" />
+    <ColorPickerSliderAlpha orientation="vertical" />
   </ColorPickerRoot>
 </template>
 ```

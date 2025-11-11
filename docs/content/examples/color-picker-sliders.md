@@ -16,11 +16,8 @@ const color = ref(null)
 </script>
 
 <template>
-  <ColorPickerRoot
-    format="object"
-    v-model="color"
-  >
-    <ColorPickerInputRGB :ui="{ label: 'block' }" />
+  <ColorPickerRoot v-model="color">
+    <ColorPickerInputRGB />
     <ColorPickerSliderRed />
     <ColorPickerSliderGreen />
     <ColorPickerSliderBlue />
