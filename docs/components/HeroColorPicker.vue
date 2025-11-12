@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import ColorPicker from './examples/ColorPicker.vue'
 
-const color = ref('#B63DDA')
+const color = ref('#B63DDAFF')
 
 watch(color, (hex) => {
   if (window.innerWidth > 700) {
@@ -15,7 +15,7 @@ watch(color, (hex) => {
   <div class="vuelor">
     <ColorPicker
       v-model="color"
-      format="hex"
+      format="hexa"
     />
   </div>
 </template>
