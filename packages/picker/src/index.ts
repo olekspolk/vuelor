@@ -1,4 +1,5 @@
 import './style/index.css'
+export type * from './utils/types'
 
 export { default as ColorPickerRoot } from './components/ColorPickerRoot.vue'
 export { default as ColorPickerCanvas } from './components/ColorPickerCanvas.vue'

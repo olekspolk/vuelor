@@ -1,6 +1,7 @@
 <script lang="ts">
 import { createContext } from 'reka-ui'
 import type { Ref } from 'vue'
+import type { ThemeSlots } from '../theme'
 import type { HSV, HSVA, HSL, RGB, RGBA, Format, ColorObject } from '../utils/types'
 
 type ColorPickerRootContext = {
@@ -23,7 +24,7 @@ type ModelValue = string | ColorObject | null
 export const [injectColorPickerContext, provideColorPickerContext] = createContext<ColorPickerRootContext>('ColorPickerRoot')
 
 export interface ColorPickerRootProps {
-  ui?: Record<string, any>,
+  ui?: ThemeSlots,
   class?: string,
   styling?: 'tailwindcss' | 'vanillacss',
   disabled?: boolean,
