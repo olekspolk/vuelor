@@ -12,6 +12,7 @@ interface CanvasProps {
   type?: 'HSV' | 'HSL',
   height?: number,
   width?: number,
+  wheel?: boolean,
   class?: string,
   ui?: {
     root?: string,
@@ -24,6 +25,7 @@ const props = withDefaults(defineProps<CanvasProps>(), {
   type: 'HSV',
   height: 208,
   width: 208,
+  wheel: true
 })
 
 const style = computed<CSSProperties>(() => {
@@ -66,9 +68,9 @@ const ui = rootContext.uiSlots('canvas', 'shared')
     :class="ui.root(props.ui?.root, props.class)"
     :data-disabled="rootContext.disabled.value ? '' : null"
     @contextmenu.prevent
-    @wheel="handleWheel"
     @keydown="handleKeyDown"
     @pointerdown="handlePointerDown"
+    @wheel="props.wheel && handleWheel($event)"
   >
     <canvas
       ref="canvasRef"
