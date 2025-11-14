@@ -13,6 +13,7 @@ import {
 } from 'reka-ui'
 
 const props = defineProps<{
+  disabled?: boolean,
   options?: string[],
   modelValue?: string
 }>()
@@ -24,6 +25,7 @@ const emit = defineEmits<{
 
 <template>
   <SelectRoot
+    :disabled="props.disabled"
     :modelValue="props.modelValue"
     @update:modelValue="(value: AcceptableValue) => emit('update:modelValue', value)"
   >

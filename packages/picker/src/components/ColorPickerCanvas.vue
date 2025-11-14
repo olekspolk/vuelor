@@ -64,6 +64,7 @@ const ui = rootContext.uiSlots('canvas', 'shared')
   <div
     :style="style"
     :class="ui.root(props.ui?.root, props.class)"
+    :data-disabled="rootContext.disabled.value ? '' : null"
     @contextmenu.prevent
     @wheel="handleWheel"
     @keydown="handleKeyDown"

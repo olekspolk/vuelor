@@ -66,6 +66,8 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
   }
 
   function handlePointerDown(event: PointerEvent) {
+    if (rootContext.disabled.value) return
+
     document.addEventListener('pointermove', handlePointerMove)
     document.addEventListener('pointerup', handlePointerUp)
     updateBounding()
@@ -87,6 +89,8 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
   }
 
   function handleKeyDown(event: KeyboardEvent) {
+    if (rootContext.disabled.value) return
+
     const step = event.shiftKey ? 0.1 : 0.01
     switch (event.key) {
       case 'ArrowUp':
@@ -113,6 +117,8 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
   }
 
   function handleWheel(event: WheelEvent) {
+    if (rootContext.disabled.value) return
+
     const step = event.deltaY * 0.1
     const hue = (rootContext.hsv.value.h + step) % 360
     event.preventDefault()

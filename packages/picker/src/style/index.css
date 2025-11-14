@@ -23,6 +23,11 @@
   background-color: #0000000d;
 }
 
+.vuelor-picker-eye-dropper:disabled {
+  opacity: 0.5;
+  background-color: transparent;
+}
+
 .vuelor-picker-eye-dropper:focus-within {
   outline-width: 1px;
   outline-color: var(--vuelor-primary-color);

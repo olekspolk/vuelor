@@ -23,12 +23,14 @@ const INPUTS = {
 }
 
 interface Props {
+  disabled?: boolean
   modelValue: ColorObject | string | null
   format?: 'object' | 'hex'
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  format: 'object'
+  format: 'object',
+  disabled: false
 })
 
 const emit = defineEmits<{
@@ -53,6 +55,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 <template>
   <ColorPickerRoot
     v-model="color"
+    :disabled="props.disabled"
     :format="props.format"
     :ui="{
       input: { label: 'hidden' }
@@ -78,6 +81,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
     <div class="flex items-center gap-2">
       <ColorPickerFormat
         v-model="format"
+        :disabled="props.disabled"
         :options="formatOptions"
       />
       <component :is="INPUTS[format]" />

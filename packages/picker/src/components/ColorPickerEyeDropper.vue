@@ -13,11 +13,6 @@ const isSupported = computed(() => {
 })
 
 function openEyeDropper () {
-  if (!isSupported.value) {
-    console.warn('EyeDropper API is not available in this environment.')
-    return
-  }
-
   const EyeDropperCtor = (window as any).EyeDropper
   const eyeDropper = new EyeDropperCtor()
 
@@ -37,6 +32,7 @@ const ui = rootContext.uiSlots('dropper')
 <template>
   <button
     v-if="isSupported"
+    :disabled="rootContext.disabled.value"
     :class="ui.base(props.class)"
     @click="openEyeDropper"
   >

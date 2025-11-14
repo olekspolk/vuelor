@@ -47,7 +47,10 @@ const ui = rootContext.uiSlots('input')
 </script>
 
 <template>
-  <div :class="ui.group(props.ui?.group, props.class)">
+  <div
+    :class="ui.group(props.ui?.group, props.class)"
+    :data-disabled="rootContext.disabled.value ? '' : null"
+  >
     <slot name="before" />
     <div :class="ui.item(props.ui?.item)">
       <span :class="ui.label(props.ui?.label)">R</span>
