@@ -10,11 +10,11 @@ export default {
   },
   canvas: {
     root: 'relative touch-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-    area: 'rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-[#0000001a]'
+    area: 'rounded-[5px] shadow-vuelor-inner'
   },
   slider: {
-    root: 'relative h-4 w-full data-[orientation=vertical]:h-auto data-[orientation=vertical]:w-4 flex items-center data-[orientation=vertical]:flex-col select-none touch-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-    track: 'relative h-4 w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-4 grow rounded-full shadow-[inset_0_0_0_1px_#0000001a]'
+    root: 'relative h-4 w-full flex items-center select-none touch-none data-[orientation=vertical]:h-auto data-[orientation=vertical]:w-4 data-[orientation=vertical]:flex-col data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+    track: 'relative h-4 w-full shadow-vuelor-inner grow rounded-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-4'
   },
   input: {
     group: 'w-full flex gap-[1px] rounded-[5px] enabled:hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
