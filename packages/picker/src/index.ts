@@ -15,3 +15,4 @@ export { default as ColorPickerSliderLightness } from './components/ColorPickerS
 export { default as ColorPickerSliderRed } from './components/ColorPickerSliderRed.vue'
 export { default as ColorPickerSliderGreen } from './components/ColorPickerSliderGreen.vue'
 export { default as ColorPickerSliderBlue } from './components/ColorPickerSliderBlue.vue'
+export { default as ColorPickerSwatch } from './components/ColorPickerSwatch.vue'
