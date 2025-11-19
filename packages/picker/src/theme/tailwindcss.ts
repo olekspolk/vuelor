@@ -23,7 +23,7 @@ export default {
     field: 'w-full min-w-5 max-w-12 h-6 first:pl-0.5 text-[11px] focus:outline-none'
   },
   swatch: {
-    base: 'relative grow-0 h-4 w-4 rounded-[20%] overflow-hidden',
+    base: 'relative grow-0 h-4 w-4 rounded-[20%] overflow-hidden focus-within:outline-1 focus-within:outline-[#0d99ff]',
     alpha: 'absolute top-0 right-0 h-full w-1/2'
   }
 }
