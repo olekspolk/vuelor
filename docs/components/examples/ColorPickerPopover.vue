@@ -8,7 +8,8 @@ import {
   ColorPickerEyeDropper,
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
-  ColorPickerInputHex
+  ColorPickerInputHex,
+  ColorPickerSwatch
 } from '@vuelor/picker'
 
 import {
@@ -18,21 +19,15 @@ import {
   PopoverTrigger
 } from 'reka-ui'
 
-interface Props {
-  modelValue: ColorObject | string | null
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  format: 'object'
-})
+const props = defineProps<{ modelValue: ColorObject | null }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: ColorObject | string | null): void
+  (e: 'update:modelValue', value: ColorObject | null): void
 }>()
 
 const color = computed({
   get: () => props.modelValue,
-  set: (value: ColorObject | string | null) => {
+  set: (value: ColorObject | null) => {
     emit('update:modelValue', value)
   }
 })
@@ -52,11 +47,8 @@ const color = computed({
     <PopoverRoot>
       <ColorPickerInputHex class="w-52 shadow bg-[#f5f5f5] rounded-[5px]" >
         <template #before>
-          <PopoverTrigger class="px-1 rounded-l-[5px] bg-white">
-            <div
-              :style="{ backgroundColor: color?.hexa ?? '#B63DDAFF' }"
-              class="w-[18px] h-[18px] rounded-[3px]"
-            />
+          <PopoverTrigger as-child>
+            <ColorPickerSwatch :value="color?.hexa ?? '#B63DDAFF'" />
           </PopoverTrigger>
         </template>
       </ColorPickerInputHex>
@@ -65,6 +57,7 @@ const color = computed({
         <PopoverContent
           align="start"
           :sideOffset="5"
+          :alignOffset="-4"
           class="vuelor bg-white rounded-[5px] shadow-vuelor-card"
         >
           <ColorPickerCanvas :ui="{ area: 'rounded-none rounded-t-[5px]' }" />

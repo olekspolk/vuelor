@@ -23,6 +23,7 @@ const INPUTS = {
 }
 
 interface Props {
+  class?: string
   disabled?: boolean
   modelValue: ColorObject | string | null
   format?: 'object' | 'hex'
@@ -55,6 +56,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 <template>
   <ColorPickerRoot
     v-model="color"
+    :class="props.class"
     :disabled="props.disabled"
     :format="props.format"
     :ui="{
