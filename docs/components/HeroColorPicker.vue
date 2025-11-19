@@ -1,12 +1,16 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import ColorPicker from './examples/ColorPicker.vue'
 
 const color = ref('#B63DDAFF')
 
-watch(color, (hex) => {
+onMounted(() => {
+  color.value = document.documentElement.style.getPropertyValue('--vuelor-selected-color') || '#B63DDAFF'
+})
+
+watch(color, (value) => {
   if (window.innerWidth > 700) {
-    document.documentElement.style.setProperty('--vuelor-selected-color', hex)
+    document.documentElement.style.setProperty('--vuelor-selected-color', value)
   }
 })
 </script>
