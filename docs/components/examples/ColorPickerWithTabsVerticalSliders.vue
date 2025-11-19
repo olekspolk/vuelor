@@ -12,7 +12,8 @@ import {
   ColorPickerInputHex,
   ColorPickerInputHSL,
   ColorPickerInputRGB,
-  ColorPickerInputHSB
+  ColorPickerInputHSB,
+  ColorPickerSwatch
 } from '@vuelor/picker'
 
 const props = defineProps<{
@@ -44,16 +45,18 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 })
 
 const shatches = ref<string[]>([
-  '#FF6900',
-  '#FCB900',
-  '#7BDCB5',
-  '#00D084',
-  '#8ED1FC',
-  '#0693E3',
-  '#ABB8C3',
-  '#EB144C',
-  '#F78DA7',
-  '#9900EF'
+  '#FF690050',
+  '#FCB900FF',
+  '#7BDCB5FF',
+  '#00D084FF',
+  '#8ED1FCFF',
+  '#0693E3FF',
+  '#ABB8C344',
+  '#EB144CFF',
+  '#F78DA7FF',
+  '#9900EFFF',
+  '#F6BD6044',
+  '#84A59DBA',
 ])
 
 const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
@@ -112,12 +115,11 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
         <component :is="INPUTS[format]" />
       </div>
     </div>
-    <div class="border-t p-4 flex flex-wrap gap-[7px]">
-      <button
+    <div class="border-t p-4 grid grid-cols-12 gap-y-1.5">
+      <ColorPickerSwatch
         v-for="color in shatches"
-        :style="{ backgroundColor: color }"
-        class="h-5 w-5 rounded-[4px] hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff]"
-        @click="colorPicker && (colorPicker.color.hex.value = color)"
+        :value="color"
+        @click="colorPicker && (colorPicker.color.hexa.value = color)"
       />
     </div>
   </ColorPickerRoot>
