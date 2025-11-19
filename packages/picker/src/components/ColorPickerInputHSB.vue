@@ -53,8 +53,8 @@ const ui = rootContext.uiSlots('input')
     :class="ui.group(props.ui?.group, props.class)"
     :data-disabled="rootContext.disabled.value ? '' : null"
   >
-    <slot name="before" />
     <div :class="ui.item(props.ui?.item)">
+      <slot name="before" />
       <span :class="ui.label(props.ui?.label)">H</span>
       <input
         type="text"
@@ -104,7 +104,7 @@ const ui = rootContext.uiSlots('input')
         :class="ui.field(props.ui?.field)"
         @blur="handleAlphaInput"
       />
-      <span :class="ui.label(props.ui?.label)">%</span>
+      <span data-alpha-label :class="ui.label(props.ui?.label)">%</span>
     </div>
   </div>
 </template>
