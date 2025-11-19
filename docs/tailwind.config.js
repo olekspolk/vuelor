@@ -2,6 +2,7 @@ export default {
   content: [
     './content/**/*.{md,vue}',
     './components/**/*.{js,ts,vue}',
+    './node_modules/@vuelor/picker/src/theme/tailwindcss.ts'
   ],
   theme: {
     extend: {
