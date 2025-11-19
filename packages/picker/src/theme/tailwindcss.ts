@@ -10,7 +10,7 @@ export default {
   },
   canvas: {
     root: 'relative touch-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-    area: 'rounded-[5px] shadow-vuelor-inner'
+    area: 'rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-[#0000001a]'
   },
   slider: {
     root: 'relative h-4 w-full flex items-center select-none touch-none data-[orientation=vertical]:h-auto data-[orientation=vertical]:w-4 data-[orientation=vertical]:flex-col data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
