@@ -8,12 +8,16 @@ import ColorPicker from './examples/ColorPicker.vue'
 import ColorPickerWithTabs from './examples/ColorPickerWithTabs.vue'
 import ColorPickerWithTabsVerticalSliders from './examples/ColorPickerWithTabsVerticalSliders.vue'
 import ColorPickerPopover from './examples/ColorPickerPopover.vue'
+import ColorPickerWithGradient from './examples/ColorPickerWithGradient.vue'
 
 const color = ref(null)
 </script>
 
 <template>
   <div class="vuelor grid sm:grid-cols-1 md:grid-cols-2 gap-2">
+    <div class="item">
+      <ColorPickerWithGradient />
+    </div>
     <div class="item">
       <ColorPickerMini v-model="color" />
     </div>
