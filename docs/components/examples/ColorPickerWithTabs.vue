@@ -41,9 +41,6 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
   <ColorPickerRoot
     v-model="color"
     format="object"
-    :ui="{
-      input: { field: 'max-w-full' }
-    }"
   >
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">
