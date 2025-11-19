@@ -38,6 +38,8 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
     }
   })
 
+  const isVisible = ref(false)
+
   const thumbStyles = computed<CSSProperties>(() => {
     const thumbX = left.value * bounding.value.width
     const thumbY = top.value * bounding.value.height
@@ -45,6 +47,7 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
       top: 0,
       left: 0,
       position: 'absolute',
+      display: isVisible.value ? undefined : 'none',
       backgroundColor: RGBAtoCSS({ ...rootContext.rgba.value, a: 1 }),
       transform: `translate3d(calc(-50% + ${thumbX}px), calc(-50% + ${thumbY}px), 0px)`
     }
@@ -52,6 +55,7 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
 
   onMounted(() => {
     updateBounding()
+    isVisible.value = true
     window.addEventListener('resize', updateBounding)
   })
 
