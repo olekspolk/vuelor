@@ -16,10 +16,10 @@ const color = ref(null)
 <template>
   <div class="vuelor grid sm:grid-cols-1 md:grid-cols-2 gap-2">
     <div class="item">
-      <ColorPickerWithGradient />
+      <ColorPickerMini v-model="color" />
     </div>
     <div class="item">
-      <ColorPickerMini v-model="color" />
+      <ColorPickerWithGradient />
     </div>
     <div class="item">
       <ColorPickerMiniVertical v-model="color" />
