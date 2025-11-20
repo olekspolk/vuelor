@@ -1,6 +1,6 @@
 import type { RGB, RGBA, HSL, HSLA, HSV, HSVA } from './types.ts'
 
-export function parseHex(hex: string): RGBA {
+export function parseHex(hex: string): RGBA | null {
   const s = hex.trim()
 
   const m6  = s.match(/^#?(?<r>[A-Fa-f0-9]{2})(?<g>[A-Fa-f0-9]{2})(?<b>[A-Fa-f0-9]{2})$/)
@@ -49,7 +49,17 @@ export function parseHex(hex: string): RGBA {
     }
   }
 
-  return { r: 255, g: 0, b: 0, a: 1 }
+  return null
+}
+
+export function getHexColorFromHexString(hex: string): string | null {
+  return hex ? hex.substring(0, 7).replace('#', '') : null
+}
+
+export function getAlphaFromHexString(hex: string): number | null {
+  if (!hex || hex.length < 9) return 100
+  const alphaHex = hex.substring(7, 9).replace('#', '')
+  return Math.round(parseInt(alphaHex, 16) / 255 * 100)
 }
 
 function baseParser(str: string) {

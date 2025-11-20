@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<{
   as: 'button'
 })
 
-const rgba = computed(() => parseHex(props.value))
+const rgba = computed(() => parseHex(props.value) || rootContext.rgba.value)
 
 const ui = rootContext.uiSlots('swatch')
 </script>

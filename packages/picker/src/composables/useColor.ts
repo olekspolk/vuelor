@@ -180,11 +180,13 @@ export function useColor () {
   function fromFormat(value: string | ColorObject, format: Format) {
     switch (format) {
       case 'hex': {
-        rgba.value = parseHex(value as string)
+        const parsed = parseHex(value as string)
+        if (parsed) rgba.value = parsed
         break
       }
       case 'hexa': {
-        rgba.value = parseHex(value as string)
+        const parsed = parseHex(value as string)
+        if (parsed) rgba.value = parsed
         break
       }
       case 'rgb': {
