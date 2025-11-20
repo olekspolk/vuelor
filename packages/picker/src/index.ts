@@ -1,6 +1,8 @@
 import './style/index.css'
 export type * from './utils/types'
 
+export { injectColorPickerContext } from './components/ColorPickerRoot.vue'
+
 export { default as ColorPickerRoot } from './components/ColorPickerRoot.vue'
 export { default as ColorPickerCanvas } from './components/ColorPickerCanvas.vue'
 export { default as ColorPickerEyeDropper } from './components/ColorPickerEyeDropper.vue'
