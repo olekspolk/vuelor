@@ -41,7 +41,7 @@ const color = computed({
     :ui="{
       shared: { thumb: 'border-2 h-3 w-3' },
       slider: { track: 'h-3' },
-      input: { item: 'bg-white' }
+      input: { item: 'bg-white', field: 'max-w-16' }
     }"
   >
     <PopoverRoot>

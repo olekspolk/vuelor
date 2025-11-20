@@ -12,7 +12,7 @@ import { ColorPickerSliderHue, ColorPickerSliderAlpha } from '@vuelor/picker'
 
 import ColorPickerFormat from '../examples/ColorPickerFormat.vue'
 
-const [DefineTemplate, ColorPicker] = createReusableTemplate()
+const [DefineColorPickerTemplate, ColorPicker] = createReusableTemplate()
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -47,11 +47,10 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 const color = ref<string | null>(null)
 const mode = ref<'color' | 'gradient'>('gradient')
 const gradientType = ref('linear')
-const gradientAngle = ref(90)
 
-const stops = ref([20, 70])
+const stops = ref([0, 33, 66, 100])
 const selectedStopIndex = ref(0)
-const colors = ref(['#FD4890', '#F2EA14'])
+const colors = ref(['#FF98C2FF', '#4DC1FFFF', '#84E882FF', '#FFFA7AFF'])
 
 const colorValue = computed<ModelValue>({
   get: () => {
@@ -72,6 +71,12 @@ function addStop () {
   colors.value = [...colors.value.slice(0, -1), '#FF0000FF', ...colors.value.slice(-1)]
 }
 
+function removeStop (index: number) {
+  if (stops.value.length < 2) return
+  stops.value.splice(index, 1)
+  colors.value.splice(index, 1)
+}
+
 const trackBackground = computed(() => {
   const stopsList = stops.value.map((value, index) => `${colors.value[index]} ${value}%`).join(', ')
   return `${gradientType.value}-gradient(to right, ${stopsList})`
@@ -80,12 +85,13 @@ const trackBackground = computed(() => {
 
 <template>
   <ColorPickerRoot
+    ref="colorPicker"
     v-model="colorValue"
     class="block p-0"
     :class="props.class"
     :ui="{ input: { label: 'hidden', field: 'max-w-12' } }"
   >
-    <DefineTemplate>
+    <DefineColorPickerTemplate>
       <div class="flex flex-col gap-2">
         <ColorPickerCanvas :type="canvasType" />
         <div class="flex items-center gap-3">
@@ -113,7 +119,7 @@ const trackBackground = computed(() => {
           <component :is="INPUTS[format]" />
         </div>
       </div>
-    </DefineTemplate>
+    </DefineColorPickerTemplate>
 
     <TabsRoot
       v-model="mode"
@@ -152,7 +158,11 @@ const trackBackground = computed(() => {
               class="flex items-center justify-center w-6 h-6 -mt-8 bg-white drop-shadow-vuelor-thumb rounded-[5px] focus:outline-none focus:bg-[#0d99ff] relative after:content-[''] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px] after:border-t-white focus:after:border-t-[#0d99ff]"
               @click="selectedStopIndex = i"
             >
-              <ColorPickerSwatch as="span" class="w-3.5 h-3.5 border border-[#0000001a] rounded-sm" :value="colors[i]" />
+              <ColorPickerSwatch
+                as="span"
+                class="w-3.5 h-3.5 border border-[#0000001a] rounded-sm"
+                :value="colors[i]"
+              />
             </SliderThumb>
           </SliderRoot>
         </div>
@@ -174,6 +184,7 @@ const trackBackground = computed(() => {
         </div>
         <div
           v-for="(stop, index) in stops"
+          :class="{ 'bg-[#e5f4ff]': selectedStopIndex === index }"
           class="h-8 pl-4 pr-2 flex items-center gap-2"
         >
           <div class="w-12 flex flex-grow-0 rounded-[5px] enabled:hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff] data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
@@ -185,7 +196,7 @@ const trackBackground = computed(() => {
               >
             </div>
           </div>
-          <ColorPickerInputHex class="flex-1">
+          <ColorPickerInputHex class="flex-1" v-model="colors[index]">
             <template #before>
               <PopoverRoot>
                 <PopoverTrigger as-child>
@@ -208,7 +219,11 @@ const trackBackground = computed(() => {
               </PopoverRoot>
             </template>
           </ColorPickerInputHex>
-          <button class="rounded-[5px] hover:bg-[#f5f5f5]">
+          <button
+            class="rounded-[5px] hover:bg-[#f5f5f5]"
+            :style="{ visibility: stops.length < 2 ? 'hidden' : undefined }"
+            @click="removeStop(index)"
+          >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
