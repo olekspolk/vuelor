@@ -10,7 +10,8 @@ import { ColorPickerInputHex, ColorPickerInputHSL, ColorPickerInputRGB, ColorPic
 import { ColorPickerRoot, ColorPickerCanvas, ColorPickerEyeDropper, ColorPickerSwatch } from '@vuelor/picker'
 import { ColorPickerSliderHue, ColorPickerSliderAlpha } from '@vuelor/picker'
 
-import ColorPickerFormat from '../examples/ColorPickerFormat.vue'
+import ColorFormat from '../common/ColorFormat.vue'
+import GradientStopInput from '../common/GradientStopInput.vue'
 
 const [DefineColorPickerTemplate, ColorPicker] = createReusableTemplate()
 
@@ -85,7 +86,6 @@ const trackBackground = computed(() => {
 
 <template>
   <ColorPickerRoot
-    ref="colorPicker"
     v-model="colorValue"
     class="block p-0"
     :class="props.class"
@@ -111,7 +111,7 @@ const trackBackground = computed(() => {
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <ColorPickerFormat
+          <ColorFormat
             v-model="format"
             :disabled="props.disabled"
             :options="formatOptions"
@@ -183,19 +183,11 @@ const trackBackground = computed(() => {
           </button>
         </div>
         <div
-          v-for="(stop, index) in stops"
+          v-for="(_, index) in stops"
           :class="{ 'bg-[#e5f4ff]': selectedStopIndex === index }"
           class="h-8 pl-4 pr-2 flex items-center gap-2"
         >
-          <div class="w-12 flex flex-grow-0 rounded-[5px] enabled:hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff] data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-            <div class="flex flex-1 data-[alpha-input]:grow-0 items-center px-1.5 gap-1 bg-[#f5f5f5] rounded-[5px]">
-              <input
-                type="text"
-                :value="`${stop}%`"
-                class="w-full h-6 min-w-5 text-[11px] focus:outline-none"
-              >
-            </div>
-          </div>
+          <GradientStopInput v-model="stops[index]" />
           <ColorPickerInputHex class="flex-1" v-model="colors[index]">
             <template #before>
               <PopoverRoot>

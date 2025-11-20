@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import type { ColorObject } from '@vuelor/picker'
-import ColorPickerFormat from './ColorPickerFormat.vue'
+import ColorFormat from '../common/ColorFormat.vue'
 
 import {
   ColorPickerRoot,
@@ -59,9 +59,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
     :class="props.class"
     :disabled="props.disabled"
     :format="props.format"
-    :ui="{
-      input: { label: 'hidden' }
-    }"
+    :ui="{ input: { label: 'hidden' } }"
   >
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">
@@ -81,7 +79,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <ColorPickerFormat
+      <ColorFormat
         v-model="format"
         :disabled="props.disabled"
         :options="formatOptions"
