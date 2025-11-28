@@ -95,6 +95,16 @@ export function HexToRGB (hex: Hex): RGB {
   }
 }
 
+export function HexaToRGBA (hex: Hexa): RGBA {
+  const rgb = chunk(hex.slice(1), 2).map((c: string) => parseInt(c, 16))
+  return {
+    r: rgb[0] as number,
+    g: rgb[1] as number,
+    b: rgb[2] as number,
+    a: (rgb[3] as number) / 255
+  }
+}
+
 export function RGBAtoCSS (rgba: RGBA): string {
   return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`
 }
