@@ -13,7 +13,10 @@ import {
 } from 'reka-ui'
 
 const props = defineProps<{
+  label?: string
+  placeholder?: string,
   disabled?: boolean,
+  class?: string,
   options?: string[],
   modelValue?: string
 }>()
@@ -30,13 +33,14 @@ const emit = defineEmits<{
     @update:modelValue="(value: AcceptableValue) => emit('update:modelValue', value)"
   >
     <SelectTrigger
-      aria-label="Color format"
-      class="inline-flex w-[56px] h-6 pl-[7px] items-center justify-between rounded-[5px] text-[11px] leading-none gap-[5px] border border-[#e6e6e6] focus:outline-none focus:border-[#0d99ff]"
+      :aria-label="props.label"
+      :class="props.class"
+      class="inline-flex h-6 pl-[7px] items-center justify-between rounded-[5px] text-[11px] leading-none gap-[5px] border border-[#e6e6e6] focus:outline-none focus:border-[#0d99ff]"
     >
-      <SelectValue placeholder="Format" />
+      <SelectValue :placeholder="props.placeholder" />
       <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
         <path
-          fill="black"
+          fill="currentColor"
           fill-rule="evenodd"
           clip-rule="evenodd"
           d="M9.646 11.146a.5.5 0 0 1 .708 0L12 12.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708"
@@ -64,7 +68,7 @@ const emit = defineEmits<{
                 viewBox="0 0 16 16"
               >
                 <path
-                  fill="#fff"
+                  fill="currentColor"
                   fill-opacity="1"
                   fill-rule="nonzero"
                   stroke="none"

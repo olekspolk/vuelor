@@ -24,7 +24,8 @@
 }
 
 .image-bg {
-  background-color: var(--vuelor-selected-color, #B63DDAFF);
+  transform: translate(-50%, -50%) scale(1.4) !important;
+  background: var(--vuelor-selected-value, #B63DDAFF) !important;
   z-index: -1;
 }
 
@@ -36,6 +37,6 @@
   }
 
   .image {
-    margin: 0 0 40px 0 !important;
+    margin: 0 0 70px 0 !important;
   }
 }

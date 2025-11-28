@@ -19,9 +19,6 @@ const color = ref(null)
       <ColorPickerMini v-model="color" />
     </div>
     <div class="item">
-      <ColorPickerWithGradient />
-    </div>
-    <div class="item">
       <ColorPickerMiniVertical v-model="color" />
     </div>
     <div class="item">
@@ -38,6 +35,9 @@ const color = ref(null)
     </div>
     <div class="item">
       <ColorPickerWithTabsVerticalSliders v-model="color" />
+    </div>
+    <div class="item">
+      <ColorPickerWithGradient />
     </div>
     <div class="item">
       <ColorPickerPopover v-model="color" />

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import type { ColorObject } from '@vuelor/picker'
-import ColorFormat from '../common/ColorFormat.vue'
+import Select from '../common/Select.vue'
 
 import {
   ColorPickerRoot,
@@ -79,8 +79,11 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <ColorFormat
+      <Select
         v-model="format"
+        class="w-[56px]"
+        label="Color Format"
+        placeholder="Format"
         :disabled="props.disabled"
         :options="formatOptions"
       />

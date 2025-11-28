@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { twMerge } from 'tailwind-merge'
 import { createReusableTemplate } from '@vueuse/core'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
-
-import type { ColorObject } from '@vuelor/picker'
 import { ColorPickerInputHex, ColorPickerInputHSL, ColorPickerInputRGB, ColorPickerInputHSB } from '@vuelor/picker'
 import { ColorPickerRoot, ColorPickerCanvas, ColorPickerEyeDropper, ColorPickerSwatch } from '@vuelor/picker'
 import { ColorPickerSliderHue, ColorPickerSliderAlpha } from '@vuelor/picker'
+import { HexaToRGBA, RGBAtoHexa } from '@vuelor/picker'
 
-import ColorFormat from '../common/ColorFormat.vue'
+import Select from '../common/Select.vue'
 import GradientStopInput from '../common/GradientStopInput.vue'
 
 const [DefineColorPickerTemplate, ColorPicker] = createReusableTemplate()
@@ -22,7 +22,7 @@ const INPUTS = {
   HSB: ColorPickerInputHSB
 }
 
-type ModelValue = ColorObject | string | null
+type ModelValue = string | null
 
 interface Props {
   class?: string
@@ -31,7 +31,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  disabled: false
+  disabled: false,
+  modelValue: null
 })
 
 const emit = defineEmits<{
@@ -41,58 +42,140 @@ const emit = defineEmits<{
 const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('Hex')
 const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB']
 
+const shatches = ref<string[]>([
+  '#00C3D0FF',
+  '#00C8B3FF',
+  '#34C759FF',
+  '#FFCC00FF',
+  '#FF383CFF',
+  '#FF8D2825',
+  '#FF383C40',
+  '#FF8D2880',
+  '#FFCC0080',
+  '#34C759FF',
+  '#00C8B3FF',
+  '#00C3D0FF',
+  '#0088FFFF',
+  '#6155F5FF',
+  '#CB30E0FF',
+  '#FF2D55FF',
+  '#FF2D5525',
+  '#AC7F5EFF'
+])
+
 const canvasType = computed<'HSL' | 'HSV'>(() => {
   return format.value === 'HSL' ? 'HSL' : 'HSV'
 })
 
 const color = ref<string | null>(null)
-const mode = ref<'color' | 'gradient'>('gradient')
-const gradientType = ref('linear')
+const mode = ref<'color' | 'gradient'>('color')
 
-const stops = ref([0, 33, 66, 100])
-const selectedStopIndex = ref(0)
-const colors = ref(['#FF98C2FF', '#4DC1FFFF', '#84E882FF', '#FFFA7AFF'])
+const gradientType = ref('Linear')
+const gradientTypeOptions = ['Linear', 'Radial', 'Conic']
 
-const colorValue = computed<ModelValue>({
+const gradientAngle = ref(90)
+const gradientStops = ref([0, 33, 66, 100])
+const gradientSelectedStopIndex = ref(0)
+const gradientColors = ref(['#FF98C2FF', '#4DC1FFFF', '#D082E8FF', '#FFFA7AFF'])
+
+const currentColor = computed<ModelValue>({
   get: () => {
-    return mode.value === 'color' ? color.value : colors.value[selectedStopIndex.value]
+    return mode.value === 'color'
+      ? color.value
+      : gradientColors.value[gradientSelectedStopIndex.value]
   },
   set: (value: ModelValue) => {
     if (mode.value === 'color') {
       color.value = value as string
     } else {
-      colors.value[selectedStopIndex.value] = value as string
+      gradientColors.value[gradientSelectedStopIndex.value] = value as string
     }
   }
 })
 
 function addStop () {
-  const last = stops.value.slice(-1)[0]
-  stops.value = [...stops.value.slice(0, -1), last - 10, last]
-  colors.value = [...colors.value.slice(0, -1), '#FF0000FF', ...colors.value.slice(-1)]
-}
+    const lastIndex = gradientStops.value.length - 1
+    const prevIndex = gradientStops.value.length > 1 ? gradientStops.value.length - 2 : 0
+
+    const newStop = gradientStops.value.length > 1
+      ? ((gradientStops.value[lastIndex] + gradientStops.value[prevIndex]) / 2)
+      : gradientStops.value[lastIndex] <= 50 ? 100 : 0
+
+    const colorA = HexaToRGBA(gradientColors.value[prevIndex])
+    const colorB = HexaToRGBA(gradientColors.value[lastIndex])
+
+    const newColor = RGBAtoHexa({
+      r: (colorA.r + colorB.r) / 2,
+      g: (colorA.g + colorB.g) / 2,
+      b: (colorA.b + colorB.b) / 2,
+      a: (colorA.a + colorB.a) / 2
+    })
+
+    const insertIndex = (gradientStops.value.length === 1) ? 1 : lastIndex
+    gradientStops.value.splice(insertIndex, 0, Math.round(newStop))
+    gradientStops.value = gradientStops.value.sort((a, b) => a - b)
+    gradientColors.value.splice(insertIndex, 0, newColor)
+};
 
 function removeStop (index: number) {
-  if (stops.value.length < 2) return
-  stops.value.splice(index, 1)
-  colors.value.splice(index, 1)
+  if (gradientStops.value.length < 2) return
+  gradientSelectedStopIndex.value = index > 0 ? index - 1 : 0
+  gradientStops.value.splice(index, 1)
+  gradientColors.value.splice(index, 1)
 }
 
-const trackBackground = computed(() => {
-  const stopsList = stops.value.map((value, index) => `${colors.value[index]} ${value}%`).join(', ')
-  return `${gradientType.value}-gradient(to right, ${stopsList})`
+function handleSelectStop (index: number) {
+  gradientSelectedStopIndex.value = index
+}
+
+function handleReverseGradient () {
+  gradientColors.value.reverse()
+}
+
+function handleRotateGradient () {
+  gradientAngle.value = (gradientAngle.value + 90) % 360
+}
+
+const gradientStopsList = computed(() => {
+  return gradientStops.value.map((value, index) => `${gradientColors.value[index]} ${value}%`).join(', ')
 })
+
+const trackBackground = computed(() => {
+  return `linear-gradient(to right, ${gradientStopsList.value})`
+})
+
+const modelValue = computed(() => {
+  if (mode.value === 'color') {
+    return color.value
+  }
+
+  switch (gradientType.value) {
+    case 'Radial':
+      return `radial-gradient(circle at center, ${gradientStopsList.value})`
+    case 'Conic':
+      return `conic-gradient(from ${gradientAngle.value}deg, ${gradientStopsList.value})`
+    case 'Linear':
+    default:
+      return `linear-gradient(${gradientAngle.value}deg, ${gradientStopsList.value})`
+  }
+})
+
+watch(
+  modelValue,
+  (newValue) => emit('update:modelValue', newValue),
+  { immediate: true }
+)
 </script>
 
 <template>
   <ColorPickerRoot
-    v-model="colorValue"
+    v-model="currentColor"
     class="block p-0"
     :class="props.class"
     :ui="{ input: { label: 'hidden', field: 'max-w-12' } }"
   >
     <DefineColorPickerTemplate>
-      <div class="flex flex-col gap-2">
+      <div class="p-4 flex flex-col gap-2">
         <ColorPickerCanvas :type="canvasType" />
         <div class="flex items-center gap-3">
           <ColorPickerEyeDropper>
@@ -111,13 +194,24 @@ const trackBackground = computed(() => {
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <ColorFormat
+          <Select
             v-model="format"
+            class="w-[56px]"
+            label="Color format"
+            placeholder="Format"
             :disabled="props.disabled"
             :options="formatOptions"
           />
           <component :is="INPUTS[format]" />
         </div>
+      </div>
+      <div class="border-t px-3 py-2 grid grid-cols-9">
+        <ColorPickerSwatch
+          v-for="color in shatches"
+          :value="color"
+          class="m-1"
+          @click="currentColor = color"
+        />
       </div>
     </DefineColorPickerTemplate>
 
@@ -125,26 +219,67 @@ const trackBackground = computed(() => {
       v-model="mode"
       default-value="color"
     >
-      <TabsList class="flex gap-1 p-2 border-b">
-        <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-[#f5f5f5]" value="color">
+      <div class="flex justify-between p-2 border-b">
+        <TabsList class="flex gap-1">
+          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-[#f5f5f5]" value="color">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path fill="#0000004d" d="M9 9h6v6H9z" />
+              <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3 7V9h6v6zM8 8.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z" />
+            </svg>
+          </TabsTrigger>
+          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-[#f5f5f5]" value="gradient">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3.75.875a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m3.791.625a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m-1.458.875a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m0 3.12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.458 2.245a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m.625-3.865a.625.625 0 1 1-1.25 0 .625.625 0 0 1 1.25 0M8.875 15.99a.875.875 0 1 0 0-1.75.875.875 0 0 0 0 1.75m.875-4.115a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m5.75-1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m.5 2.623a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
+            </svg>
+          </TabsTrigger>
+        </TabsList>
+
+        <button class="h-6 w-6 rounded-[5px] hover:bg-[#f5f5f5] focus:outline focus:outline-[#0d99ff]">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path fill="#0000004d" d="M9 9h6v6H9z" />
-            <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3 7V9h6v6zM8 8.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z" />
+            <path fill="#000000e6" d="M16.224 7.082a.501.501 0 0 1 .694.693l-.065.078L12.707 12l4.146 4.146.064.078a.5.5 0 0 1-.693.694l-.078-.065L12 12.706l-4.147 4.147a.5.5 0 1 1-.707-.707l4.147-4.147-4.147-4.146-.064-.078a.501.501 0 0 1 .693-.693l.078.064L12 11.293l4.146-4.147z" />
           </svg>
-        </TabsTrigger>
-        <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-[#f5f5f5]" value="gradient">
-          <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3.75.875a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m3.791.625a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m-1.458.875a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m0 3.12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.458 2.245a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m.625-3.865a.625.625 0 1 1-1.25 0 .625.625 0 0 1 1.25 0M8.875 15.99a.875.875 0 1 0 0-1.75.875.875 0 0 0 0 1.75m.875-4.115a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m5.75-1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m.5 2.623a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
-          </svg>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent class="p-4" value="color">
+        </button>
+      </div>
+
+      <TabsContent value="color">
         <ColorPicker />
       </TabsContent>
       <TabsContent class="pb-3" value="gradient">
+        <div class="h-12 pl-4 pr-2 flex items-center justify-between gap-2">
+          <Select
+            v-model="gradientType"
+            class="w-24"
+            label="Gradient type"
+            placeholder="Type"
+            :disabled="props.disabled"
+            :options="gradientTypeOptions"
+          />
+          <div class="flex items-center gap-1">
+            <button
+              :disabled="gradientStops.length === 1"
+              class="rounded-[5px] enabled:hover:bg-[#f5f5f5] disabled:opacity-50 focus:outline focus:outline-[#0d99ff]"
+              @click="handleReverseGradient"
+            >
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M8.354 6.354a.5.5 0 1 0-.708-.708l-2.5 2.5a.5.5 0 0 0 0 .708l2.5 2.5a.5.5 0 0 0 .708-.708L6.707 9H18.5a.5.5 0 0 0 0-1H6.707zm7.292 7a.5.5 0 0 1 .708-.708l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 0 1-.708-.708L17.293 16H5.5a.5.5 0 0 1 0-1h11.793z" />
+              </svg>
+            </button>
+
+            <button
+              :disabled="gradientType === 'Radial'"
+              class="rounded-[5px] enabled:hover:bg-[#f5f5f5] disabled:opacity-50 focus:outline focus:outline-[#0d99ff]"
+              @click="handleRotateGradient"
+            >
+              <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path fill="currentColor" fill-rule="evenodd" d="M10.233 6.474a2.5 2.5 0 0 1 3.535 0L15.293 8H14a.5.5 0 0 0 0 1h2.5a.5.5 0 0 0 .5-.5V6a.5.5 0 1 0-1 0v1.292l-1.525-1.525a3.5 3.5 0 0 0-4.95 0L7.147 8.146a.5.5 0 0 0 .707.707zm2.828 3.172a1.5 1.5 0 0 0-2.121 0l-3.293 3.293a1.5 1.5 0 0 0 0 2.121l3.293 3.293a1.5 1.5 0 0 0 2.12 0l3.294-3.293a1.5 1.5 0 0 0 0-2.121zm-1.414.707a.5.5 0 0 1 .707 0l3.293 3.293a.5.5 0 0 1 0 .707l-3.293 3.293a.5.5 0 0 1-.707 0l-3.293-3.293a.5.5 0 0 1 0-.707z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
         <div class="pt-4 px-4">
           <SliderRoot
-            v-model="stops"
+            v-model="gradientStops"
             class="relative flex items-center select-none touch-none"
             thumbAlignment="overflow"
           >
@@ -153,15 +288,15 @@ const trackBackground = computed(() => {
               class="relative grow rounded-[5px] h-8 shadow-vuelor-inner"
             />
             <SliderThumb
-              v-for="(_, i) in stops.length"
+              v-for="(_, i) in gradientStops.length"
               aria-label="Stop"
-              class="flex items-center justify-center w-6 h-6 -mt-8 bg-white drop-shadow-vuelor-thumb rounded-[5px] focus:outline-none focus:bg-[#0d99ff] relative after:content-[''] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px] after:border-t-white focus:after:border-t-[#0d99ff]"
-              @click="selectedStopIndex = i"
+              :class="twMerge(['flex items-center justify-center w-6 h-6 -mt-8 bg-white drop-shadow-vuelor-thumb rounded-[5px] focus:outline-none relative after:content-[\'\'] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px] after:border-t-white', gradientSelectedStopIndex === i ? 'bg-[#0d99ff] after:border-t-[#0d99ff]' : ''])"
+              @pointerdown="handleSelectStop(i)"
             >
               <ColorPickerSwatch
                 as="span"
                 class="w-3.5 h-3.5 border border-[#0000001a] rounded-sm"
-                :value="colors[i]"
+                :value="gradientColors[i]"
               />
             </SliderThumb>
           </SliderRoot>
@@ -169,7 +304,8 @@ const trackBackground = computed(() => {
         <div class="h-8 pl-4 pr-2 mt-2 mb-1 flex items-center justify-between">
           <span class="text-black text-[11px] font-bold">Stops</span>
           <button
-            class="rounded-[5px] hover:bg-[#f5f5f5]"
+            :disabled="gradientStops.length > 7"
+            class="rounded-[5px] enabled:hover:bg-[#f5f5f5] disabled:opacity-50 focus:outline focus:outline-[#0d99ff]"
             @click="addStop"
           >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -183,18 +319,19 @@ const trackBackground = computed(() => {
           </button>
         </div>
         <div
-          v-for="(_, index) in stops"
-          :class="{ 'bg-[#e5f4ff]': selectedStopIndex === index }"
+          v-for="(_, index) in gradientStops"
+          :class="{ 'bg-[#e5f4ff]': gradientSelectedStopIndex === index }"
           class="h-8 pl-4 pr-2 flex items-center gap-2"
+          @mousedown="handleSelectStop(index)"
         >
-          <GradientStopInput v-model="stops[index]" />
-          <ColorPickerInputHex class="flex-1" v-model="colors[index]">
+          <GradientStopInput v-model="gradientStops[index]" />
+          <ColorPickerInputHex class="flex-1" v-model="gradientColors[index]">
             <template #before>
               <PopoverRoot>
                 <PopoverTrigger as-child>
                   <ColorPickerSwatch
-                    :value="colors[index]"
-                    @click="selectedStopIndex = index"
+                    :value="gradientColors[index]"
+                    @click="gradientSelectedStopIndex = index"
                   />
                 </PopoverTrigger>
                 <PopoverPortal>
@@ -203,7 +340,7 @@ const trackBackground = computed(() => {
                     align="start"
                     :alignOffset="-100"
                     :sideOffset="75"
-                    class="vuelor bg-white w-60 p-4 rounded-lg shadow-vuelor-card"
+                    class="vuelor bg-white w-60 z-10 rounded-lg shadow-vuelor-card"
                   >
                     <ColorPicker />
                   </PopoverContent>
@@ -212,9 +349,10 @@ const trackBackground = computed(() => {
             </template>
           </ColorPickerInputHex>
           <button
-            class="rounded-[5px] hover:bg-[#f5f5f5]"
-            :style="{ visibility: stops.length < 2 ? 'hidden' : undefined }"
+            class="rounded-[5px] hover:bg-[#f5f5f5] focus:outline focus:outline-[#0d99ff]"
+            :style="{ visibility: gradientStops.length < 2 ? 'hidden' : undefined }"
             @click="removeStop(index)"
+            @pointerdown.prevent
           >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path
