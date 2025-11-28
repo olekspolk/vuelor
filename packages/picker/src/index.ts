@@ -1,6 +1,8 @@
 import './style/index.css'
+export * from './utils/color'
 export type * from './utils/types'
 
+export { useVModel } from './composables/useVModel.ts'
 export { injectColorPickerContext } from './components/ColorPickerRoot.vue'
 
 export { default as ColorPickerRoot } from './components/ColorPickerRoot.vue'
