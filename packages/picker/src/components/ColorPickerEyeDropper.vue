@@ -1,10 +1,17 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { Primitive } from 'reka-ui'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
-const props = defineProps<{
-  class?: string
-}>()
+interface Props {
+  class?: string,
+  as?: string,
+  asChild?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  as: 'button'
+})
 
 const rootContext = injectColorPickerContext()
 
@@ -30,12 +37,14 @@ const ui = rootContext.uiSlots('dropper')
 </script>
 
 <template>
-  <button
+  <Primitive
     v-if="isSupported"
+    :as="props.as"
+    :as-child="props.asChild"
     :disabled="rootContext.disabled.value"
     :class="ui.base(props.class)"
     @click="openEyeDropper"
   >
     <slot />
-  </button>
+  </Primitive>
 </template>

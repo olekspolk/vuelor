@@ -172,6 +172,7 @@ watch(
     v-model="currentColor"
     class="block p-0"
     :class="props.class"
+    :disabled="props.disabled"
     :ui="{ input: { label: 'hidden', field: 'max-w-12' } }"
   >
     <DefineColorPickerTemplate>
@@ -340,7 +341,8 @@ watch(
                     align="start"
                     :alignOffset="-100"
                     :sideOffset="75"
-                    class="vuelor bg-white w-60 z-10 rounded-lg shadow-vuelor-card"
+                    data-vuelor-docs
+                    class="bg-white w-60 z-10 rounded-lg shadow-vuelor-card"
                   >
                     <ColorPicker />
                   </PopoverContent>

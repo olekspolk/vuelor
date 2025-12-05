@@ -27,6 +27,7 @@ const ui = rootContext.uiSlots('swatch')
 <template>
   <Primitive
     :as="props.as"
+    :disabled="rootContext.disabled.value"
     :style="{ backgroundColor: `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})` }"
     :class="ui.base(props.ui?.base, props.class)"
   >

@@ -31,6 +31,7 @@ const ui = rootContext.uiSlots('input')
     <div :class="ui.item()">
       <input
         type="text"
+        :disabled="rootContext.disabled.value"
         :value="`${props.modelValue}%`"
         :class="ui.field()"
         @blur="handleInput"
