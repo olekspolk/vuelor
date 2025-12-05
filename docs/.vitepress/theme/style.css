@@ -2,23 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-.vuelor button,
-.vuelor input {
+[data-vuelor-docs] button,
+[data-vuelor-docs] input {
   color: #000;
 }
 
-.vuelor button {
+[data-vuelor-docs] button {
   border-style: solid;
 }
 
-.vuelor * {
+[data-vuelor-docs] * {
   outline-width: 0;
   outline-style: solid;
 }
 
-.vuelor canvas,
-.vuelor span:focus,
-.vuelor button:focus {
+[data-vuelor-docs] canvas,
+[data-vuelor-docs] span:focus,
+[data-vuelor-docs] button:focus {
   outline-width: 1px;
   outline-style: solid;
 }

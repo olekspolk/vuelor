@@ -16,7 +16,7 @@ watch(color, (value) => {
 </script>
 
 <template>
-  <div class="vuelor">
+  <div data-vuelor-docs>
     <ColorPicker
       v-model="color"
       format="hexa"

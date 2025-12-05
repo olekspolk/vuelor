@@ -58,7 +58,8 @@ const color = computed({
           align="start"
           :sideOffset="5"
           :alignOffset="-4"
-          class="vuelor bg-white rounded-[5px] shadow-vuelor-card"
+          data-vuelor-docs
+          class="bg-white rounded-[5px] shadow-vuelor-card"
         >
           <ColorPickerCanvas :ui="{ area: 'rounded-none rounded-t-[5px]' }" />
           <div class="p-3 flex items-center gap-3">
