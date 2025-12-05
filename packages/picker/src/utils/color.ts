@@ -1,4 +1,4 @@
-import type { Hex, HSL, HSV, RGB, RGBA } from './types.ts'
+import type { Hex, Hexa, HSL, HSV, RGB, RGBA } from './types.ts'
 import { chunk } from './helpers.ts'
 
 export function HSLtoHSV (hsl: HSL): HSV {
@@ -77,12 +77,31 @@ export function RGBtoHex (rgb: RGB): Hex {
   ].join('')}`
 }
 
+export function RGBAtoHexa (rgba: RGBA): Hexa {
+  return `#${[
+    toHex(rgba.r),
+    toHex(rgba.g),
+    toHex(rgba.b),
+    toHex(rgba.a * 255),
+  ].join('')}`
+}
+
 export function HexToRGB (hex: Hex): RGB {
   const rgb = chunk(hex.slice(1), 2).map((c: string) => parseInt(c, 16))
   return {
     r: rgb[0] as number,
     g: rgb[1] as number,
     b: rgb[2] as number
+  }
+}
+
+export function HexaToRGBA (hex: Hexa): RGBA {
+  const rgb = chunk(hex.slice(1), 2).map((c: string) => parseInt(c, 16))
+  return {
+    r: rgb[0] as number,
+    g: rgb[1] as number,
+    b: rgb[2] as number,
+    a: (rgb[3] as number) / 255
   }
 }
 

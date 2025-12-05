@@ -21,5 +21,9 @@ export default {
     item: 'vuelor-picker-input-item',
     label: 'vuelor-picker-input-label',
     field: 'vuelor-picker-input-field'
+  },
+  swatch: {
+    base: 'vuelor-picker-swatch-base',
+    alpha: 'vuelor-picker-swatch-alpha'
   }
 }

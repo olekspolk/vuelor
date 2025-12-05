@@ -31,6 +31,12 @@
 | class        | `-`            | `string`                                                       |
 | ui           | `-`            | `ThemeSlots`                                                   |
 
+
+| Emit              | Description                                                               |
+| ----------------- | ------------------------------------------------------------------------- |
+| update:modelValue | Event handler called when the color value changes.                        |
+| valueCommit       | Event handler called when the value changes at the end of an interaction. |
+
 ### ColorObject
 
 ```ts
@@ -72,6 +78,10 @@ type ThemeSlots {
     item: string
     label: string
     field: string
+  },
+  swatch: {
+    base: string
+    alpha: string
   }
 }
 ```
@@ -112,3 +122,13 @@ type ThemeSlots {
 | ------------ | -------------- | ------------------------ |
 | class        | `-`            | `string`                 |
 | ui           | `-`            | Slider UI Slots          |
+
+
+## ColorPickerSwatch.vue
+
+| Props        | Default        | Description              |
+| ------------ | -------------- | ------------------------ |
+| as           | `button`       | `string`                 |
+| class        | `-`            | `string`                 |
+| value        | `-`            | `string`                 |
+| ui           | `-`            | Swatch UI Slots          |

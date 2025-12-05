@@ -1,5 +1,9 @@
 import './style/index.css'
+export * from './utils/color'
 export type * from './utils/types'
+
+export { useVModel } from './composables/useVModel.ts'
+export { injectColorPickerContext } from './components/ColorPickerRoot.vue'
 
 export { default as ColorPickerRoot } from './components/ColorPickerRoot.vue'
 export { default as ColorPickerCanvas } from './components/ColorPickerCanvas.vue'
@@ -15,3 +19,4 @@ export { default as ColorPickerSliderLightness } from './components/ColorPickerS
 export { default as ColorPickerSliderRed } from './components/ColorPickerSliderRed.vue'
 export { default as ColorPickerSliderGreen } from './components/ColorPickerSliderGreen.vue'
 export { default as ColorPickerSliderBlue } from './components/ColorPickerSliderBlue.vue'
+export { default as ColorPickerSwatch } from './components/ColorPickerSwatch.vue'

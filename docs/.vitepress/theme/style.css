@@ -2,29 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-.vuelor button,
-.vuelor input {
+[data-vuelor-docs] button,
+[data-vuelor-docs] input {
   color: #000;
 }
 
-.vuelor button {
+[data-vuelor-docs] button {
   border-style: solid;
 }
 
-.vuelor * {
+[data-vuelor-docs] * {
   outline-width: 0;
   outline-style: solid;
 }
 
-.vuelor canvas,
-.vuelor span:focus,
-.vuelor button:focus {
+[data-vuelor-docs] canvas,
+[data-vuelor-docs] span:focus,
+[data-vuelor-docs] button:focus {
   outline-width: 1px;
   outline-style: solid;
 }
 
 .image-bg {
-  background-color: var(--vuelor-selected-color, #B63DDAFF);
+  transform: translate(-50%, -50%) scale(1.4) !important;
+  background: var(--vuelor-selected-value, #B63DDAFF) !important;
   z-index: -1;
 }
 
@@ -36,6 +37,6 @@
   }
 
   .image {
-    margin: 0 0 40px 0 !important;
+    margin: 0 0 70px 0 !important;
   }
 }

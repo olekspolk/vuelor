@@ -16,7 +16,7 @@ type ColorPickerRootContext = {
   uiSlots: Function,
   disabled: Ref<boolean>,
   isAlphaEnabled: Ref<boolean>,
-  emitUpdateEnd: () => void
+  commitValue: () => void
 }
 
 type ModelValue = string | ColorObject | null
@@ -34,7 +34,7 @@ export interface ColorPickerRootProps {
 }
 
 export type ColorPickerRootEmits = {
-  (e: 'update:end', value: ModelValue): void,
+  (e: 'valueCommit', value: ModelValue): void,
   (e: 'update:modelValue', value: ModelValue): void
 }
 </script>
@@ -83,9 +83,9 @@ provideColorPickerContext({
   uiSlots,
   disabled,
   isAlphaEnabled,
-  emitUpdateEnd: () => {
+  commitValue: () => {
     if (!props.disabled) {
-      emit('update:end', color.toFormat(props.format))
+      emit('valueCommit', color.toFormat(props.format))
     }
   }
 })

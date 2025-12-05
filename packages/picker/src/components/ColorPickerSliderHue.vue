@@ -47,7 +47,7 @@ const ui = rootContext.uiSlots('slider', 'shared')
     :inverted="props.inverted"
     :orientation="props.orientation"
     :class="ui.root(props.ui?.root, props.class)"
-    @pointerup="rootContext.emitUpdateEnd()"
+    @value-commit="rootContext.commitValue()"
   >
     <SliderTrack
       :style="{ background: trackBackground }"

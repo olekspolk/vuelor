@@ -21,7 +21,7 @@ function parseChannelValue(e: Event, channel: 'h' | 's' | 'l', max: number) {
       ...rootContext.hsl.value,
       [channel]: channel === 'h' ? value : value / 100
     }
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   } else {
     target.value = channel !== 'h'
       ? Math.round(value * 100).toString()
@@ -37,7 +37,7 @@ function handleAlphaInput(e: Event) {
     : clamp(intValue, 0, 100)
   if (rootContext.alpha.value !== value) {
     rootContext.alpha.value = value
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   } else {
     target.value = value.toString()
   }
@@ -53,8 +53,8 @@ const ui = rootContext.uiSlots('input')
     :class="ui.group(props.ui?.group, props.class)"
     :data-disabled="rootContext.disabled.value ? '' : null"
   >
-    <slot name="before" />
     <div :class="ui.item(props.ui?.item)">
+      <slot name="before" />
       <span :class="ui.label(props.ui?.label)">H</span>
       <input
         type="text"
@@ -107,7 +107,7 @@ const ui = rootContext.uiSlots('input')
         :class="ui.field(props.ui?.field)"
         @blur="handleAlphaInput"
       />
-      <span :class="ui.label(props.ui?.label)">%</span>
+      <span data-alpha-label :class="ui.label(props.ui?.label)">%</span>
     </div>
   </div>
 </template>
