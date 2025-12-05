@@ -21,7 +21,7 @@ function parseChannelValue(e: Event, channel: 'h' | 's' | 'l', max: number) {
       ...rootContext.hsl.value,
       [channel]: channel === 'h' ? value : value / 100
     }
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   } else {
     target.value = channel !== 'h'
       ? Math.round(value * 100).toString()
@@ -37,7 +37,7 @@ function handleAlphaInput(e: Event) {
     : clamp(intValue, 0, 100)
   if (rootContext.alpha.value !== value) {
     rootContext.alpha.value = value
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   } else {
     target.value = value.toString()
   }

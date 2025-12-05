@@ -89,7 +89,7 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
   function handlePointerUp() {
     document.removeEventListener('pointermove', handlePointerMove)
     document.removeEventListener('pointerup', handlePointerUp)
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   }
 
   function handleKeyDown(event: KeyboardEvent) {
@@ -100,22 +100,22 @@ export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HS
       case 'ArrowUp':
         event.preventDefault()
         top.value -= step
-        rootContext.emitUpdateEnd()
+        rootContext.commitValue()
         break
       case 'ArrowDown':
         event.preventDefault()
         top.value += step
-        rootContext.emitUpdateEnd()
+        rootContext.commitValue()
         break
       case 'ArrowLeft':
         event.preventDefault()
         left.value -= step
-        rootContext.emitUpdateEnd()
+        rootContext.commitValue()
         break
       case 'ArrowRight':
         event.preventDefault()
         left.value += step
-        rootContext.emitUpdateEnd()
+        rootContext.commitValue()
         break
     }
   }

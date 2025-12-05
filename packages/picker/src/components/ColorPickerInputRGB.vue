@@ -21,7 +21,7 @@ function parseChannelValue(e: Event, channel: 'r' | 'g' | 'b') {
       ...rootContext.rgb.value,
       [channel]: value
     }
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   } else {
     target.value = value.toString()
   }
@@ -35,7 +35,7 @@ function handleAlphaInput(e: Event) {
     : clamp(intValue, 0, 100)
   if (rootContext.alpha.value !== value) {
     rootContext.alpha.value = value
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   } else {
     target.value = value.toString()
   }

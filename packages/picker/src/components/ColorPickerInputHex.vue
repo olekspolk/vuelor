@@ -47,7 +47,7 @@ function handleHexInput(e: Event) {
     emit('update:modelValue', RGBAtoHexa(rgba))
   } else {
     rootContext.rgba.value = rgba
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   }
 }
 
@@ -59,7 +59,7 @@ function handleAlphaInput(e: Event) {
     : clamp(intValue, 0, 100)
   if (rootContext.alpha.value !== value) {
     rootContext.alpha.value = value
-    rootContext.emitUpdateEnd()
+    rootContext.commitValue()
   } else {
     target.value = value.toString()
   }
