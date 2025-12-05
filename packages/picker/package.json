@@ -1,6 +1,6 @@
 {
   "name": "@vuelor/picker",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "license": "MIT",
   "description": "Vue color picker, built with Reka UI and Tailwind CSS.",
@@ -34,7 +34,9 @@
     "ui",
     "vue",
     "nuxt",
+    "nuxt-ui",
     "reka-ui",
+    "shadcn/vue",
     "tailwindcss",
     "color",
     "color-picker"
