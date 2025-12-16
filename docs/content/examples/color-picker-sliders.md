@@ -1,27 +1,15 @@
-# ColorPicker Sliders
+# ColorPicker Sliders Edition
 
-```vue
-<script setup>
-import { ref } from 'vue'
-import {
-  ColorPickerRoot,
-  ColorPickerInputRGB,
-  ColorPickerSliderRed,
-  ColorPickerSliderGreen,
-  ColorPickerSliderBlue,
-  ColorPickerSliderAlpha
-} from '@vuelor/picker'
+For granular control, the library provides individual slider components for each color channel. These primitives — such as `ColorPickerSliderRed`, `ColorPickerSliderGreen`, `ColorPickerSliderBlue`, and `ColorPickerSliderAlpha` — can be combined to build completely custom interfaces.
 
-const color = ref(null)
-</script>
+## ColorPicker RGB Sliders
 
-<template>
-  <ColorPickerRoot v-model="color">
-    <ColorPickerInputRGB />
-    <ColorPickerSliderRed />
-    <ColorPickerSliderGreen />
-    <ColorPickerSliderBlue />
-    <ColorPickerSliderAlpha />
-  </ColorPickerRoot>
-</template>
-```
+::: demo ColorPickerSlidersRGB.vue
+:::
+
+## ColorPicker HSL Sliders
+
+For applications that prioritize the HSL color model, you can utilize dedicated primitives to construct a complete HSL interface. By combining `ColorPickerSliderHue`, `ColorPickerSliderSaturation`, and `ColorPickerSliderLightness`, you provide users with intuitive control over color tone and intensity. This setup is ideal for design-focused tools where adjusting saturation or lightness independently is a key requirement.
+
+::: demo ColorPickerSlidersHSL.vue
+:::
