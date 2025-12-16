@@ -3,22 +3,29 @@
 @tailwind utilities;
 
 [data-vuelor-docs] button,
-[data-vuelor-docs] input {
+[data-vuelor-docs] input,
+[data-reka-popper-content-wrapper] button,
+[data-reka-popper-content-wrapper] input {
   color: #000;
 }
 
-[data-vuelor-docs] button {
+[data-vuelor-docs] button,
+[data-reka-popper-content-wrapper] button {
   border-style: solid;
 }
 
-[data-vuelor-docs] * {
+[data-vuelor-docs] *,
+[data-reka-popper-content-wrapper] * {
   outline-width: 0;
   outline-style: solid;
 }
 
 [data-vuelor-docs] canvas,
 [data-vuelor-docs] span:focus,
-[data-vuelor-docs] button:focus {
+[data-vuelor-docs] button:focus,
+[data-reka-popper-content-wrapper] canvas,
+[data-reka-popper-content-wrapper] span:focus,
+[data-reka-popper-content-wrapper] button:focus {
   outline-width: 1px;
   outline-style: solid;
 }

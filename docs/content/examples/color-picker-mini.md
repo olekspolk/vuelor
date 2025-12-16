@@ -1,48 +1,19 @@
 # ColorPicker Mini
 
-```vue
-<script setup>
-import { ref } from 'vue'
-import {
-  ColorPickerRoot,
-  ColorPickerCanvas,
-  ColorPickerSliderHue
-} from '@vuelor/picker'
-
-const color =  ref(null)
-</script>
-
-<template>
-  <ColorPickerRoot v-model="color">
-    <ColorPickerCanvas />
-    <ColorPickerSliderHue />
-  </ColorPickerRoot>
-</template>
-```
+::: demo ColorPickerMini.vue
+:::
 
 ## With vertical sliders
 
-```vue
-<script setup>
-import { ref } from 'vue'
-import {
-  ColorPickerRoot,
-  ColorPickerCanvas,
-  ColorPickerSliderHue,
-  ColorPickerSliderAlpha
-} from '@vuelor/picker'
+::: demo ColorPickerMiniVertical.vue
+:::
 
-const color = ref(null)
-</script>
+## With custom styles
 
-<template>
-  <ColorPickerRoot
-    v-model="color"
-    class="flex-row gap-3 w-auto"
-  >
-    <ColorPickerCanvas />
-    <ColorPickerSliderHue orientation="vertical" />
-    <ColorPickerSliderAlpha orientation="vertical" />
-  </ColorPickerRoot>
-</template>
-```
+::: demo ColorPickerMiniStyled.vue
+:::
+
+## With vertical sliders and custom styles
+
+::: demo ColorPickerMiniVerticalStyled.vue
+:::

@@ -1,3 +1,6 @@
+import fs from 'fs'
+import path from 'path'
+import container from 'markdown-it-container'
 import tailwind from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 import { defineConfig } from 'vitepress'
@@ -41,9 +44,11 @@ export default defineConfig({
       {
         text: 'Examples',
         items: [
+          { text: 'ColorPicker SE', link: '/examples/color-picker-sliders' },
           { text: 'ColorPicker Mini', link: '/examples/color-picker-mini' },
           { text: 'ColorPicker Pro', link: '/examples/color-picker-pro' },
-          { text: 'ColorPicker Sliders', link: '/examples/color-picker-sliders' },
+          { text: 'ColorPicker Max', link: '/examples/color-picker-max' },
+          { text: 'ColorPicker Ultra', link: '/examples/color-picker-ultra' },
         ]
       }
     ],
@@ -55,6 +60,45 @@ export default defineConfig({
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2025'
+    }
+  },
+  markdown: {
+    config(md) {
+      md.use(container, 'demo', {
+        render(tokens, idx) {
+          const token = tokens[idx]
+          if (token.nesting === 1) {
+            const sourceFileToken = token.info.trim().match(/^demo\s+(.*)$/)
+            const sourceFile = sourceFileToken ? sourceFileToken[1] : ''
+            if (!sourceFile) throw new Error('Incorrect syntax: ::: demo <path>')
+            const sourcePath = path.resolve(__dirname, '../components/examples', sourceFile)
+            let sourceCode = ''
+            try {
+              sourceCode = fs.readFileSync(sourcePath, 'utf-8')
+            } catch (e) {
+              console.error(`Could not read file: ${sourcePath}`, e)
+            }
+
+            const highlightedCode = md.options.highlight
+              ? md.options.highlight(sourceCode, 'vue', '')
+              : sourceCode
+
+            const componentName = sourceFile.replace('.vue', '')
+
+            return `
+              <ComponentDemo path="${sourceFile}">
+                <template #demo>
+                  <${componentName} />
+                </template>
+                <template #code>
+                  ${highlightedCode}
+                </template>
+            `
+          } else {
+            return '</ComponentDemo>\n'
+          }
+        }
+      })
     }
   },
   srcDir: 'content',

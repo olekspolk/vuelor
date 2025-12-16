@@ -4,6 +4,7 @@ import {
   ColorPickerRoot,
   ColorPickerCanvas,
   ColorPickerSliderHue,
+  ColorPickerSliderAlpha,
   type ColorObject
 } from '@vuelor/picker'
 
@@ -27,10 +28,29 @@ const color = computed({
 
 <template>
   <ColorPickerRoot
-    format="object"
     v-model="color"
+    format="object"
+    class="bg-transparent p-0 !shadow-none flex-row gap-3 w-auto"
   >
-    <ColorPickerCanvas />
-    <ColorPickerSliderHue />
+    <ColorPickerCanvas
+      :ui="{
+        area: 'rounded-none',
+        thumb: 'border-2'
+      }"
+    />
+    <ColorPickerSliderHue
+      orientation="vertical"
+      :ui="{
+        track: 'rounded-none',
+        thumb: 'w-6 h-2 border-4'
+      }"
+    />
+    <ColorPickerSliderAlpha
+      orientation="vertical"
+      :ui="{
+        track: 'rounded-none',
+        thumb: 'w-6 h-2 border-4'
+      }"
+    />
   </ColorPickerRoot>
 </template>

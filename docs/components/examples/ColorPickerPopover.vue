@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
-import type { ColorObject } from '@vuelor/picker'
-
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
@@ -9,9 +7,9 @@ import {
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
   ColorPickerInputHex,
-  ColorPickerSwatch
+  ColorPickerSwatch,
+  type ColorObject
 } from '@vuelor/picker'
-
 import {
   PopoverContent,
   PopoverPortal,
@@ -19,15 +17,19 @@ import {
   PopoverTrigger
 } from 'reka-ui'
 
-const props = defineProps<{ modelValue: ColorObject | null }>()
+type ModelValue = ColorObject | null
+
+const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
+  modelValue: null
+})
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: ColorObject | null): void
+  (e: 'update:modelValue', value: ModelValue): void
 }>()
 
 const color = computed({
   get: () => props.modelValue,
-  set: (value: ColorObject | null) => {
+  set: (value: ModelValue) => {
     emit('update:modelValue', value)
   }
 })
@@ -58,7 +60,6 @@ const color = computed({
           align="start"
           :sideOffset="5"
           :alignOffset="-4"
-          data-vuelor-docs
           class="bg-white rounded-[5px] shadow-vuelor-card"
         >
           <ColorPickerCanvas :ui="{ area: 'rounded-none rounded-t-[5px]' }" />

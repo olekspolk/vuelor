@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, useTemplateRef } from 'vue'
 import { TabsRoot, TabsList, TabsTrigger } from 'reka-ui'
-import type { ColorObject } from '@vuelor/picker'
-
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
@@ -13,20 +11,23 @@ import {
   ColorPickerInputHSL,
   ColorPickerInputRGB,
   ColorPickerInputHSB,
-  ColorPickerSwatch
+  ColorPickerSwatch,
+  type ColorObject
 } from '@vuelor/picker'
 
-const props = defineProps<{
-  modelValue: ColorObject | null
-}>()
+type ModelValue = ColorObject | null
+
+const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
+  modelValue: null
+})
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: ColorObject | null): void
+  (e: 'update:modelValue', value: ModelValue): void
 }>()
 
 const color = computed({
   get: () => props.modelValue,
-  set: (value: ColorObject | null) => {
+  set: (value: ModelValue) => {
     emit('update:modelValue', value)
   }
 })
@@ -119,6 +120,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
       <ColorPickerSwatch
         v-for="color in shatches"
         :value="color"
+        class="m-1"
         @click="colorPicker && (colorPicker.color.hexa.value = color)"
       />
     </div>

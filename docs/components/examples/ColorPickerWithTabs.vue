@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, useTemplateRef } from 'vue'
 import { TabsRoot, TabsContent, TabsList, TabsTrigger } from 'reka-ui'
-import type { ColorObject } from '@vuelor/picker'
-
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
@@ -12,20 +10,24 @@ import {
   ColorPickerInputHex,
   ColorPickerInputHSL,
   ColorPickerInputRGB,
-  ColorPickerInputHSB
+  ColorPickerInputHSB,
+  ColorPickerSwatch,
+  type ColorObject
 } from '@vuelor/picker'
 
-const props = defineProps<{
-  modelValue: ColorObject | null
-}>()
+type ModelValue = ColorObject | null
+
+const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
+  modelValue: null
+})
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: ColorObject | null): void
+  (e: 'update:modelValue', value: ModelValue): void
 }>()
 
 const color = computed({
   get: () => props.modelValue,
-  set: (value: ColorObject | null) => {
+  set: (value: ModelValue) => {
     emit('update:modelValue', value)
   }
 })
@@ -35,11 +37,35 @@ const format = ref<string>('hex')
 const canvasType = computed<'HSL' | 'HSV'>(() => {
   return format.value === 'hsl' ? 'HSL' : 'HSV'
 })
+
+const shatches = ref<string[]>([
+  '#00C3D0FF',
+  '#00C8B3FF',
+  '#34C759FF',
+  '#FFCC00FF',
+  '#FF383CFF',
+  '#FF8D2825',
+  '#FF383C40',
+  '#FF8D2880',
+  '#FFCC0080',
+  '#34C759FF',
+  '#00C8B3FF',
+  '#00C3D0FF',
+  '#0088FFFF',
+  '#6155F5FF',
+  '#CB30E0FF',
+  '#FF2D55FF',
+  '#FF2D5525',
+  '#AC7F5EFF'
+])
+
+const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
 </script>
 
 <template>
   <ColorPickerRoot
     v-model="color"
+    ref="colorPicker"
     format="object"
   >
     <ColorPickerCanvas :type="canvasType" />
@@ -83,6 +109,14 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
           <ColorPickerInputHSB />
         </TabsContent>
       </TabsRoot>
+    </div>
+    <div class="border-t -mx-4 px-3 pt-2 grid grid-cols-9">
+      <ColorPickerSwatch
+        v-for="color in shatches"
+        :value="color"
+        class="m-1"
+        @click="colorPicker && (colorPicker.color.hexa.value = color)"
+      />
     </div>
   </ColorPickerRoot>
 </template>
