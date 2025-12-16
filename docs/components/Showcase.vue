@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import ColorPickerMini from './examples/ColorPickerMini.vue'
-import ColorPickerMiniVertical from './examples/ColorPickerMiniVertical.vue'
+import ColorPickerMiniStyled from './examples/ColorPickerMiniStyled.vue'
+import ColorPickerMiniVerticalStyled from './examples/ColorPickerMiniVerticalStyled.vue'
 import ColorPickerSlidersRGB from './examples/ColorPickerSlidersRGB.vue'
 import ColorPickerSlidersHSL from './examples/ColorPickerSlidersHSL.vue'
 import ColorPicker from './examples/ColorPicker.vue'
@@ -16,10 +16,10 @@ const color = ref(null)
 <template>
   <div data-vuelor-docs class="grid sm:grid-cols-1 md:grid-cols-2 gap-2">
     <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerMini v-model="color" />
+      <ColorPickerMiniStyled v-model="color" />
     </div>
     <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerMiniVertical v-model="color" />
+      <ColorPickerMiniVerticalStyled v-model="color" />
     </div>
     <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
       <ColorPickerSlidersRGB v-model="color" />

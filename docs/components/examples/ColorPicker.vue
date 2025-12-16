@@ -1,8 +1,5 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import type { ColorObject } from '@vuelor/picker'
-import Select from '../common/Select.vue'
-
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
@@ -12,8 +9,11 @@ import {
   ColorPickerInputHex,
   ColorPickerInputHSL,
   ColorPickerInputRGB,
-  ColorPickerInputHSB
+  ColorPickerInputHSB,
+  type ColorObject
 } from '@vuelor/picker'
+
+import Select from '../common/Select.vue'
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -22,25 +22,28 @@ const INPUTS = {
   HSB: ColorPickerInputHSB
 }
 
+type ModelValue = ColorObject | string | null
+
 interface Props {
   class?: string
   disabled?: boolean
-  modelValue: ColorObject | string | null
+  modelValue?: ModelValue
   format?: 'object' | 'hex'
 }
 
 const props = withDefaults(defineProps<Props>(), {
   format: 'object',
+  modelValue: null,
   disabled: false
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: ColorObject | string | null): void
+  (e: 'update:modelValue', value: ModelValue): void
 }>()
 
 const color = computed({
   get: () => props.modelValue,
-  set: (value: ColorObject | string | null) => {
+  set: (value: ModelValue) => {
     emit('update:modelValue', value)
   }
 })
@@ -57,8 +60,8 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
   <ColorPickerRoot
     v-model="color"
     :class="props.class"
-    :disabled="props.disabled"
     :format="props.format"
+    :disabled="props.disabled"
     :ui="{ input: { label: 'hidden' } }"
   >
     <ColorPickerCanvas :type="canvasType" />

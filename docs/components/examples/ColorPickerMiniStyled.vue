@@ -28,9 +28,15 @@ const color = computed({
 <template>
   <ColorPickerRoot
     format="object"
+    class="bg-transparent p-0 !shadow-none gap-3 w-auto"
     v-model="color"
   >
-    <ColorPickerCanvas />
-    <ColorPickerSliderHue />
+    <ColorPickerCanvas
+      :ui="{
+        area: 'rounded-lg',
+        thumb: 'h-6 w-6 border'
+      }"
+    />
+    <ColorPickerSliderHue :ui="{ thumb: 'border' }" />
   </ColorPickerRoot>
 </template>

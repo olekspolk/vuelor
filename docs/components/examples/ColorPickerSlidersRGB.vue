@@ -6,21 +6,23 @@ import {
   ColorPickerSliderRed,
   ColorPickerSliderGreen,
   ColorPickerSliderBlue,
-  ColorPickerSliderAlpha
+  ColorPickerSliderAlpha,
+  type ColorObject
 } from '@vuelor/picker'
-import type { ColorObject } from '@vuelor/picker'
 
-const props = defineProps<{
-  modelValue: ColorObject | null
-}>()
+type ModelValue = ColorObject | null
+
+const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
+  modelValue: null
+})
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: ColorObject | null): void
+  (e: 'update:modelValue', value: ModelValue): void
 }>()
 
 const color = computed({
   get: () => props.modelValue,
-  set: (value: ColorObject | null) => {
+  set: (value: ModelValue) => {
     emit('update:modelValue', value)
   }
 })
