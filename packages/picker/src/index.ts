@@ -20,3 +20,5 @@ export { default as ColorPickerSliderRed } from './components/ColorPickerSliderR
 export { default as ColorPickerSliderGreen } from './components/ColorPickerSliderGreen.vue'
 export { default as ColorPickerSliderBlue } from './components/ColorPickerSliderBlue.vue'
 export { default as ColorPickerSwatch } from './components/ColorPickerSwatch.vue'
+
+export type { ColorPickerRootProps, ColorPickerRootEmits } from './components/ColorPickerRoot.vue'
