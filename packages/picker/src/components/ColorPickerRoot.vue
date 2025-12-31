@@ -49,6 +49,7 @@ import { useVModel } from '../composables/useVModel'
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   styling: 'tailwindcss',
   defaultValue: '#B63DDAFF',
+  modelValue: null,
   format: 'hexa',
   disabled: false
 })
