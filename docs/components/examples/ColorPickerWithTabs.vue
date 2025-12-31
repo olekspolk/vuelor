@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, useTemplateRef } from 'vue'
+import { useForwardPropsEmits } from 'reka-ui'
 import { TabsRoot, TabsContent, TabsList, TabsTrigger } from 'reka-ui'
 import {
   ColorPickerRoot,
@@ -12,25 +13,16 @@ import {
   ColorPickerInputRGB,
   ColorPickerInputHSB,
   ColorPickerSwatch,
-  type ColorObject
+  type ColorPickerRootProps,
+  type ColorPickerRootEmits
 } from '@vuelor/picker'
 
-type ModelValue = ColorObject | null
+type ColorPickerProps = Omit<ColorPickerRootProps, 'styling' | 'ui'>
 
-const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
-  modelValue: null
-})
+const props = defineProps<ColorPickerProps>()
+const emits = defineEmits<ColorPickerRootEmits>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: ModelValue): void
-}>()
-
-const color = computed({
-  get: () => props.modelValue,
-  set: (value: ModelValue) => {
-    emit('update:modelValue', value)
-  }
-})
+const forwarded = useForwardPropsEmits(props, emits)
 
 const format = ref<string>('hex')
 
@@ -38,7 +30,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
   return format.value === 'hsl' ? 'HSL' : 'HSV'
 })
 
-const shatches = ref<string[]>([
+const swatches = ref<string[]>([
   '#00C3D0FF',
   '#00C8B3FF',
   '#34C759FF',
@@ -64,9 +56,8 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
 
 <template>
   <ColorPickerRoot
-    v-model="color"
     ref="colorPicker"
-    format="object"
+    v-bind="forwarded"
   >
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">
@@ -112,7 +103,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
     </div>
     <div class="border-t -mx-4 px-3 pt-2 grid grid-cols-9">
       <ColorPickerSwatch
-        v-for="color in shatches"
+        v-for="color in swatches"
         :value="color"
         class="m-1"
         @click="colorPicker && (colorPicker.color.hexa.value = color)"

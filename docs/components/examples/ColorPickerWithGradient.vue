@@ -42,7 +42,7 @@ const emit = defineEmits<{
 const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('Hex')
 const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB']
 
-const shatches = ref<string[]>([
+const swatches = ref<string[]>([
   '#00C3D0FF',
   '#00C8B3FF',
   '#34C759FF',
@@ -208,7 +208,7 @@ watch(
       </div>
       <div class="border-t px-3 py-2 grid grid-cols-9">
         <ColorPickerSwatch
-          v-for="color in shatches"
+          v-for="color in swatches"
           :value="color"
           class="m-1"
           @click="currentColor = color"

@@ -1,36 +1,26 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { useForwardPropsEmits } from 'reka-ui'
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
   ColorPickerSliderHue,
   ColorPickerSliderAlpha,
-  type ColorObject
+  type ColorPickerRootProps,
+  type ColorPickerRootEmits
 } from '@vuelor/picker'
 
-type ModelValue = ColorObject | null
+type ColorPickerProps = Omit<ColorPickerRootProps, 'styling' | 'ui'>
 
-const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
-  modelValue: null
-})
+const props = defineProps<ColorPickerProps>()
+const emits = defineEmits<ColorPickerRootEmits>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: ModelValue): void
-}>()
-
-const color = computed({
-  get: () => props.modelValue,
-  set: (value: ModelValue) => {
-    emit('update:modelValue', value)
-  }
-})
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>
   <ColorPickerRoot
-    v-model="color"
-    format="object"
     class="bg-transparent p-0 !shadow-none flex-row gap-3 w-auto"
+    v-bind="forwarded"
   >
     <ColorPickerCanvas
       :ui="{
