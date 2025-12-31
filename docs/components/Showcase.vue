@@ -15,32 +15,56 @@ const color = ref(null)
 
 <template>
   <div data-vuelor-docs class="grid sm:grid-cols-1 md:grid-cols-2 gap-2">
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerMiniStyled v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPickerMiniStyled
+        v-model="color"
+        format="object"
+      />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerMiniVerticalStyled v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPickerMiniVerticalStyled
+        v-model="color"
+        format="object"
+      />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerSlidersRGB v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPickerSlidersRGB
+        v-model="color"
+        format="object"
+      />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerSlidersHSL v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPickerSlidersHSL
+        v-model="color"
+        format="object"
+      />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPicker v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPicker
+        v-model="color"
+        format="object"
+      />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerWithTabs v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPickerWithTabs
+        v-model="color"
+        format="object"
+      />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerWithTabsVerticalSliders v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPickerWithTabsVerticalSliders
+        v-model="color"
+        format="object"
+      />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
       <ColorPickerWithGradient />
     </div>
-    <div class="flex items-center justify-center py-12 px-3 rounded-lg bg-[var(--vp-sidebar-bg-color)]">
-      <ColorPickerPopover v-model="color" />
+    <div class="flex items-center justify-center rounded-lg border border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] py-10 px-3">
+      <ColorPickerPopover
+        v-model="color"
+        format="object"
+      />
     </div>
   </div>
 </template>

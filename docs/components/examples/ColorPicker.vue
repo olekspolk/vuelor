@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
+import { useForwardPropsEmits } from 'reka-ui'
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
@@ -10,7 +11,8 @@ import {
   ColorPickerInputHSL,
   ColorPickerInputRGB,
   ColorPickerInputHSB,
-  type ColorObject
+  type ColorPickerRootProps,
+  type ColorPickerRootEmits
 } from '@vuelor/picker'
 
 import Select from '../common/Select.vue'
@@ -22,35 +24,15 @@ const INPUTS = {
   HSB: ColorPickerInputHSB
 }
 
-type ModelValue = ColorObject | string | null
+type ColorPickerProps = Omit<ColorPickerRootProps, 'styling' | 'ui'>
 
-interface Props {
-  class?: string
-  disabled?: boolean
-  modelValue?: ModelValue
-  format?: 'object' | 'hex'
-}
+const props = defineProps<ColorPickerProps>()
+const emits = defineEmits<ColorPickerRootEmits>()
 
-const props = withDefaults(defineProps<Props>(), {
-  format: 'object',
-  modelValue: null,
-  disabled: false
-})
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: ModelValue): void
-}>()
-
-const color = computed({
-  get: () => props.modelValue,
-  set: (value: ModelValue) => {
-    emit('update:modelValue', value)
-  }
-})
+const forwarded = useForwardPropsEmits(props, emits)
 
 const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('Hex')
 const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB']
-
 const canvasType = computed<'HSL' | 'HSV'>(() => {
   return format.value === 'HSL' ? 'HSL' : 'HSV'
 })
@@ -58,11 +40,8 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 
 <template>
   <ColorPickerRoot
-    v-model="color"
-    :class="props.class"
-    :format="props.format"
-    :disabled="props.disabled"
     :ui="{ input: { label: 'hidden' } }"
+    v-bind="forwarded"
   >
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">

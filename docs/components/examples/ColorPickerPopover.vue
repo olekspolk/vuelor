@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { useTemplateRef } from 'vue'
+import { useForwardPropsEmits } from 'reka-ui'
 import {
   ColorPickerRoot,
   ColorPickerCanvas,
@@ -8,7 +9,8 @@ import {
   ColorPickerSliderAlpha,
   ColorPickerInputHex,
   ColorPickerSwatch,
-  type ColorObject
+  type ColorPickerRootProps,
+  type ColorPickerRootEmits
 } from '@vuelor/picker'
 import {
   PopoverContent,
@@ -17,40 +19,32 @@ import {
   PopoverTrigger
 } from 'reka-ui'
 
-type ModelValue = ColorObject | null
+type ColorPickerProps = Omit<ColorPickerRootProps, 'styling' | 'ui'>
 
-const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
-  modelValue: null
-})
+const props = defineProps<ColorPickerProps>()
+const emits = defineEmits<ColorPickerRootEmits>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: ModelValue): void
-}>()
+const forwarded = useForwardPropsEmits(props, emits)
 
-const color = computed({
-  get: () => props.modelValue,
-  set: (value: ModelValue) => {
-    emit('update:modelValue', value)
-  }
-})
+const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
 </script>
 
 <template>
   <ColorPickerRoot
-    v-model="color"
-    format="object"
+    ref="colorPicker"
     class="p-0 rounded-none bg-transparent !shadow-none w-auto"
     :ui="{
       shared: { thumb: 'border-2 h-3 w-3' },
       slider: { track: 'h-3' },
       input: { item: 'bg-white', field: 'max-w-16' }
     }"
+    v-bind="forwarded"
   >
     <PopoverRoot>
       <ColorPickerInputHex class="w-52 shadow bg-[#f5f5f5] rounded-[5px]" >
         <template #before>
           <PopoverTrigger as-child>
-            <ColorPickerSwatch :value="color?.hexa ?? '#B63DDAFF'" />
+            <ColorPickerSwatch :value="colorPicker?.color.hexa.value ?? '#B63DDAFF'" />
           </PopoverTrigger>
         </template>
       </ColorPickerInputHex>

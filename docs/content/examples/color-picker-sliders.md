@@ -1,3 +1,9 @@
+---
+prev:
+  text: 'Showcase'
+  link: '/examples'
+---
+
 # ColorPicker Sliders Edition
 
 For granular control, the library provides individual slider components for each color channel. These primitives — such as `ColorPickerSliderRed`, `ColorPickerSliderGreen`, `ColorPickerSliderBlue`, and `ColorPickerSliderAlpha` — can be combined to build completely custom interfaces.

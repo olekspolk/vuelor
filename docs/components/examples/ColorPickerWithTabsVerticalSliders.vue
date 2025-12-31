@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, useTemplateRef } from 'vue'
+import { useForwardPropsEmits } from 'reka-ui'
 import { TabsRoot, TabsList, TabsTrigger } from 'reka-ui'
 import {
   ColorPickerRoot,
@@ -12,25 +13,16 @@ import {
   ColorPickerInputRGB,
   ColorPickerInputHSB,
   ColorPickerSwatch,
-  type ColorObject
+  type ColorPickerRootProps,
+  type ColorPickerRootEmits
 } from '@vuelor/picker'
 
-type ModelValue = ColorObject | null
+type ColorPickerProps = Omit<ColorPickerRootProps, 'styling' | 'ui'>
 
-const props = withDefaults(defineProps<{ modelValue?: ModelValue }>(), {
-  modelValue: null
-})
+const props = defineProps<ColorPickerProps>()
+const emits = defineEmits<ColorPickerRootEmits>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: ModelValue): void
-}>()
-
-const color = computed({
-  get: () => props.modelValue,
-  set: (value: ModelValue) => {
-    emit('update:modelValue', value)
-  }
-})
+const forwarded = useForwardPropsEmits(props, emits)
 
 const INPUTS = {
   hex: ColorPickerInputHex,
@@ -45,7 +37,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
   return format.value === 'hsl' ? 'HSL' : 'HSV'
 })
 
-const shatches = ref<string[]>([
+const swatches = ref<string[]>([
   '#FF690050',
   '#FCB900FF',
   '#7BDCB5FF',
@@ -66,8 +58,6 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
 <template>
   <ColorPickerRoot
     ref="colorPicker"
-    v-model="color"
-    format="object"
     class="w-[295px] p-0 gap-0"
     :ui="{
       input: {
@@ -84,6 +74,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
         track: 'w-4'
       }
     }"
+    v-bind="forwarded"
   >
     <div class="pt-4 px-4 pb-3 flex flex-col gap-3">
       <div class="flex gap-3">
@@ -118,7 +109,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
     </div>
     <div class="border-t p-4 grid grid-cols-12 gap-y-1.5">
       <ColorPickerSwatch
-        v-for="color in shatches"
+        v-for="color in swatches"
         :value="color"
         class="m-1"
         @click="colorPicker && (colorPicker.color.hexa.value = color)"
