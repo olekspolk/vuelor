@@ -13,4 +13,5 @@ export type ThemeSlots = Partial<{
   canvas: Partial<typeof tailwindcss.canvas>
   slider: Partial<typeof tailwindcss.slider>
   input: Partial<typeof tailwindcss.input>
+  swatch: Partial<typeof tailwindcss.swatch>
 }>
