@@ -41,7 +41,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
     v-bind="forwarded"
   >
     <PopoverRoot>
-      <ColorPickerInputHex class="w-52 shadow bg-[#f5f5f5] rounded-[5px]" >
+      <ColorPickerInputHex class="w-52 shadow bg-vuelor-input rounded-[5px]" >
         <template #before>
           <PopoverTrigger as-child>
             <ColorPickerSwatch :value="colorPicker?.color.hexa.value ?? '#B63DDAFF'" />

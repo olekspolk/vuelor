@@ -62,7 +62,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
     :ui="{
       input: {
         group: '!outline-none gap-2',
-        item: '!rounded-[6px] hover:outline-1 outline-[#e6e6e6] focus-within:outline-1 focus-within:outline-[#0d99ff]'
+        item: '!rounded-[6px] hover:outline-1 outline-vuelor-border focus-within:outline-1 focus-within:outline-vuelor-primary'
       },
       shared: {
         thumb: 'border-[3px] w-3.5 h-3.5'
@@ -86,11 +86,11 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
         v-model="format"
         default-value="hex"
       >
-        <TabsList class="grid grid-cols-4 items-center justify-center rounded-[7px] bg-[#f5f5f5] p-0.5 w-full">
-          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-[#0d99ff] disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hex">Hex</TabsTrigger>
-          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-[#0d99ff] disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="rgb">RGB</TabsTrigger>
-          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-[#0d99ff] disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hsl">HSL</TabsTrigger>
-          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-[#0d99ff] disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hsb">HSB</TabsTrigger>
+        <TabsList class="grid grid-cols-4 items-center justify-center rounded-[7px] bg-vuelor-input p-0.5 w-full">
+          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hex">Hex</TabsTrigger>
+          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="rgb">RGB</TabsTrigger>
+          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hsl">HSL</TabsTrigger>
+          <TabsTrigger class="h-6 inline-flex items-center justify-center rounded-[5px] px-1 py-0.5 text-[11px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hsb">HSB</TabsTrigger>
         </TabsList>
       </TabsRoot>
       <div class="flex items-center gap-3">
