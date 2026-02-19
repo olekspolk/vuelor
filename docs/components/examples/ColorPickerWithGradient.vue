@@ -222,20 +222,20 @@ watch(
     >
       <div class="flex justify-between p-2 border-b">
         <TabsList class="flex gap-1">
-          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-[#f5f5f5]" value="color">
+          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-vuelor-input" value="color">
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path fill="#0000004d" d="M9 9h6v6H9z" />
               <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3 7V9h6v6zM8 8.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z" />
             </svg>
           </TabsTrigger>
-          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-[#f5f5f5]" value="gradient">
+          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-vuelor-input" value="gradient">
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3.75.875a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m3.791.625a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m-1.458.875a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m0 3.12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.458 2.245a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m.625-3.865a.625.625 0 1 1-1.25 0 .625.625 0 0 1 1.25 0M8.875 15.99a.875.875 0 1 0 0-1.75.875.875 0 0 0 0 1.75m.875-4.115a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m5.75-1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m.5 2.623a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
             </svg>
           </TabsTrigger>
         </TabsList>
 
-        <button class="h-6 w-6 rounded-[5px] hover:bg-[#f5f5f5] focus:outline focus:outline-[#0d99ff]">
+        <button class="h-6 w-6 rounded-[5px] hover:bg-vuelor-input focus:outline focus:outline-vuelor-primary">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path fill="#000000e6" d="M16.224 7.082a.501.501 0 0 1 .694.693l-.065.078L12.707 12l4.146 4.146.064.078a.5.5 0 0 1-.693.694l-.078-.065L12 12.706l-4.147 4.147a.5.5 0 1 1-.707-.707l4.147-4.147-4.147-4.146-.064-.078a.501.501 0 0 1 .693-.693l.078.064L12 11.293l4.146-4.147z" />
           </svg>
@@ -258,7 +258,7 @@ watch(
           <div class="flex items-center gap-1">
             <button
               :disabled="gradientStops.length === 1"
-              class="rounded-[5px] enabled:hover:bg-[#f5f5f5] disabled:opacity-50 focus:outline focus:outline-[#0d99ff]"
+              class="rounded-[5px] enabled:hover:bg-vuelor-input disabled:opacity-50 focus:outline focus:outline-vuelor-primary"
               @click="handleReverseGradient"
             >
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -268,7 +268,7 @@ watch(
 
             <button
               :disabled="gradientType === 'Radial'"
-              class="rounded-[5px] enabled:hover:bg-[#f5f5f5] disabled:opacity-50 focus:outline focus:outline-[#0d99ff]"
+              class="rounded-[5px] enabled:hover:bg-vuelor-input disabled:opacity-50 focus:outline focus:outline-vuelor-primary"
               @click="handleRotateGradient"
             >
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -291,7 +291,7 @@ watch(
             <SliderThumb
               v-for="(_, i) in gradientStops.length"
               aria-label="Stop"
-              :class="twMerge(['flex items-center justify-center w-6 h-6 -mt-8 bg-white drop-shadow-vuelor-thumb rounded-[5px] focus:outline-none relative after:content-[\'\'] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px] after:border-t-white', gradientSelectedStopIndex === i ? 'bg-[#0d99ff] after:border-t-[#0d99ff]' : ''])"
+              :class="twMerge(['flex items-center justify-center w-6 h-6 -mt-8 bg-white drop-shadow-vuelor-thumb rounded-[5px] focus:outline-none relative after:content-[\'\'] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px] after:border-t-white', gradientSelectedStopIndex === i ? 'bg-vuelor-primary after:border-t-vuelor-primary' : ''])"
               @pointerdown="handleSelectStop(i)"
             >
               <ColorPickerSwatch
@@ -306,7 +306,7 @@ watch(
           <span class="text-black text-[11px] font-bold">Stops</span>
           <button
             :disabled="gradientStops.length > 7"
-            class="rounded-[5px] enabled:hover:bg-[#f5f5f5] disabled:opacity-50 focus:outline focus:outline-[#0d99ff]"
+            class="rounded-[5px] enabled:hover:bg-vuelor-input disabled:opacity-50 focus:outline focus:outline-vuelor-primary"
             @click="addStop"
           >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -351,7 +351,7 @@ watch(
             </template>
           </ColorPickerInputHex>
           <button
-            class="rounded-[5px] hover:bg-[#f5f5f5] focus:outline focus:outline-[#0d99ff]"
+            class="rounded-[5px] hover:bg-vuelor-input focus:outline focus:outline-vuelor-primary"
             :style="{ visibility: gradientStops.length < 2 ? 'hidden' : undefined }"
             @click="removeStop(index)"
             @pointerdown.prevent

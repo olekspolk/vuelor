@@ -35,7 +35,7 @@ const emit = defineEmits<{
     <SelectTrigger
       :aria-label="props.label"
       :class="props.class"
-      class="inline-flex h-6 pl-[7px] items-center justify-between rounded-[5px] text-[11px] leading-none gap-[5px] border border-[#e6e6e6] focus:outline-none focus:border-[#0d99ff]"
+      class="inline-flex h-6 pl-[7px] items-center justify-between rounded-[5px] text-[11px] leading-none gap-[5px] border border-vuelor-border focus:outline-none focus:border-vuelor-primary"
     >
       <SelectValue :placeholder="props.placeholder" />
       <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ const emit = defineEmits<{
             v-for="(option, index) in props.options"
             :key="index"
             :value="option"
-            class="text-xs leading-none text-white rounded-[5px] flex items-center h-[25px] pl-6 pr-2 relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-[#0d99ff]"
+            class="text-xs leading-none text-white rounded-[5px] flex items-center h-[25px] pl-6 pr-2 relative select-none data-[disabled]:text-mauve8 data-[disabled]:pointer-events-none data-[highlighted]:outline-none data-[highlighted]:bg-vuelor-primary"
           >
             <SelectItemIndicator class="absolute left-1 inline-flex items-center justify-center">
               <svg

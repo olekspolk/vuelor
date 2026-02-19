@@ -1,18 +1,19 @@
 .vuelor-picker-root {
-  --vuelor-primary-color: #0d99ff;
-  --vuelor-surface-color: #ffffff;
-  --vuelor-border-color: #e6e6e6;
-  --vuelor-inner-shadow-color: #0000001a;
-  --vuelor-input-bg-color: #f5f5f5;
-  --vuelor-button-hover-bg-color: #0000000d;
-  --vuelor-disabled-opacity: 0.5;
+  --color-vuelor-primary: #0d99ff;
+  --color-vuelor-surface: #ffffff;
+  --color-vuelor-border: #e6e6e6;
+  --color-vuelor-shadow-inner: #0000001a;
+  --color-vuelor-input-bg: #f5f5f5;
+  --color-vuelor-button-bg--hover: #0000000d;
+
+  --opacity-vuelor-disabled: 0.5;
 
   --shadow-vuelor-card: 0 0.125rem 0.3125rem 0 #00000026, 0 0.625rem 1rem 0 #0000001f, 0 0 0.03125rem 0 #0000001f;
   --shadow-vuelor-thumb: 0 0 0.03125rem rgba(0, 0, 0, .18), 0 0.1875rem 0.5rem rgba(0, 0, 0, .1), 0 0.0625rem 0.1875rem rgba(0, 0, 0, .1);
-  --shadow-vuelor-inner: inset 0 0 0 0.0625rem var(--vuelor-inner-shadow-color);
+  --shadow-vuelor-inner: inset 0 0 0 0.0625rem var(--color-vuelor-shadow-inner);
 
   width: 15rem;
-  background-color: var(--vuelor-surface-color);
+  background-color: var(--color-vuelor-surface);
   border-radius: 0.8125rem;
   padding: 1rem;
   display: flex;
@@ -27,11 +28,11 @@
 }
 
 .vuelor-picker-eye-dropper:hover:not(:disabled) {
-  background-color: var(--vuelor-button-hover-bg-color);
+  background-color: var(--color-vuelor-button-bg--hover);
 }
 
 .vuelor-picker-eye-dropper:disabled {
-  opacity: var(--vuelor-disabled-opacity);
+  opacity: var(--opacity-vuelor-disabled);
   background-color: transparent;
   cursor: not-allowed;
 }
@@ -39,7 +40,7 @@
 .vuelor-picker-eye-dropper:focus-within {
   outline-width: 0.0625rem;
   outline-style: solid;
-  outline-color: var(--vuelor-primary-color);
+  outline-color: var(--color-vuelor-primary);
 }
 
 .vuelor-picker-shared-thumb {
@@ -49,24 +50,23 @@
   border-radius: 9999rem;
   border-width: 0.25rem;
   border-style: solid;
-  border-color: var(--vuelor-surface-color);
+  border-color: var(--color-vuelor-surface);
   box-shadow: var(--shadow-vuelor-thumb);
 }
 
 .vuelor-picker-shared-thumb:focus {
   outline-width: 0.0625rem;
   outline-style: solid;
-  outline-color: var(--vuelor-primary-color);
+  outline-color: var(--color-vuelor-primary);
 }
 
 .vuelor-picker-canvas-root {
-  position: relative;
   touch-action: none;
 }
 
 .vuelor-picker-canvas-root[data-disabled] {
   pointer-events: none;
-  opacity: var(--vuelor-disabled-opacity);
+  opacity: var(--opacity-vuelor-disabled);
 }
 
 .vuelor-picker-canvas-area {
@@ -74,7 +74,7 @@
   outline-width: 0.0625rem;
   outline-style: solid;
   outline-offset: -0.0625rem;
-  outline-color: var(--vuelor-inner-shadow-color);
+  outline-color: var(--color-vuelor-shadow-inner);
 }
 
 .vuelor-picker-slider-root {
@@ -95,7 +95,7 @@
 
 .vuelor-picker-slider-root[data-disabled] {
   pointer-events: none;
-  opacity: var(--vuelor-disabled-opacity);
+  opacity: var(--opacity-vuelor-disabled);
 }
 
 .vuelor-picker-slider-track {
@@ -119,7 +119,7 @@
   border-radius: 0.3125rem;
   outline-style: solid;
   outline-width: 0;
-  outline-color: var(--vuelor-border-color);
+  outline-color: var(--color-vuelor-border);
 }
 
 .vuelor-picker-input-group:hover:not([data-disabled]) {
@@ -128,12 +128,12 @@
 
 .vuelor-picker-input-group:focus-within {
   outline-width: 0.0625rem;
-  outline-color: var(--vuelor-primary-color);
+  outline-color: var(--color-vuelor-primary);
 }
 
 .vuelor-picker-input-group[data-disabled] {
   pointer-events: none;
-  opacity: var(--vuelor-disabled-opacity);
+  opacity: var(--opacity-vuelor-disabled);
 }
 
 .vuelor-picker-input-item {
@@ -143,7 +143,7 @@
   padding-left: 0.25rem;
   padding-right: 0.25rem;
   gap: 0.25rem;
-  background-color: var(--vuelor-input-bg-color);
+  background-color: var(--color-vuelor-input-bg);
 }
 
 .vuelor-picker-input-item[data-before],
@@ -197,13 +197,13 @@
 }
 
 .vuelor-picker-swatch-basedisabled {
-  opacity: var(--vuelor-disabled-opacity);
+  opacity: var(--opacity-vuelor-disabled);
 }
 
 .vuelor-picker-swatch-base:focus-within {
   outline-width: 0.0625rem;
   outline-style: solid;
-  outline-color: var(--vuelor-primary-color);
+  outline-color: var(--color-vuelor-primary);
 }
 
 .vuelor-picker-swatch-alpha {

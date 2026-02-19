@@ -56,30 +56,52 @@ const color = ref(null)
 </template>
 ```
 
-## Update tailwind.config.js
+## For TailwindCSS 4
+
+Update the `index.css` file:
+
+```css
+@import "tailwindcss";
+@source "../../node_modules/@vuelor/picker";
+
+@theme {
+  --color-vuelor-primary: #0d99ff;
+  --color-vuelor-surface: #ffffff;
+  --color-vuelor-border: #e6e6e6;
+  --color-vuelor-input: #f5f5f5;
+
+  --shadow-vuelor-card: 0 2px 5px 0 #00000026, 0 10px 16px 0 #0000001f, 0 0 .5px 0 #0000001f;
+  --shadow-vuelor-thumb: 0px 0px .5px #0000002e, 0px 3px 8px #0000001a, 0px 1px 3px #0000001a;
+  --shadow-vuelor-inner: inset 0 0 0 1px #0000001a;
+}
+```
+
+## For TailwindCSS 3
+
+Update the `tailwind.config.js` file:
 
 ```js
 export default {
+  content: [
+    './src/**/*.{vue,js,ts}',
+    './node_modules/@vuelor/picker/dist/index.js'
+  ],
   theme: {
     extend: {
+      colors: {
+        'vuelor-primary': '#0d99ff',
+        'vuelor-surface': '#ffffff',
+        'vuelor-border': '#e6e6e6',
+        'vuelor-input': '#f5f5f5',
+      },
       boxShadow: {
         'vuelor-card': '0 2px 5px 0 #00000026, 0 10px 16px 0 #0000001f, 0 0 .5px 0 #0000001f',
         'vuelor-thumb': '0px 0px .5px #0000002e, 0px 3px 8px #0000001a, 0px 1px 3px #0000001a',
         'vuelor-inner': 'inset 0 0 0 1px #0000001a'
       }
     },
-    dropShadow: {
-      'vuelor-thumb': ['0px 0px .5px #00000054', '0px 1px 3px #00000026']
-    }
   }
 }
-```
-
-## Update CSS file to include external tailwind source
-
-```css
-@import "tailwindcss";
-@source "../node_modules/@vuelor/picker";
 ```
 
 ## For non-tailwind projects
