@@ -196,7 +196,7 @@
   overflow: hidden;
 }
 
-.vuelor-picker-swatch-basedisabled {
+.vuelor-picker-swatch-base:disabled {
   opacity: var(--opacity-vuelor-disabled);
 }
 
