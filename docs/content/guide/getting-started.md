@@ -94,9 +94,60 @@ export default {
 }
 ```
 
+## Choosing a color format
+
+By default `modelValue` is emitted as a `hexa` string (e.g. `#B63DDAFF`). Use the `format` prop to change the shape:
+
+```vue
+<!-- Emit an RGB CSS string: "rgb(182, 61, 218)" -->
+<ColorPickerRoot v-model="color" format="rgb">
+...
+</ColorPickerRoot>
+
+<!-- Emit a plain object with all formats at once -->
+<ColorPickerRoot v-model="color" format="object">
+...
+</ColorPickerRoot>
+```
+
+Formats that include alpha (`hexa`, `rgba`, `hsla`, `hsva`, `object`) automatically show the **opacity field** inside input components. See the [Format table](/guide/api-reference#format) in the API reference for the full list.
+
+## Accessing the color state directly
+
+`ColorPickerRoot` exposes its internal `color` object via a template ref. This is handy for reading the current value in any format, or for setting a color programmatically (e.g. applying a swatch preset):
+
+```vue
+<script setup>
+import { useTemplateRef } from 'vue'
+import { ColorPickerRoot, ColorPickerCanvas, ColorPickerSliderHue } from '@vuelor/picker'
+
+const picker = useTemplateRef('picker')
+
+const presets = ['#FF6900FF', '#0693E3FF', '#00D084FF']
+</script>
+
+<template>
+  <ColorPickerRoot ref="picker" v-model="color">
+    <ColorPickerCanvas />
+    <ColorPickerSliderHue />
+  </ColorPickerRoot>
+
+  <button
+    v-for="preset in presets"
+    :key="preset"
+    :style="{ background: preset }"
+    @click="picker.color.hexa.value = preset"
+  />
+</template>
+```
+
 ## Usage Without Tailwind CSS
 
 If your project does not use Tailwind CSS, you can use the built-in "Vanilla CSS" mode. This ensures all components are styled correctly using pre-compiled CSS.
+
+::: tip EyeDropper browser support
+`ColorPickerEyeDropper` relies on the [EyeDropper API](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper), which is currently supported in Chrome and Edge but **not** in Firefox or Safari. The component is automatically hidden when the API is unavailable — no `v-if` needed — but make sure your layout doesn't leave an awkward gap in unsupported browsers.
+:::
 
 ### Enable Vanilla Styling
 

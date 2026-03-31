@@ -68,7 +68,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
         thumb: 'border-[3px] w-3.5 h-3.5'
       },
       canvas: {
-        area: 'rounded-lg'
+        root: 'rounded-lg'
       },
       slider: {
         track: 'w-4'
