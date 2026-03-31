@@ -252,12 +252,30 @@ Same props as `ColorPickerSlider*.vue`, plus:
 
 A compact color chip. The right half of the chip shows the **transparency level** — fully transparent colors display a checkerboard pattern there.
 
+Clicking a swatch **automatically applies** its `value` to the picker and emits `valueCommit`. No manual wiring required.
+
 | Prop  | Default  | Description                                                                           |
 | ----- | -------- | ------------------------------------------------------------------------------------- |
 | value | `-`      | The hex or hexa color string this swatch represents (e.g. `#FF6900` or `#FF690080`). |
 | as    | `button` | The HTML element or component to render as.                                           |
 | class | `-`      | Extra classes applied to the swatch.                                                  |
 | ui    | `-`      | `Partial<{ base, alpha }>` — `base` targets the chip itself; `alpha` targets the transparency overlay. |
+
+| Emit     | Description                                              |
+| -------- | -------------------------------------------------------- |
+| `select` | Emitted after the color is applied, with the `value` string. Use this to run additional logic (e.g. saving recently used colors). |
+
+```vue
+<!-- Minimal — just works, no wiring needed -->
+<ColorPickerSwatch value="#FF6900FF" />
+
+<!-- With @select hook for side effects -->
+<ColorPickerSwatch
+  v-for="color in swatches"
+  :value="color"
+  @select="saveToRecents"
+/>
+```
 
 
 ## Types

@@ -112,9 +112,37 @@ By default `modelValue` is emitted as a `hexa` string (e.g. `#B63DDAFF`). Use th
 
 Formats that include alpha (`hexa`, `rgba`, `hsla`, `hsva`, `object`) automatically show the **opacity field** inside input components. See the [Format table](/guide/api-reference#format) in the API reference for the full list.
 
+## Adding color presets
+
+Use `ColorPickerSwatch` to add preset chips — clicking one **automatically applies** that color with no extra wiring:
+
+```vue
+<script setup>
+import { ColorPickerRoot, ColorPickerCanvas, ColorPickerSliderHue, ColorPickerSwatch } from '@vuelor/picker'
+
+const presets = ['#FF6900FF', '#0693E3FF', '#00D084FF']
+</script>
+
+<template>
+  <ColorPickerRoot v-model="color">
+    <ColorPickerCanvas />
+    <ColorPickerSliderHue />
+    <div class="flex gap-1">
+      <ColorPickerSwatch v-for="preset in presets" :key="preset" :value="preset" />
+    </div>
+  </ColorPickerRoot>
+</template>
+```
+
+Use `@select` if you need a side-effect hook (e.g. saving to a recent-colors list):
+
+```vue
+<ColorPickerSwatch :value="preset" @select="addToRecents" />
+```
+
 ## Accessing the color state directly
 
-`ColorPickerRoot` exposes its internal `color` object via a template ref. This is handy for reading the current value in any format, or for setting a color programmatically (e.g. applying a swatch preset):
+`ColorPickerRoot` exposes its internal `color` object via a template ref. This is useful for reading the current value in any format or setting a color imperatively from outside the picker:
 
 ```vue
 <script setup>
@@ -122,8 +150,6 @@ import { useTemplateRef } from 'vue'
 import { ColorPickerRoot, ColorPickerCanvas, ColorPickerSliderHue } from '@vuelor/picker'
 
 const picker = useTemplateRef('picker')
-
-const presets = ['#FF6900FF', '#0693E3FF', '#00D084FF']
 </script>
 
 <template>
@@ -132,12 +158,7 @@ const presets = ['#FF6900FF', '#0693E3FF', '#00D084FF']
     <ColorPickerSliderHue />
   </ColorPickerRoot>
 
-  <button
-    v-for="preset in presets"
-    :key="preset"
-    :style="{ background: preset }"
-    @click="picker.color.hexa.value = preset"
-  />
+  <button @click="picker.color.hexa.value = '#FF6900FF'">Reset</button>
 </template>
 ```
 

@@ -211,7 +211,6 @@ watch(
           v-for="color in swatches"
           :value="color"
           class="m-1"
-          @click="currentColor = color"
         />
       </div>
     </DefineColorPickerTemplate>

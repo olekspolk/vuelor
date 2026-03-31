@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, useTemplateRef } from 'vue'
+import { ref, computed } from 'vue'
 import { useForwardPropsEmits } from 'reka-ui'
 import { TabsRoot, TabsList, TabsTrigger } from 'reka-ui'
 import {
@@ -52,12 +52,11 @@ const swatches = ref<string[]>([
   '#84A59DBA',
 ])
 
-const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
+
 </script>
 
 <template>
   <ColorPickerRoot
-    ref="colorPicker"
     class="w-[295px] p-0 gap-0"
     :ui="{
       input: {
@@ -112,7 +111,6 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
         v-for="color in swatches"
         :value="color"
         class="m-1"
-        @click="colorPicker && (colorPicker.color.hexa.value = color)"
       />
     </div>
   </ColorPickerRoot>
