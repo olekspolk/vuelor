@@ -30,7 +30,7 @@ yarn add @vuelor/picker
 
 ## Import the parts
 
-This isn’t a **"drop-in"** color picker. Instead, it’s a collection of building blocks that let you craft exactly what you want.
+This isn't a **"drop-in"** color picker. Instead, it's a collection of building blocks that let you craft exactly what you want.
 
 ```vue
 <script setup>
@@ -106,7 +106,7 @@ export default {
 
 ## For non-tailwind projects
 
-Import CSS styles and add `styling="vanillacss"` property.
+Import the CSS bundle and set `styling="vanillacss"` on the root component.
 
 ```vue
 <script setup>
@@ -137,21 +137,24 @@ const color = ref(null)
 </template>
 ```
 
+Set `styling="unstyled"` instead to strip all built-in classes and start from a blank slate.
+
 ## Available components
 
-| Name                              |
-| ----------------------------------|
-| `ColorPickerRoot.vue`             |
-| `ColorPickerCanvas.vue`           |
-| `ColorPickerEyeDropper.vue`       |
-| `ColorPickerInputHSB.vue`         |
-| `ColorPickerInputHSL.vue`         |
-| `ColorPickerInputRGB.vue`         |
-| `ColorPickerSliderAlpha.vue`      |
-| `ColorPickerSliderRed.vue`        |
-| `ColorPickerSliderGreen.vue`      |
-| `ColorPickerSliderBlue.vue`       |
-| `ColorPickerSliderHue.vue`        |
-| `ColorPickerSliderSaturation.vue` |
-| `ColorPickerSliderLightness.vue`  |
-| `ColorPickerSwatch.vue`           |
+| Name                              | Description                                                              |
+| --------------------------------- | ------------------------------------------------------------------------ |
+| `ColorPickerRoot`                 | Root wrapper that manages color state and provides context to all children. |
+| `ColorPickerCanvas`               | 2D gradient area for picking saturation and brightness/lightness.        |
+| `ColorPickerEyeDropper`           | Button that opens the native browser eye dropper (Chrome/Edge only).     |
+| `ColorPickerInputHex`             | Text input for editing the color as a hex string, with optional opacity. |
+| `ColorPickerInputHSB`             | Text inputs for Hue, Saturation, and Brightness channels.                |
+| `ColorPickerInputHSL`             | Text inputs for Hue, Saturation, and Lightness channels.                 |
+| `ColorPickerInputRGB`             | Text inputs for Red, Green, and Blue channels (0–255).                   |
+| `ColorPickerSliderAlpha`          | Slider for controlling the opacity of the current color.                 |
+| `ColorPickerSliderRed`            | Slider for controlling the Red channel (0–255).                          |
+| `ColorPickerSliderGreen`          | Slider for controlling the Green channel (0–255).                        |
+| `ColorPickerSliderBlue`           | Slider for controlling the Blue channel (0–255).                         |
+| `ColorPickerSliderHue`            | Slider for selecting the hue across the full color spectrum (0–360°).    |
+| `ColorPickerSliderSaturation`     | Slider for controlling the HSL saturation.                               |
+| `ColorPickerSliderLightness`      | Slider for controlling the HSL lightness.                                |
+| `ColorPickerSwatch`               | Color chip that displays a preset — clicking it automatically applies the color. |
