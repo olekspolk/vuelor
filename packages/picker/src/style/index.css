@@ -66,10 +66,7 @@
   height: 13rem;
   touch-action: none;
   border-radius: 0.3125rem;
-  outline-width: 0.0625rem;
-  outline-style: solid;
-  outline-offset: -0.0625rem;
-  outline-color: var(--color-vuelor-shadow-inner);
+  box-shadow: var(--shadow-vuelor-inner);
 }
 
 .vuelor-picker-canvas-root[data-disabled] {
@@ -134,6 +131,7 @@
 .vuelor-picker-input-group[data-disabled] {
   pointer-events: none;
   opacity: var(--opacity-vuelor-disabled);
+  outline: none;
 }
 
 .vuelor-picker-input-item {
@@ -166,12 +164,6 @@
   color: #000;
   font-size: 0.6875rem;
   opacity: 0.4;
-  display: none;
-}
-
-.vuelor-picker-input-label[data-alpha-label],
-.vuelor-picker-input-label:not([data-alpha-label]) {
-  display: block;
 }
 
 .vuelor-picker-input-field {
