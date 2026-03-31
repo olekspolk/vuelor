@@ -29,7 +29,7 @@ function openEyeDropper () {
       rootContext.hexa.value = result.sRGBHex
     })
     .catch((e: any) => {
-      console.error(e)
+      if (e?.name !== 'AbortError') console.error(e)
     })
 }
 
