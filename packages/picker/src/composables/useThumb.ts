@@ -4,7 +4,7 @@ import { clamp } from '../utils/helpers.ts'
 import { RGBAtoCSS } from '../utils/color.ts'
 import { injectColorPickerContext } from '../components/ColorPickerRoot.vue'
 
-export function useThumb(canvasRef: Ref<HTMLCanvasElement | null>, type: Ref<'HSV' | 'HSL'>) {
+export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | 'HSL'>) {
   const rootContext = injectColorPickerContext()
 
   const bounding = ref({
