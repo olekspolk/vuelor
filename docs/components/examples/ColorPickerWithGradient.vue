@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { twMerge } from 'tailwind-merge'
-import { createReusableTemplate } from '@vueuse/core'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
@@ -14,6 +14,8 @@ import Select from '../common/Select.vue'
 import GradientStopInput from '../common/GradientStopInput.vue'
 
 const [DefineColorPickerTemplate, ColorPicker] = createReusableTemplate()
+
+const isDesktop = useMediaQuery('(min-width: 640px)')
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -310,6 +312,9 @@ watch(
         <ColorPicker />
       </TabsContent>
       <TabsContent class="pb-3" value="gradient">
+        <div class="sm:hidden border-b">
+          <ColorPicker />
+        </div>
         <div class="h-12 pl-4 pr-2 flex items-center justify-between gap-2">
           <Select
             v-model="gradientType"
@@ -392,7 +397,7 @@ watch(
           <GradientStopInput v-model="gradientStops[index]" />
           <ColorPickerInputHex class="flex-1" v-model="gradientColors[index]">
             <template #before>
-              <PopoverRoot>
+              <PopoverRoot v-if="isDesktop">
                 <PopoverTrigger as-child>
                   <ColorPickerSwatch
                     :value="gradientColors[index]"
@@ -412,6 +417,11 @@ watch(
                   </PopoverContent>
                 </PopoverPortal>
               </PopoverRoot>
+              <ColorPickerSwatch
+                v-else
+                :value="gradientColors[index]"
+                @click="gradientSelectedStopIndex = index"
+              />
             </template>
           </ColorPickerInputHex>
           <button
