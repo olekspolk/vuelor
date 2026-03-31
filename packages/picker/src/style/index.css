@@ -187,7 +187,7 @@
   outline: none;
 }
 
-.vuelor-picker-swatch-base {
+.vuelor-picker-swatch-root {
   position: relative;
   flex-grow: 0;
   height: 1rem;
@@ -196,11 +196,11 @@
   overflow: hidden;
 }
 
-.vuelor-picker-swatch-base:disabled {
+.vuelor-picker-swatch-root:disabled {
   opacity: var(--opacity-vuelor-disabled);
 }
 
-.vuelor-picker-swatch-base:focus-within {
+.vuelor-picker-swatch-root:focus-within {
   outline-width: 0.0625rem;
   outline-style: solid;
   outline-color: var(--color-vuelor-primary);

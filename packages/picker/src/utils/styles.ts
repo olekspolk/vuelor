@@ -8,7 +8,7 @@ export type Styling = 'tailwindcss' | 'vanillacss' | 'unstyled'
 
 function vanillaCssClass(group: string, slot: string): string {
   if (group === 'picker') return `vuelor-picker-${slot}`
-  if (group === 'dropper' && slot === 'base') return 'vuelor-picker-eye-dropper'
+  if (group === 'dropper' && slot === 'root') return 'vuelor-picker-eye-dropper'
   return `vuelor-picker-${group}-${slot}`
 }
 

@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
   value: string,
   class?: string,
   ui?: Partial<{
-    base: string
+    root: string
     alpha: string
   }>
 }>(), {
@@ -40,7 +40,7 @@ const ui = rootContext.uiSlots('swatch')
     :as="props.as"
     :disabled="rootContext.disabled.value"
     :style="{ backgroundColor: `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})` }"
-    :class="ui.base(props.ui?.base, props.class)"
+    :class="ui.root(props.ui?.root, props.class)"
     @click="handleSelect"
   >
     <span

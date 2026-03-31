@@ -42,7 +42,7 @@ const ui = rootContext.uiSlots('dropper')
     :as="props.as"
     :as-child="props.asChild"
     :disabled="rootContext.disabled.value"
-    :class="ui.base(props.class)"
+    :class="ui.root(props.class)"
     @click="openEyeDropper"
   >
     <slot />

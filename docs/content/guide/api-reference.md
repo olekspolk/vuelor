@@ -119,7 +119,7 @@ type ThemeSlots = {
     root: string        // The root <div> of ColorPickerRoot
   },
   dropper: {
-    base: string        // The EyeDropper button
+    root: string        // The EyeDropper button
   },
   shared: {
     thumb: string       // Applied to thumbs in both Canvas and all Sliders
@@ -138,7 +138,7 @@ type ThemeSlots = {
     field: string       // The <input> element
   },
   swatch: {
-    base: string        // The Swatch button
+    root: string        // The Swatch button
     alpha: string       // The alpha overlay strip inside the Swatch
   }
 }
@@ -259,7 +259,7 @@ Clicking a swatch **automatically applies** its `value` to the picker and emits 
 | value | `-`      | The hex or hexa color string this swatch represents (e.g. `#FF6900` or `#FF690080`). |
 | as    | `button` | The HTML element or component to render as.                                           |
 | class | `-`      | Extra classes applied to the swatch.                                                  |
-| ui    | `-`      | `Partial<{ base, alpha }>` — `base` targets the chip itself; `alpha` targets the transparency overlay. |
+| ui    | `-`      | `Partial<{ root, alpha }>` — `root` targets the chip itself; `alpha` targets the transparency overlay. |
 
 | Emit     | Description                                              |
 | -------- | -------------------------------------------------------- |

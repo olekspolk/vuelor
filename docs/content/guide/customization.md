@@ -67,7 +67,7 @@ These are all the slots you can target via the `ui` prop, along with the default
     root: 'w-60 bg-vuelor-surface shadow-vuelor-card rounded-[13px] p-4 flex flex-col gap-2'
   },
   dropper: {
-    base: 'enabled:hover:bg-black/5 disabled:opacity-50 rounded-[5px] focus-within:outline-1 focus-within:outline-vuelor-primary p-1'
+    root: 'enabled:hover:bg-black/5 disabled:opacity-50 rounded-[5px] focus-within:outline-1 focus-within:outline-vuelor-primary p-1'
   },
   shared: {
     // Applied to the thumb in both ColorPickerCanvas and all slider components
@@ -87,7 +87,7 @@ These are all the slots you can target via the `ui` prop, along with the default
     field: 'w-full min-w-5 h-6 text-[11px] focus:outline-none'
   },
   swatch: {
-    base: 'relative grow-0 h-4 w-4 rounded-[20%] overflow-hidden focus-within:outline-1 focus-within:outline-vuelor-primary disabled:opacity-50',
+    root: 'relative grow-0 h-4 w-4 rounded-[20%] overflow-hidden focus-within:outline-1 focus-within:outline-vuelor-primary disabled:opacity-50',
     alpha: 'absolute top-0 right-0 h-full w-1/2'
   }
 }
@@ -129,7 +129,7 @@ If you prefer to style components using **plain CSS** instead of Tailwind, set `
 // Class names applied per slot in vanillacss mode
 {
   picker:  { root:  'vuelor-picker-root' },
-  dropper: { base:  'vuelor-picker-eye-dropper' },
+  dropper: { root:  'vuelor-picker-eye-dropper' },
   shared:  { thumb: 'vuelor-picker-shared-thumb' },
   canvas:  { root:  'vuelor-picker-canvas-root' },
   slider:  { root:  'vuelor-picker-slider-root', track: 'vuelor-picker-slider-track' },
@@ -139,7 +139,7 @@ If you prefer to style components using **plain CSS** instead of Tailwind, set `
     label: 'vuelor-picker-input-label',
     field: 'vuelor-picker-input-field'
   },
-  swatch:  { base: 'vuelor-picker-swatch-base', alpha: 'vuelor-picker-swatch-alpha' }
+  swatch:  { root: 'vuelor-picker-swatch-root', alpha: 'vuelor-picker-swatch-alpha' }
 }
 ```
 
