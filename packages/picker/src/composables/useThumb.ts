@@ -130,6 +130,7 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
       ...rootContext.hsv.value,
       h: hue < 0 ? 360 : hue
     }
+    rootContext.commitValue()
   }
 
   return {
