@@ -39,6 +39,7 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
   })
 
   const isVisible = ref(false)
+  let wheelCommitTimer: ReturnType<typeof setTimeout> | null = null
 
   const thumbStyles = computed<CSSProperties>(() => {
     const thumbX = left.value * bounding.value.width
@@ -63,6 +64,7 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
     window.removeEventListener('resize', updateBounding)
     document.removeEventListener('pointermove', handlePointerMove)
     document.removeEventListener('pointerup', handlePointerUp)
+    if (wheelCommitTimer) clearTimeout(wheelCommitTimer)
   })
 
   function updateBounding() {
@@ -124,14 +126,15 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
   function handleWheel(event: WheelEvent) {
     if (rootContext.disabled.value) return
 
-    const step = event.deltaY * 0.1
-    const hue = ((rootContext.hsv.value.h + step) % 360 + 360) % 360
+    const hue = ((rootContext.hsv.value.h + event.deltaY * 0.1) % 360 + 360) % 360
     event.preventDefault()
-    rootContext.hsv.value = {
-      ...rootContext.hsv.value,
-      h: hue
-    }
-    rootContext.commitValue()
+    rootContext.hsv.value = { ...rootContext.hsv.value, h: hue }
+
+    if (wheelCommitTimer) clearTimeout(wheelCommitTimer)
+    wheelCommitTimer = setTimeout(() => {
+      rootContext.commitValue()
+      wheelCommitTimer = null
+    }, 150)
   }
 
   return {
