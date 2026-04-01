@@ -92,7 +92,7 @@ export function parseRGB (str: string): RGB {
 
 export function parseRGBA (str: string): RGBA {
   const parsed = baseParser(str)
-  if (parsed && (parsed.type?.toLowerCase() === 'rgb')) {
+  if (parsed && (parsed.type?.toLowerCase() === 'rgba' || parsed.type?.toLowerCase() === 'rgb')) {
     return {
       r: parseInt(parsed.values[0] as string, 10),
       g: parseInt(parsed.values[1] as string, 10),
