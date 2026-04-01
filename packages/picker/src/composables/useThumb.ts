@@ -124,11 +124,11 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
     if (rootContext.disabled.value) return
 
     const step = event.deltaY * 0.1
-    const hue = (rootContext.hsv.value.h + step) % 360
+    const hue = ((rootContext.hsv.value.h + step) % 360 + 360) % 360
     event.preventDefault()
     rootContext.hsv.value = {
       ...rootContext.hsv.value,
-      h: hue < 0 ? 360 : hue
+      h: hue
     }
     rootContext.commitValue()
   }
