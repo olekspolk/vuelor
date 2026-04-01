@@ -3,14 +3,13 @@ export default {
     root: 'w-60 bg-vuelor-surface shadow-vuelor-card rounded-[13px] p-4 flex flex-col gap-2'
   },
   dropper: {
-    base: 'enabled:hover:bg-black/5 disabled:opacity-50 rounded-[5px] focus-within:outline-1 focus-within:outline-vuelor-primary p-1'
+    root: 'enabled:hover:bg-black/5 disabled:opacity-50 rounded-[5px] focus-within:outline-1 focus-within:outline-vuelor-primary p-1'
   },
   shared: {
     thumb: 'block w-4 h-4 rounded-full border-4 border-white shadow-vuelor-thumb focus:outline-1 outline-vuelor-primary'
   },
   canvas: {
-    root: 'touch-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-    area: 'rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-black/10'
+    root: 'relative w-full h-52 touch-none rounded-[5px] shadow-vuelor-inner data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
   },
   slider: {
     root: 'relative h-4 w-full flex items-center select-none touch-none data-[orientation=vertical]:h-auto data-[orientation=vertical]:w-4 data-[orientation=vertical]:flex-col data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
@@ -23,7 +22,7 @@ export default {
     field: 'w-full min-w-5 h-6 text-[11px] focus:outline-none'
   },
   swatch: {
-    base: 'relative grow-0 h-4 w-4 rounded-[20%] overflow-hidden focus-within:outline-1 focus-within:outline-vuelor-primary disabled:opacity-50',
+    root: 'relative grow-0 h-4 w-4 rounded-[20%] overflow-hidden focus-within:outline-1 focus-within:outline-vuelor-primary disabled:opacity-50',
     alpha: 'absolute top-0 right-0 h-full w-1/2'
   }
 }

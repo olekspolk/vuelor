@@ -22,7 +22,7 @@ const forwarded = useForwardPropsEmits(props, emits)
     class="flex-row gap-3 w-auto"
     v-bind="forwarded"
   >
-    <ColorPickerCanvas />
+    <ColorPickerCanvas class="w-52" />
     <ColorPickerSliderHue orientation="vertical" />
     <ColorPickerSliderAlpha orientation="vertical" />
   </ColorPickerRoot>

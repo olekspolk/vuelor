@@ -56,7 +56,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
           :alignOffset="-4"
           class="bg-white rounded-[5px] shadow-vuelor-card"
         >
-          <ColorPickerCanvas :ui="{ area: 'rounded-none rounded-t-[5px]' }" />
+          <ColorPickerCanvas :ui="{ root: 'w-52 rounded-none rounded-t-[5px]' }" />
           <div class="p-3 flex items-center gap-3">
             <ColorPickerEyeDropper>
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">

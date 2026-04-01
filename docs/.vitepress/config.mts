@@ -4,6 +4,7 @@ import container from 'markdown-it-container'
 import tailwind from 'tailwindcss'
 import autoprefixer from 'autoprefixer'
 import { defineConfig } from 'vitepress'
+import llmstxt from 'vitepress-plugin-llms'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -103,6 +104,9 @@ export default defineConfig({
   },
   srcDir: 'content',
   vite: {
+    plugins: [
+      llmstxt(),
+    ],
     css: {
       postcss: {
         plugins: [

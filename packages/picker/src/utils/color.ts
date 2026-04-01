@@ -36,7 +36,7 @@ export function HSVtoRGB (hsv: HSV): RGB {
  * @param color RGB color as an array [0-255, 0-255, 0-255]
  */
 export function RGBtoHSV (rgba: RGB): HSV {
-  if (!rgba) return { h: 0, s: 1, v: 1 }
+  if (rgba == null) return { h: 0, s: 1, v: 1 }
 
   const r = rgba.r / 255
   const g = rgba.g / 255

@@ -18,12 +18,12 @@ const forwarded = useForwardPropsEmits(props, emits)
 
 <template>
   <ColorPickerRoot
-    class="bg-transparent p-0 !shadow-none gap-3 w-auto"
+    class="bg-transparent !shadow-none gap-3"
     v-bind="forwarded"
   >
     <ColorPickerCanvas
       :ui="{
-        area: 'rounded-lg',
+        root: 'rounded-lg',
         thumb: 'h-6 w-6 border'
       }"
     />

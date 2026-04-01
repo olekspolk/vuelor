@@ -1,19 +1,21 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { twMerge } from 'tailwind-merge'
-import { createReusableTemplate } from '@vueuse/core'
+import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
 import { ColorPickerInputHex, ColorPickerInputHSL, ColorPickerInputRGB, ColorPickerInputHSB } from '@vuelor/picker'
 import { ColorPickerRoot, ColorPickerCanvas, ColorPickerEyeDropper, ColorPickerSwatch } from '@vuelor/picker'
 import { ColorPickerSliderHue, ColorPickerSliderAlpha } from '@vuelor/picker'
-import { HexaToRGBA, RGBAtoHexa } from '@vuelor/picker'
+import { HexaToRGBA, RGBAtoHexa, useVModel } from '@vuelor/picker'
 
 import Select from '../common/Select.vue'
 import GradientStopInput from '../common/GradientStopInput.vue'
 
 const [DefineColorPickerTemplate, ColorPicker] = createReusableTemplate()
+
+const isDesktop = useMediaQuery('(min-width: 640px)')
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -77,6 +79,71 @@ const gradientAngle = ref(90)
 const gradientStops = ref([0, 33, 66, 100])
 const gradientSelectedStopIndex = ref(0)
 const gradientColors = ref(['#FF98C2FF', '#4DC1FFFF', '#D082E8FF', '#FFFA7AFF'])
+
+function parseStops(stopsStr: string): { colors: string[], stops: number[] } | null {
+  const colors: string[] = []
+  const positions: number[] = []
+  const re = /(#[0-9A-Fa-f]{8})\s+(\d+)%/g
+  let match: RegExpExecArray | null
+  while ((match = re.exec(stopsStr)) !== null) {
+    colors.push(match[1].toUpperCase())
+    positions.push(parseInt(match[2], 10))
+  }
+  return colors.length >= 2 ? { colors, stops: positions } : null
+}
+
+function applyModelValue(value: ModelValue): void {
+  if (!value) return
+
+  // Plain hexa color (color mode)
+  if (/^#[0-9A-Fa-f]{8}$/.test(value)) {
+    mode.value = 'color'
+    color.value = value
+    return
+  }
+
+  // linear-gradient(<angle>deg, <stops>)
+  const linearMatch = value.match(/^linear-gradient\((\d+)deg,\s*(.+)\)$/)
+  if (linearMatch) {
+    const parsed = parseStops(linearMatch[2])
+    if (!parsed) return
+    mode.value = 'gradient'
+    gradientType.value = 'Linear'
+    gradientAngle.value = parseInt(linearMatch[1], 10)
+    gradientColors.value = parsed.colors
+    gradientStops.value = parsed.stops
+    gradientSelectedStopIndex.value = 0
+    return
+  }
+
+  // radial-gradient(circle at center, <stops>)
+  const radialMatch = value.match(/^radial-gradient\(circle at center,\s*(.+)\)$/)
+  if (radialMatch) {
+    const parsed = parseStops(radialMatch[1])
+    if (!parsed) return
+    mode.value = 'gradient'
+    gradientType.value = 'Radial'
+    gradientColors.value = parsed.colors
+    gradientStops.value = parsed.stops
+    gradientSelectedStopIndex.value = 0
+    return
+  }
+
+  // conic-gradient(from <angle>deg, <stops>)
+  const conicMatch = value.match(/^conic-gradient\(from (\d+)deg,\s*(.+)\)$/)
+  if (conicMatch) {
+    const parsed = parseStops(conicMatch[2])
+    if (!parsed) return
+    mode.value = 'gradient'
+    gradientType.value = 'Conic'
+    gradientAngle.value = parseInt(conicMatch[1], 10)
+    gradientColors.value = parsed.colors
+    gradientStops.value = parsed.stops
+    gradientSelectedStopIndex.value = 0
+  }
+}
+
+const externalModel = useVModel(props, emit, applyModelValue)
 
 const currentColor = computed<ModelValue>({
   get: () => {
@@ -162,7 +229,7 @@ const modelValue = computed(() => {
 
 watch(
   modelValue,
-  (newValue) => emit('update:modelValue', newValue),
+  (newValue) => { externalModel.value = newValue },
   { immediate: true }
 )
 </script>
@@ -211,7 +278,6 @@ watch(
           v-for="color in swatches"
           :value="color"
           class="m-1"
-          @click="currentColor = color"
         />
       </div>
     </DefineColorPickerTemplate>
@@ -246,6 +312,9 @@ watch(
         <ColorPicker />
       </TabsContent>
       <TabsContent class="pb-3" value="gradient">
+        <div class="sm:hidden border-b">
+          <ColorPicker />
+        </div>
         <div class="h-12 pl-4 pr-2 flex items-center justify-between gap-2">
           <Select
             v-model="gradientType"
@@ -328,7 +397,7 @@ watch(
           <GradientStopInput v-model="gradientStops[index]" />
           <ColorPickerInputHex class="flex-1" v-model="gradientColors[index]">
             <template #before>
-              <PopoverRoot>
+              <PopoverRoot v-if="isDesktop">
                 <PopoverTrigger as-child>
                   <ColorPickerSwatch
                     :value="gradientColors[index]"
@@ -348,6 +417,11 @@ watch(
                   </PopoverContent>
                 </PopoverPortal>
               </PopoverRoot>
+              <ColorPickerSwatch
+                v-else
+                :value="gradientColors[index]"
+                @click="gradientSelectedStopIndex = index"
+              />
             </template>
           </ColorPickerInputHex>
           <button

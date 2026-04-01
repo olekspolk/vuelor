@@ -4,21 +4,35 @@ layout: home
 
 hero:
   name: "Vuelor"
-  text: "Fully customizable ColorPicker for Vue.js"
-  tagline: Accessible · Flexible · Tree shakeable
+  text: "The composable color picker for Vue 3"
+  tagline: Build exactly the picker your design needs — no overrides, no fighting the defaults.
   actions:
     - theme: brand
-      text: Getting started
+      text: Get started
       link: /guide/getting-started
     - theme: alt
-      text: Examples
+      text: View examples
       link: /examples
 
 features:
-  - title: Lego-like
-    details: Instead of one pre-built <ColorPicker /> component, you get smaller building blocks — such as the Canvas, Slider, Input — that can be combined and styled however you like.
-  - title: Tailwind-Friendly
-    details: If your project uses TailwindCSS, you’ll find that every part of the picker fits naturally into your design system. But you’re never locked in — you can use plain CSS or CSS Modules.
-  - title: Accessibility by Design
-    details: Accessibility isn’t an afterthought — it’s a foundation. Keyboard navigation, ARIA attributes, and focus management are all built in according to the WAI-ARIA Color Picker Pattern.
+  - icon: 🧩
+    title: Composable building blocks
+    details: Instead of one rigid <ColorPicker /> drop-in, you get focused primitives — Canvas, Sliders, Inputs, Swatches — that you compose yourself. Use only what you need.
+    link: /guide/getting-started
+    linkText: Get started
+  - icon: 🎨
+    title: Tailwind-native, CSS-optional
+    details: Every slot ships with Tailwind classes out of the box. Prefer plain CSS? Switch to vanillacss mode. Want full control? Use unstyled mode and bring your own classes entirely.
+    link: /guide/customization
+    linkText: Customization guide
+  - icon: ⌨️
+    title: Accessible out of the box
+    details: Keyboard navigation, ARIA attributes, and focus management are built in from the start — following the WAI-ARIA Color Picker pattern so you don’t have to think about it.
+    link: /guide/api-reference
+    linkText: API reference
+  - icon: 🔢
+    title: Flexible output formats
+    details: Emit color as hexa, rgb, hsl, hsv, or a plain object with all representations at once. Alpha channel is included automatically when your chosen format supports it.
+    link: /guide/api-reference#format
+    linkText: Format table
 ---

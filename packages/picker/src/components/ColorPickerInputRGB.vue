@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UiInputSlots } from '../utils/styles'
-import { clamp } from '../utils/helpers.ts'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
+import { useChannelInput } from '../composables/useChannelInput.ts'
 
 const props = defineProps<{
   class?: string,
@@ -10,38 +10,11 @@ const props = defineProps<{
 
 const rootContext = injectColorPickerContext()
 
-function parseChannelValue(e: Event, channel: 'r' | 'g' | 'b') {
-  const target = e.target as HTMLInputElement
-  const intValue = parseInt(target.value, 10)
-  const value = isNaN(intValue)
-    ? rootContext.rgb.value[channel]
-    : clamp(intValue, 0, 255)
-  if (rootContext.rgb.value[channel] !== value) {
-    rootContext.rgb.value = {
-      ...rootContext.rgb.value,
-      [channel]: value
-    }
-    rootContext.commitValue()
-  } else {
-    target.value = value.toString()
-  }
-}
-
-function handleAlphaInput(e: Event) {
-  const target = e.target as HTMLInputElement
-  const intValue = parseInt(target.value, 10)
-  const value = isNaN(intValue)
-    ? rootContext.alpha.value
-    : clamp(intValue, 0, 100)
-  if (rootContext.alpha.value !== value) {
-    rootContext.alpha.value = value
-    rootContext.commitValue()
-  } else {
-    target.value = value.toString()
-  }
-}
-
-const round = (value: number) => Math.round(value)
+const { parseChannelValue, handleAlphaInput, toDisplay } = useChannelInput(
+  () => rootContext.rgb.value,
+  (v) => { rootContext.rgb.value = v },
+  { defaultMax: 255 }
+)
 
 const ui = rootContext.uiSlots('input')
 </script>
@@ -60,7 +33,7 @@ const ui = rootContext.uiSlots('input')
         aria-label="Red"
         :disabled="rootContext.disabled.value"
         :class="ui.field(props.ui?.field)"
-        :value="round(rootContext.rgb.value.r)"
+        :value="toDisplay('r', rootContext.rgb.value.r)"
         @blur="parseChannelValue($event, 'r')"
       />
     </div>
@@ -72,7 +45,7 @@ const ui = rootContext.uiSlots('input')
         aria-label="Green"
         :disabled="rootContext.disabled.value"
         :class="ui.field(props.ui?.field)"
-        :value="round(rootContext.rgb.value.g)"
+        :value="toDisplay('g', rootContext.rgb.value.g)"
         @blur="parseChannelValue($event, 'g')"
       />
     </div>
@@ -84,7 +57,7 @@ const ui = rootContext.uiSlots('input')
         aria-label="Blue"
         :disabled="rootContext.disabled.value"
         :class="ui.field(props.ui?.field)"
-        :value="round(rootContext.rgb.value.b)"
+        :value="toDisplay('b', rootContext.rgb.value.b)"
         @blur="parseChannelValue($event, 'b')"
       />
     </div>

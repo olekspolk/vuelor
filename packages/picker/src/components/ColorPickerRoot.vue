@@ -26,7 +26,7 @@ export const [injectColorPickerContext, provideColorPickerContext] = createConte
 export interface ColorPickerRootProps {
   ui?: ThemeSlots,
   class?: string,
-  styling?: 'tailwindcss' | 'vanillacss',
+  styling?: 'tailwindcss' | 'vanillacss' | 'unstyled',
   disabled?: boolean,
   defaultValue?: string,
   modelValue: ModelValue,
@@ -59,9 +59,20 @@ const emit = defineEmits<ColorPickerRootEmits>()
 const color = useColor()
 
 const modelValue = useVModel<ModelValue>(props, emit, (value: ModelValue) => {
-  if ((value === null) ||
-    (props.format === 'object' && typeof value !== 'object') ||
-    (props.format !== 'object' && typeof value === 'object')) {
+  const objectMismatch = props.format === 'object' && typeof value !== 'object'
+  const stringMismatch = props.format !== 'object' && typeof value === 'object'
+
+  if (value === null) {
+    color.hexa.value = props.defaultValue
+  } else if (objectMismatch || stringMismatch) {
+    if (import.meta.env.DEV) {
+      const received = typeof value
+      const expected = props.format === 'object' ? 'object' : 'string'
+      console.warn(
+        `[ColorPickerRoot] modelValue type mismatch: format="${props.format}" expects a ${expected} but received ${received}. ` +
+        `Falling back to defaultValue "${props.defaultValue}".`
+      )
+    }
     color.hexa.value = props.defaultValue
   } else {
     color.fromFormat(value, props.format)
@@ -76,7 +87,7 @@ watch(
 const disabled = computed(() => props.disabled)
 const isAlphaEnabled = computed(() => ['hexa', 'rgba', 'hsva', 'object'].includes(props.format!))
 
-const uiSlots = createUiSlots(theme[props.styling], props.ui)
+const uiSlots = createUiSlots(theme.tailwindcss, props.ui, props.styling)
 const ui = uiSlots('picker')
 
 provideColorPickerContext({

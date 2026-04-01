@@ -24,7 +24,7 @@ const forwarded = useForwardPropsEmits(props, emits)
   >
     <ColorPickerCanvas
       :ui="{
-        area: 'rounded-none',
+        root: 'w-52 rounded-none',
         thumb: 'border-2'
       }"
     />

@@ -12,14 +12,25 @@ const props = withDefaults(defineProps<{
   value: string,
   class?: string,
   ui?: Partial<{
-    base: string
+    root: string
     alpha: string
   }>
 }>(), {
   as: 'button'
 })
 
+const emit = defineEmits<{
+  select: [value: string]
+}>()
+
 const rgba = computed(() => parseHex(props.value) || rootContext.rgba.value)
+
+function handleSelect() {
+  if (rootContext.disabled.value) return
+  rootContext.hexa.value = props.value
+  rootContext.commitValue()
+  emit('select', props.value)
+}
 
 const ui = rootContext.uiSlots('swatch')
 </script>
@@ -29,7 +40,8 @@ const ui = rootContext.uiSlots('swatch')
     :as="props.as"
     :disabled="rootContext.disabled.value"
     :style="{ backgroundColor: `rgb(${rgba.r}, ${rgba.g}, ${rgba.b})` }"
-    :class="ui.base(props.ui?.base, props.class)"
+    :class="ui.root(props.ui?.root, props.class)"
+    @click="handleSelect"
   >
     <span
       :style="{
