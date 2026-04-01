@@ -61,6 +61,8 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
 
   onUnmounted(() => {
     window.removeEventListener('resize', updateBounding)
+    document.removeEventListener('pointermove', handlePointerMove)
+    document.removeEventListener('pointerup', handlePointerUp)
   })
 
   function updateBounding() {
@@ -73,7 +75,7 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
     if (rootContext.disabled.value) return
 
     document.addEventListener('pointermove', handlePointerMove)
-    document.addEventListener('pointerup', handlePointerUp)
+    document.addEventListener('pointerup', handlePointerUp, { once: true })
     updateBounding()
     handlePointerMove(event)
   }
@@ -88,7 +90,6 @@ export function useThumb(canvasRef: Ref<HTMLElement | null>, type: Ref<'HSV' | '
 
   function handlePointerUp() {
     document.removeEventListener('pointermove', handlePointerMove)
-    document.removeEventListener('pointerup', handlePointerUp)
     rootContext.commitValue()
   }
 
