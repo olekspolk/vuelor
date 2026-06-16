@@ -73,8 +73,14 @@ npx shadcn-vue@latest add https://vuelor.dev/r/color-picker.json
 ## Theming notes
 
 - **Tailwind v4** (the shadcn-vue default): the `vuelor-*` color and shadow tokens are added to your
-  global stylesheet automatically through the `color-picker-theme` dependency. Nothing else to do.
-- **Tailwind v3**: also add the package to your `content` globs so the utility classes aren't purged —
+  global stylesheet automatically through the `color-picker-theme` dependency. You also need to let
+  Tailwind scan the package — Tailwind v4 ignores `node_modules`, so add this to your CSS entry file
+  (adjust the relative path to where it lives), or the canvas and sliders get purged:
+
+  ```css
+  @source "../node_modules/@vuelor/picker";
+  ```
+- **Tailwind v3**: instead add the package to your `content` globs so the utility classes aren't purged —
   `'./node_modules/@vuelor/picker/dist/index.js'`.
 - **No Tailwind**: set `styling="vanillacss"` on `ColorPickerRoot` and import `@vuelor/picker/style.css`.
   See [Customization](/guide/customization).

@@ -13,7 +13,7 @@
   ],
   "files": [
     {
-      "path": "registry/default/color-picker-sliders-hsl/ColorPickerSlidersHSL.vue",
+      "path": "color-picker-sliders-hsl/ColorPickerSlidersHSL.vue",
       "content": "<script lang=\"ts\" setup>\nimport { useForwardPropsEmits } from 'reka-ui'\nimport {\n  ColorPickerRoot,\n  ColorPickerInputHSL,\n  ColorPickerSliderHue,\n  ColorPickerSliderSaturation,\n  ColorPickerSliderLightness,\n  ColorPickerSliderAlpha,\n  type ColorPickerRootProps,\n  type ColorPickerRootEmits\n} from '@vuelor/picker'\n\ntype ColorPickerProps = Omit<ColorPickerRootProps, 'styling' | 'ui'>\n\nconst props = defineProps<ColorPickerProps>()\nconst emits = defineEmits<ColorPickerRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <ColorPickerRoot\n    class=\"p-3\"\n    :ui=\"{ shared: { thumb: 'border-2' } }\"\n    v-bind=\"forwarded\"\n  >\n    <ColorPickerSliderHue />\n    <ColorPickerSliderSaturation />\n    <ColorPickerSliderLightness />\n    <ColorPickerSliderAlpha />\n    <ColorPickerInputHSL :ui=\"{ item: 'bg-transparent' }\" />\n  </ColorPickerRoot>\n</template>\n",
       "type": "registry:component"
     }
@@ -22,7 +22,7 @@
     "vuelorVersion": "^1.0.1",
     "stylingMode": "tailwindcss"
   },
-  "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+  "docs": "Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the color-picker-theme dependency, but you must ALSO add `@source \"../node_modules/@vuelor/picker\";` to your global CSS (adjust the relative path to where your CSS entry file lives) so Tailwind scans the picker's classes — without it the canvas and sliders get purged. Tailwind v3: instead add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
   "categories": [
     "color-picker",
     "form",
