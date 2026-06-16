@@ -13,6 +13,9 @@ hero:
     - theme: alt
       text: View examples
       link: /examples
+    - theme: alt
+      text: ⭐ Star on GitHub
+      link: https://github.com/olekspolk/vuelor
 
 features:
   - icon: 🧩
