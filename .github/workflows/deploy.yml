@@ -16,7 +16,6 @@ jobs:
 
     permissions:
       contents: read
-      deployments: write
 
     steps:
       - name: Checkout repo
@@ -44,10 +43,12 @@ jobs:
       - name: Build docs site
         run: pnpm --filter docs docs:build
 
+      # Run wrangler via npx rather than cloudflare/wrangler-action: the action installs wrangler with
+      # `pnpm add`, which fails in this pnpm workspace (ERR_PNPM_ADDING_TO_ROOT). npx is unaffected.
+      # wrangler reads CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID from the environment.
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Change --project-name to match your Cloudflare Pages project.
-          command: pages deploy docs/.vitepress/dist --project-name=vuelor --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # Change --project-name to match your Cloudflare Pages project.
+        run: npx --yes wrangler@3 pages deploy docs/.vitepress/dist --project-name=vuelor --branch=main
