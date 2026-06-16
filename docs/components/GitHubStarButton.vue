@@ -68,17 +68,16 @@ onMounted(async () => {
 .gh-star {
   display: inline-flex;
   align-items: stretch;
-  height: 40px;
+  height: 32px;
   border: 1px solid var(--vp-c-border);
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--vp-c-text-1);
   background-color: var(--vp-c-bg-soft);
   text-decoration: none;
   transition: border-color 0.25s, background-color 0.25s;
-  margin-top: 20px;
 }
 .gh-star:hover {
   border-color: var(--vp-c-brand-1);
@@ -87,8 +86,8 @@ onMounted(async () => {
 .gh-star__label {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 18px;
+  gap: 6px;
+  padding: 0 12px;
 }
 .gh-star__mark {
   flex-shrink: 0;
@@ -96,8 +95,8 @@ onMounted(async () => {
 .gh-star__count {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 16px;
+  gap: 5px;
+  padding: 0 12px;
   border-left: 1px solid var(--vp-c-border);
   color: var(--vp-c-text-1);
 }
