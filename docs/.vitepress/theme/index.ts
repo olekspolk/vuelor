@@ -3,6 +3,7 @@ import DefaultTheme from 'vitepress/theme'
 import HeroColorPicker from '../../components/HeroColorPicker.vue'
 import ColorPickerShowcase from '../../components/Showcase.vue'
 import ComponentDemo from '../../components/ComponentDemo.vue'
+import InstallTerminal from '../../components/InstallTerminal.vue'
 
 import './style.css'
 import './vars.css'
@@ -13,6 +14,7 @@ export default {
     app.component('ComponentDemo', ComponentDemo)
     app.component('HeroColorPicker', HeroColorPicker)
     app.component('ColorPickerShowcase', ColorPickerShowcase)
+    app.component('InstallTerminal', InstallTerminal)
 
     const modules = import.meta.glob('../../components/examples/*.vue', { eager: true })
 
