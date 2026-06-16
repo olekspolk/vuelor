@@ -38,3 +38,55 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm publish --access public --no-git-checks
+
+  # After a new @vuelor/picker is published, pin the registry to it, regenerate, and commit back
+  # to main. The push to main triggers the Deploy workflow, so the live registry is rebuilt against
+  # the new release.
+  sync-registry:
+    needs: publish
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pin registry to the released @vuelor/picker version
+        run: |
+          VERSION=$(node -p "require('./packages/picker/package.json').version")
+          echo "Pinning registry to @vuelor/picker@^$VERSION"
+          sed -i "s/export const PICKER_VERSION = '[^']*'/export const PICKER_VERSION = '^$VERSION'/" docs/registry.config.mjs
+
+      - name: Regenerate registry
+        run: pnpm --filter docs registry:build
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/registry.config.mjs docs/registry.json docs/registry docs/content/public/r
+          if git diff --staged --quiet; then
+            echo "Registry already up to date — nothing to commit."
+          else
+            VERSION=$(node -p "require('./packages/picker/package.json').version")
+            git commit -m "chore(registry): regenerate for @vuelor/picker@$VERSION"
+            git push origin HEAD:main
+          fi
