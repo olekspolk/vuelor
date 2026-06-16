@@ -38,6 +38,7 @@ export default defineConfig({
         items: [
           { text: 'Introduction', link: '/guide/introduction' },
           { text: 'Getting Started', link: '/guide/getting-started' },
+          { text: 'shadcn-vue CLI', link: '/guide/cli' },
           { text: 'Customization', link: '/guide/customization' },
           { text: 'API Reference', link: '/guide/api-reference' },
         ]
@@ -103,6 +104,9 @@ export default defineConfig({
     }
   },
   srcDir: 'content',
+  sitemap: {
+    hostname: 'https://vuelor.dev'
+  },
   vite: {
     plugins: [
       llmstxt(),

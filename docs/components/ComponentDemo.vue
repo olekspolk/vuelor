@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { NAMESPACE, itemNameForFile } from '../registry.config.mjs'
+import CopyCommand from './CopyCommand.vue'
 
 const props = defineProps({
   path: String
@@ -8,13 +10,18 @@ const props = defineProps({
 const copied = ref(false)
 const codeContainer = ref(null)
 
+// The matching `shadcn-vue add @vuelor/<item>` command for this demo, derived from its source file.
+const installCommand = computed(() => {
+  const item = itemNameForFile(props.path)
+  return item ? `npx shadcn-vue@latest add ${NAMESPACE}/${item}` : null
+})
+
 const copyToClipboard = async () => {
   if (!codeContainer.value) return
-  const codeText = codeContainer.value.textContent
   try {
-    await navigator.clipboard.writeText(codeText)
+    await navigator.clipboard.writeText(codeContainer.value.textContent)
     copied.value = true
-    setTimeout(() => copied.value = false, 2000)
+    setTimeout(() => (copied.value = false), 2000)
   } catch (err) {
     console.error(err)
   }
@@ -23,6 +30,10 @@ const copyToClipboard = async () => {
 
 <template>
   <div class="my-4 overflow-hidden rounded-lg border border-[var(--vp-c-divider)] bg-[var(--vp-c-bg)]">
+
+    <div v-if="installCommand" class="border-b border-[var(--vp-c-divider)]">
+      <CopyCommand :command="installCommand" />
+    </div>
 
     <div data-vuelor-docs class="flex items-center justify-center border-b border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] p-10">
       <slot name="demo"></slot>

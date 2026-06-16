@@ -1,0 +1,32 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "color-picker-mini",
+  "title": "Color Picker (Mini)",
+  "author": "Vuelor <https://vuelor.dev>",
+  "description": "Minimal color picker — a saturation/brightness canvas with a hue slider.",
+  "dependencies": [
+    "@vuelor/picker@^1.0.1",
+    "reka-ui"
+  ],
+  "registryDependencies": [
+    "@vuelor/color-picker-theme"
+  ],
+  "files": [
+    {
+      "path": "registry/default/color-picker-mini/ColorPickerMini.vue",
+      "content": "<script lang=\"ts\" setup>\nimport { useForwardPropsEmits } from 'reka-ui'\nimport {\n  ColorPickerRoot,\n  ColorPickerCanvas,\n  ColorPickerSliderHue,\n  type ColorPickerRootProps,\n  type ColorPickerRootEmits,\n} from '@vuelor/picker'\n\ntype ColorPickerProps = Omit<ColorPickerRootProps, 'styling' | 'ui'>\n\nconst props = defineProps<ColorPickerProps>()\nconst emits = defineEmits<ColorPickerRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <ColorPickerRoot v-bind=\"forwarded\">\n    <ColorPickerCanvas />\n    <ColorPickerSliderHue />\n  </ColorPickerRoot>\n</template>\n",
+      "type": "registry:component"
+    }
+  ],
+  "meta": {
+    "vuelorVersion": "^1.0.1",
+    "stylingMode": "tailwindcss"
+  },
+  "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+  "categories": [
+    "color-picker",
+    "form",
+    "input"
+  ],
+  "type": "registry:block"
+}

@@ -2,12 +2,14 @@
   "name": "docs",
   "scripts": {
     "docs:dev": "vitepress dev",
-    "docs:build": "vitepress build",
+    "registry:build": "node scripts/build-registry.mjs && shadcn-vue build --output content/public/r",
+    "docs:build": "pnpm registry:build && vitepress build",
     "docs:preview": "vitepress preview"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
+    "shadcn-vue": "^2.7.4",
     "vitepress": "2.0.0-alpha.15",
     "vitepress-plugin-llms": "^1.0.0"
   },

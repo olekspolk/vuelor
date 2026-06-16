@@ -28,6 +28,24 @@ pnpm add @vuelor/picker
 yarn add @vuelor/picker
 ```
 
+## Install a ready-made picker with the shadcn-vue CLI
+
+Prefer a complete, editable picker over wiring the parts yourself? Every example on
+[vuelor.dev](https://vuelor.dev/examples/) is a [shadcn-vue registry](https://www.shadcn-vue.com/docs/registry)
+item. Add the `@vuelor` registry to your `components.json` once:
+
+```json
+{ "registries": { "@vuelor": "https://vuelor.dev/r/{name}.json" } }
+```
+
+then copy a picker into your project (this also installs `@vuelor/picker` and adds the required theme tokens):
+
+```bash
+npx shadcn-vue@latest add @vuelor/color-picker
+```
+
+See the [shadcn-vue CLI guide](https://vuelor.dev/guide/cli) for the full list of pickers and AI/MCP usage.
+
 ## Import the parts
 
 This isn't a **"drop-in"** color picker. Instead, it's a collection of building blocks that let you craft exactly what you want.
@@ -73,6 +91,9 @@ Update the `index.css` file:
   --shadow-vuelor-card: 0 2px 5px 0 #00000026, 0 10px 16px 0 #0000001f, 0 0 .5px 0 #0000001f;
   --shadow-vuelor-thumb: 0px 0px .5px #0000002e, 0px 3px 8px #0000001a, 0px 1px 3px #0000001a;
   --shadow-vuelor-inner: inset 0 0 0 1px #0000001a;
+
+  /* Gradient editor only */
+  --drop-shadow-vuelor-thumb: 0px 0px .5px #00000054, 0px 1px 3px #00000026;
 }
 ```
 
@@ -98,6 +119,10 @@ export default {
         'vuelor-card': '0 2px 5px 0 #00000026, 0 10px 16px 0 #0000001f, 0 0 .5px 0 #0000001f',
         'vuelor-thumb': '0px 0px .5px #0000002e, 0px 3px 8px #0000001a, 0px 1px 3px #0000001a',
         'vuelor-inner': 'inset 0 0 0 1px #0000001a'
+      },
+      // Gradient editor only
+      dropShadow: {
+        'vuelor-thumb': ['0px 0px .5px #00000054', '0px 1px 3px #00000026']
       }
     },
   }
