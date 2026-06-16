@@ -4,6 +4,7 @@ import HeroColorPicker from '../../components/HeroColorPicker.vue'
 import ColorPickerShowcase from '../../components/Showcase.vue'
 import ComponentDemo from '../../components/ComponentDemo.vue'
 import InstallTerminal from '../../components/InstallTerminal.vue'
+import GitHubStarButton from '../../components/GitHubStarButton.vue'
 
 import './style.css'
 import './vars.css'
@@ -26,7 +27,8 @@ export default {
   },
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'home-hero-image': () => h(HeroColorPicker)
+      'home-hero-image': () => h(HeroColorPicker),
+      'home-hero-actions-after': () => h(GitHubStarButton)
     })
   }
 }
