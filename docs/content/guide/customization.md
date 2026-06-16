@@ -74,7 +74,7 @@ These are all the slots you can target via the `ui` prop, along with the default
     thumb: 'block w-4 h-4 rounded-full border-4 border-white shadow-vuelor-thumb focus:outline-1 outline-vuelor-primary'
   },
   canvas: {
-    root: 'relative w-full h-52 touch-none rounded-[5px] outline-1 outline-solid -outline-offset-1 outline-black/10 data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
+    root: 'relative w-full h-52 touch-none rounded-[5px] shadow-vuelor-inner data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
   },
   slider: {
     root: 'relative h-4 w-full flex items-center select-none touch-none data-[orientation=vertical]:h-auto data-[orientation=vertical]:w-4 data-[orientation=vertical]:flex-col data-[disabled]:pointer-events-none data-[disabled]:opacity-50',

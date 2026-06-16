@@ -1,0 +1,53 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Only one production deploy at a time; cancel superseded runs.
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      deployments: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The docs site imports @vuelor/picker (workspace:*) from its built dist, so build it first.
+      - name: Build @vuelor/picker
+        run: pnpm --filter @vuelor/picker build
+
+      # docs:build runs `registry:build` (regenerates registry.json + content/public/r) then `vitepress build`.
+      - name: Build docs site
+        run: pnpm --filter docs docs:build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Change --project-name to match your Cloudflare Pages project.
+          command: pages deploy docs/.vitepress/dist --project-name=vuelor --branch=main

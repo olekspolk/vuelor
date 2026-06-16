@@ -3,7 +3,7 @@
 ::: demo ColorPickerWithGradient.vue
 :::
 
-Add a drop shadow styles in `index.css` (TailwindCSS 4)
+Installed with the [shadcn-vue CLI](/guide/cli)? The `--drop-shadow-vuelor-thumb` token is added for you automatically. For a manual `@vuelor/picker` install, add the gradient thumb shadow in `index.css` (TailwindCSS 4):
 
 ```css
 @import "tailwindcss";

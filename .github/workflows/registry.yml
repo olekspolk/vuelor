@@ -1,0 +1,66 @@
+name: Registry
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - 'docs/components/**'
+      - 'docs/registry/**'
+      - 'docs/registry.json'
+      - 'docs/registry.config.mjs'
+      - 'docs/scripts/build-registry.mjs'
+      - 'docs/content/public/r/**'
+      - 'docs/package.json'
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build registry
+        run: pnpm --filter docs registry:build
+
+      # The registry is generated from docs/components/examples (the single source of truth).
+      # If the committed registry output differs from a fresh build, someone edited an example
+      # without regenerating — fail so it can't drift.
+      - name: Verify registry is up to date
+        run: |
+          if ! git diff --exit-code -- docs/registry.json docs/registry docs/content/public/r; then
+            echo "::error::Registry output is stale. Run 'pnpm --filter docs registry:build' and commit the result."
+            exit 1
+          fi
+
+      - name: Validate emitted items
+        run: |
+          node --input-type=module <<'EOF'
+          import { readdirSync, readFileSync } from 'node:fs'
+          const dir = 'docs/content/public/r'
+          const files = readdirSync(dir).filter((f) => f.endsWith('.json') && f !== 'registry.json')
+          if (files.length === 0) throw new Error('No registry items were emitted.')
+          for (const f of files) {
+            const item = JSON.parse(readFileSync(`${dir}/${f}`, 'utf8'))
+            if (!item.name || !item.type) throw new Error(`${f}: missing name/type`)
+            for (const file of item.files ?? []) {
+              if (!file.content) throw new Error(`${f}: file ${file.path} has no inlined content`)
+            }
+          }
+          console.log(`✔ Validated ${files.length} registry items`)
+          EOF

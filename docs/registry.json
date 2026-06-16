@@ -1,0 +1,368 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry.json",
+  "name": "vuelor",
+  "homepage": "https://vuelor.dev",
+  "items": [
+    {
+      "name": "color-picker-theme",
+      "type": "registry:theme",
+      "title": "Vuelor Theme",
+      "description": "Tailwind v4 design tokens (colors + shadows) required by @vuelor/picker in its default tailwindcss styling mode.",
+      "cssVars": {
+        "theme": {
+          "vuelor-primary": "#0d99ff",
+          "vuelor-surface": "#ffffff",
+          "vuelor-border": "#e6e6e6",
+          "vuelor-input": "#f5f5f5",
+          "shadow-vuelor-card": "0 2px 5px 0 #00000026, 0 10px 16px 0 #0000001f, 0 0 .5px 0 #0000001f",
+          "shadow-vuelor-thumb": "0px 0px .5px #0000002e, 0px 3px 8px #0000001a, 0px 1px 3px #0000001a",
+          "shadow-vuelor-inner": "inset 0 0 0 1px #0000001a",
+          "drop-shadow-vuelor-thumb": "0px 0px .5px #00000054, 0px 1px 3px #00000026"
+        }
+      }
+    },
+    {
+      "name": "color-picker-mini",
+      "type": "registry:block",
+      "title": "Color Picker (Mini)",
+      "description": "Minimal color picker — a saturation/brightness canvas with a hue slider.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-mini/ColorPickerMini.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-mini-styled",
+      "type": "registry:block",
+      "title": "Color Picker (Mini, Styled)",
+      "description": "Mini color picker with a rounded canvas and custom slider thumb styling applied through the ui prop.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-mini-styled/ColorPickerMiniStyled.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-mini-vertical",
+      "type": "registry:block",
+      "title": "Color Picker (Mini, Vertical)",
+      "description": "Mini color picker with the hue and alpha sliders arranged vertically beside the canvas.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-mini-vertical/ColorPickerMiniVertical.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-mini-vertical-styled",
+      "type": "registry:block",
+      "title": "Color Picker (Mini, Vertical, Styled)",
+      "description": "Vertical mini color picker with custom ui-prop styling overrides.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-mini-vertical-styled/ColorPickerMiniVerticalStyled.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-sliders-hsl",
+      "type": "registry:block",
+      "title": "Color Picker (HSL Sliders)",
+      "description": "HSL color picker built from individual hue, saturation, lightness and alpha sliders.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-sliders-hsl/ColorPickerSlidersHSL.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-sliders-rgb",
+      "type": "registry:block",
+      "title": "Color Picker (RGB Sliders)",
+      "description": "RGB color picker built from individual red, green, blue and alpha sliders.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-sliders-rgb/ColorPickerSlidersRGB.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:block",
+      "title": "Color Picker",
+      "description": "Full color picker with an eyedropper, hue + alpha sliders and switchable HEX / RGB / HSL / HSB inputs.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker/ColorPicker.vue",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/color-picker/Select.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-popover",
+      "type": "registry:block",
+      "title": "Color Picker (Popover)",
+      "description": "Hex input that opens a Reka UI popover containing a canvas, eyedropper and sliders.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-popover/ColorPickerPopover.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-tabs",
+      "type": "registry:block",
+      "title": "Color Picker (Tabs)",
+      "description": "Color picker whose HEX / RGB / HSL / HSB inputs are organized behind Reka UI tabs.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-tabs/ColorPickerWithTabs.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-tabs-vertical",
+      "type": "registry:block",
+      "title": "Color Picker (Tabs, Vertical)",
+      "description": "Tabbed color picker with a vertical slider layout.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-tabs-vertical/ColorPickerWithTabsVerticalSliders.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "form",
+        "input"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    },
+    {
+      "name": "color-picker-gradient",
+      "type": "registry:block",
+      "title": "Color Picker (Gradient)",
+      "description": "Multi-stop gradient editor (linear / radial / conic) built on @vuelor/picker.",
+      "author": "Vuelor <https://vuelor.dev>",
+      "dependencies": [
+        "@vuelor/picker@^1.0.1",
+        "@vueuse/core",
+        "reka-ui",
+        "tailwind-merge"
+      ],
+      "registryDependencies": [
+        "@vuelor/color-picker-theme"
+      ],
+      "files": [
+        {
+          "path": "registry/default/color-picker-gradient/ColorPickerWithGradient.vue",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/color-picker-gradient/Select.vue",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/color-picker-gradient/GradientStopInput.vue",
+          "type": "registry:component"
+        }
+      ],
+      "docs": "Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via the color-picker-theme registry dependency. Tailwind v3 only: add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the vuelor-* utility classes are not purged. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
+      "categories": [
+        "color-picker",
+        "gradient"
+      ],
+      "meta": {
+        "vuelorVersion": "^1.0.1",
+        "stylingMode": "tailwindcss"
+      }
+    }
+  ]
+}
