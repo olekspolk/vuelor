@@ -49,3 +49,32 @@
     margin: 0 0 70px 0 !important;
   }
 }
+
+/* Home page: "Add a picker in one command" CLI section */
+.home-cli {
+  max-width: 960px;
+  margin: 8px auto 64px;
+  padding: 0 24px;
+  text-align: center;
+}
+.home-cli h2 {
+  border-top: none;
+  margin: 0 0 12px;
+  padding-top: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.home-cli > p {
+  max-width: 560px;
+  margin: 0 auto 28px;
+  color: var(--vp-c-text-2);
+  line-height: 1.6;
+}
+.home-cli__link {
+  margin-top: 24px !important;
+  font-weight: 500;
+}
+.home-cli__link a {
+  color: var(--vp-c-brand-1);
+}

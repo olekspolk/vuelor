@@ -35,4 +35,21 @@ features:
     details: Emit color as hexa, rgb, hsl, hsv, or a plain object with all representations at once. Alpha channel is included automatically when your chosen format supports it.
     link: /guide/api-reference#format
     linkText: Format table
+  - icon: 📦
+    title: Install with the shadcn-vue CLI
+    details: Copy a complete, editable picker into your project with one shadcn-vue add command — you own the source, no black-box dependency.
+    link: /guide/cli
+    linkText: CLI guide
 ---
+
+<div class="home-cli">
+
+## Add a picker in one command
+
+Every example is a [shadcn-vue registry](https://www.shadcn-vue.com/docs/registry) item. Register the `@vuelor` registry once, then drop a complete, editable picker straight into your project.
+
+<InstallTerminal />
+
+<p class="home-cli__link"><a href="/guide/cli">Read the shadcn-vue CLI guide →</a></p>
+
+</div>
