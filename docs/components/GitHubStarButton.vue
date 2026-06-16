@@ -78,6 +78,8 @@ onMounted(async () => {
   background-color: var(--vp-c-bg-soft);
   text-decoration: none;
   transition: border-color 0.25s, background-color 0.25s;
+  /* space from the appearance toggle that precedes it in the nav */
+  margin-left: 12px;
 }
 .gh-star:hover {
   border-color: var(--vp-c-brand-1);
