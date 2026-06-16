@@ -28,7 +28,7 @@ export default {
   Layout() {
     return h(DefaultTheme.Layout, null, {
       'home-hero-image': () => h(HeroColorPicker),
-      'home-hero-actions-after': () => h(GitHubStarButton)
+      'nav-bar-content-after': () => h(GitHubStarButton)
     })
   }
 }

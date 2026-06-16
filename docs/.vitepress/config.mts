@@ -55,10 +55,6 @@ export default defineConfig({
       }
     ],
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/olekspolk/vuelor' }
-    ],
-
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2025'
