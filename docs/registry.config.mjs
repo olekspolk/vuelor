@@ -54,11 +54,14 @@ export const THEME_VARS = {
 }
 
 export const DOCS_NOTE =
-  'Tailwind v4 (shadcn-vue default): the required vuelor-* tokens are installed automatically via ' +
-  'the color-picker-theme registry dependency. Tailwind v3 only: add ' +
-  "'./node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array so the " +
-  'vuelor-* utility classes are not purged. Non-Tailwind projects: set styling="vanillacss" on ' +
-  "ColorPickerRoot and import '@vuelor/picker/style.css'."
+  'Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the ' +
+  'color-picker-theme dependency, but you must ALSO add ' +
+  '`@source "../node_modules/@vuelor/picker";` to your global CSS (adjust the relative path to ' +
+  "where your CSS entry file lives) so Tailwind scans the picker's classes — without it the canvas " +
+  'and sliders get purged. Tailwind v3: instead add ' +
+  "'./node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. " +
+  'Non-Tailwind projects: set styling="vanillacss" on ColorPickerRoot and import ' +
+  "'@vuelor/picker/style.css'."
 
 /** Map an example .vue filename to its registry item name ("ColorPickerMini.vue" -> "color-picker-mini"). */
 export function itemNameForFile(file) {
