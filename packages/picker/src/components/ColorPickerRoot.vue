@@ -29,7 +29,9 @@ export interface ColorPickerRootProps {
   styling?: 'tailwindcss' | 'vanillacss' | 'unstyled',
   disabled?: boolean,
   defaultValue?: string,
-  modelValue: ModelValue,
+  // Optional: withDefaults falls back to null when a consumer omits it, so
+  // uncontrolled usage (e.g. <ColorPickerRoot /> with no v-model) doesn't warn.
+  modelValue?: ModelValue,
   format?: Format
 }
 
