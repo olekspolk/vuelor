@@ -60,7 +60,7 @@ const swatches = ref<string[]>([
   >
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">
-      <ColorPickerEyeDropper>
+      <ColorPickerEyeDropper type="button" aria-label="Pick color from screen">
         <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
           <path
             fill="currentColor"
@@ -81,10 +81,10 @@ const swatches = ref<string[]>([
         default-value="hex"
       >
         <TabsList class="w-full grid grid-cols-4 items-center justify-center rounded-[7px] bg-vuelor-input p-0.5">
-          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hex">Hex</TabsTrigger>
-          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="rgb">RGB</TabsTrigger>
-          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hsl">HSL</TabsTrigger>
-          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-white data-[state=active]:shadow" value="hsb">HSB</TabsTrigger>
+          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-vuelor-surface data-[state=active]:shadow" value="hex">Hex</TabsTrigger>
+          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-vuelor-surface data-[state=active]:shadow" value="rgb">RGB</TabsTrigger>
+          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-vuelor-surface data-[state=active]:shadow" value="hsl">HSL</TabsTrigger>
+          <TabsTrigger class="h-6 inline-flex items-center justify-center whitespace-nowrap rounded-[5px] px-1 py-0.5 text-[10px] font-medium focus-within:outline-1 focus-within:outline-vuelor-primary disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-vuelor-surface data-[state=active]:shadow" value="hsb">HSB</TabsTrigger>
         </TabsList>
         <TabsContent class="mt-2" value="hex">
           <ColorPickerInputHex />
@@ -102,7 +102,10 @@ const swatches = ref<string[]>([
     </div>
     <div class="border-t -mx-4 px-3 pt-2 grid grid-cols-9">
       <ColorPickerSwatch
-        v-for="color in swatches"
+        v-for="(color, index) in swatches"
+        :key="index"
+        type="button"
+        :aria-label="`Select color ${color}`"
         :value="color"
         class="m-1"
       />
