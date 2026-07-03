@@ -697,7 +697,7 @@ const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-
                     align="start"
                     :sideOffset="STOP_POPOVER_SIDE_OFFSET"
                     data-vuelor-docs
-                    class="bg-vuelor-surface w-60 z-10 rounded-lg shadow-vuelor-card"
+                    class="bg-vuelor-surface w-60 z-50 rounded-lg shadow-vuelor-card"
                   >
                     <ColorPicker />
                   </PopoverContent>
