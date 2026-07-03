@@ -43,15 +43,14 @@ function handleHexInput(e: Event) {
     target.value = hexValue.value as string
     return
   }
+  // The hex field shows only the 6 RGB digits — the sibling opacity field owns
+  // alpha — and parseHex forces a=1 for 3/6-digit input. So a plain edit must
+  // keep the existing alpha; only an explicitly typed 4/8-digit value sets it.
+  const digits = target.value.trim().replace('#', '')
+  const typedAlpha = digits.length === 4 || digits.length === 8
   if (hasVModel.value) {
-    // The hex field edits RGB only — the sibling opacity field owns alpha and
-    // this input shows just the 6 RGB digits. parseHex forces a=1 for 3/6-digit
-    // input, so preserve the bound value's alpha unless the user explicitly
-    // typed an alpha component (4/8-digit). Reading the byte back through
-    // parseHex (not getAlphaFromHexString, which quantizes to whole percents)
-    // keeps a no-op blur bit-exact.
-    const digits = target.value.trim().replace('#', '')
-    const typedAlpha = digits.length === 4 || digits.length === 8
+    // Read the bound alpha back via parseHex (not getAlphaFromHexString, which
+    // quantizes to whole percents) so a no-op blur stays bit-exact.
     const current = props.modelValue ? parseHex(props.modelValue) : null
     const a = typedAlpha ? rgba.a : current?.a ?? 1
     const next = RGBAtoHexa({ ...rgba, a })
@@ -61,7 +60,13 @@ function handleHexInput(e: Event) {
       target.value = hexValue.value as string
     }
   } else {
-    rootContext.rgba.value = rgba
+    // Write RGB only (the rgb setter leaves alpha untouched); apply a typed
+    // alpha through the rgba setter.
+    if (typedAlpha) {
+      rootContext.rgba.value = rgba
+    } else {
+      rootContext.rgb.value = { r: rgba.r, g: rgba.g, b: rgba.b }
+    }
     rootContext.commitValue()
   }
 }
