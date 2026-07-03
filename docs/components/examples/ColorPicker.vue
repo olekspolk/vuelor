@@ -15,7 +15,7 @@ import {
   type ColorPickerRootEmits
 } from '@vuelor/picker'
 
-import Select from '../common/Select.vue'
+import ColorPickerSelect from '../common/ColorPickerSelect.vue'
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -45,7 +45,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
   >
     <ColorPickerCanvas :type="canvasType" />
     <div class="flex items-center gap-3">
-      <ColorPickerEyeDropper>
+      <ColorPickerEyeDropper type="button" aria-label="Pick color from screen">
         <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
           <path
             fill="currentColor"
@@ -61,7 +61,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <Select
+      <ColorPickerSelect
         v-model="format"
         class="w-[56px]"
         label="Color Format"

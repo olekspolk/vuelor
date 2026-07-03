@@ -36,7 +36,7 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
     :ui="{
       shared: { thumb: 'border-2 h-3 w-3' },
       slider: { track: 'h-3' },
-      input: { item: 'bg-white', field: 'max-w-16' }
+      input: { item: 'bg-vuelor-surface', field: 'max-w-16' }
     }"
     v-bind="forwarded"
   >
@@ -44,7 +44,11 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
       <ColorPickerInputHex class="w-52 shadow bg-vuelor-input rounded-[5px]" >
         <template #before>
           <PopoverTrigger as-child>
-            <ColorPickerSwatch :value="colorPicker?.color.hexa.value ?? '#B63DDAFF'" />
+            <ColorPickerSwatch
+              type="button"
+              aria-label="Toggle color picker"
+              :value="colorPicker?.color.hexa.value ?? '#B63DDAFF'"
+            />
           </PopoverTrigger>
         </template>
       </ColorPickerInputHex>
@@ -54,11 +58,11 @@ const colorPicker = useTemplateRef<typeof ColorPickerRoot>('colorPicker')
           align="start"
           :sideOffset="5"
           :alignOffset="-4"
-          class="bg-white rounded-[5px] shadow-vuelor-card"
+          class="bg-vuelor-surface rounded-[5px] shadow-vuelor-card"
         >
           <ColorPickerCanvas :ui="{ root: 'w-52 rounded-none rounded-t-[5px]' }" />
           <div class="p-3 flex items-center gap-3">
-            <ColorPickerEyeDropper>
+            <ColorPickerEyeDropper type="button" aria-label="Pick color from screen">
               <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"

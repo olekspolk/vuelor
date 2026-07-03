@@ -39,8 +39,8 @@ npx shadcn-vue@latest add @vuelor/color-picker
 
 That single command:
 
-- copies the example component (and any helpers it uses, e.g. a `Select`) into your `components` directory;
-- installs the npm dependencies it needs (`@vuelor/picker`, `reka-ui`, and for the gradient editor `@vueuse/core` + `tailwind-merge`);
+- copies the example component (and any helpers it uses, e.g. a `ColorPickerSelect`) into your `components` directory;
+- installs the npm dependencies it needs (`@vuelor/picker`, `reka-ui`, and for the gradient editor `@vueuse/core`);
 - adds the required `vuelor-*` design tokens to your CSS via the `color-picker-theme` dependency.
 
 You can add several at once: `npx shadcn-vue@latest add @vuelor/color-picker @vuelor/color-picker-gradient`.

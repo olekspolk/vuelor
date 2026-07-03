@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
-import { twMerge } from 'tailwind-merge'
-import { createReusableTemplate, useMediaQuery } from '@vueuse/core'
+import { createReusableTemplate, useMediaQuery, useMounted } from '@vueuse/core'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
 import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
@@ -10,12 +9,16 @@ import { ColorPickerRoot, ColorPickerCanvas, ColorPickerEyeDropper, ColorPickerS
 import { ColorPickerSliderHue, ColorPickerSliderAlpha } from '@vuelor/picker'
 import { HexaToRGBA, RGBAtoHexa, useVModel } from '@vuelor/picker'
 
-import Select from '../common/Select.vue'
+import ColorPickerSelect from '../common/ColorPickerSelect.vue'
 import GradientStopInput from '../common/GradientStopInput.vue'
 
 const [DefineColorPickerTemplate, ColorPicker] = createReusableTemplate()
 
 const isDesktop = useMediaQuery('(min-width: 640px)')
+// The media query resolves only in the browser; gating the mobile-only picker
+// on mounted keeps server and first client render identical (no hydration
+// mismatch) while still unmounting the duplicate instance on desktop.
+const isMounted = useMounted()
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -25,6 +28,13 @@ const INPUTS = {
 }
 
 type ModelValue = string | null
+type Format = keyof typeof INPUTS
+
+interface GradientStop {
+  id: number
+  position: number
+  color: string
+}
 
 interface Props {
   class?: string
@@ -39,12 +49,17 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: ModelValue): void
+  (e: 'close'): void
 }>()
 
-const format = ref<'Hex' | 'RGB' | 'HSL' | 'HSB'>('Hex')
-const formatOptions = ['Hex', 'RGB', 'HSL', 'HSB']
+const format = ref<Format>('Hex')
+const formatOptions = Object.keys(INPUTS)
 
-const swatches = ref<string[]>([
+function handleFormatChange (value: string) {
+  if (value in INPUTS) format.value = value as Format
+}
+
+const swatches = [
   '#00C3D0FF',
   '#00C8B3FF',
   '#34C759FF',
@@ -63,7 +78,7 @@ const swatches = ref<string[]>([
   '#FF2D55FF',
   '#FF2D5525',
   '#AC7F5EFF'
-])
+]
 
 const canvasType = computed<'HSL' | 'HSV'>(() => {
   return format.value === 'HSL' ? 'HSL' : 'HSV'
@@ -72,146 +87,362 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
 const color = ref<string | null>(null)
 const mode = ref<'color' | 'gradient'>('color')
 
-const gradientType = ref('Linear')
-const gradientTypeOptions = ['Linear', 'Radial', 'Conic']
-
-const gradientAngle = ref(90)
-const gradientStops = ref([0, 33, 66, 100])
-const gradientSelectedStopIndex = ref(0)
-const gradientColors = ref(['#FF98C2FF', '#4DC1FFFF', '#D082E8FF', '#FFFA7AFF'])
-
-function parseStops(stopsStr: string): { colors: string[], stops: number[] } | null {
-  const colors: string[] = []
-  const positions: number[] = []
-  const re = /(#[0-9A-Fa-f]{8})\s+(\d+)%/g
-  let match: RegExpExecArray | null
-  while ((match = re.exec(stopsStr)) !== null) {
-    colors.push(match[1].toUpperCase())
-    positions.push(parseInt(match[2], 10))
+function handleModeChange (value: string | number) {
+  if (value !== 'color' && value !== 'gradient') return
+  // Entering the color tab with no solid color yet: seed it from the selected
+  // stop so the flip doesn't emit null (or the engine default) to the parent.
+  if (value === 'color' && color.value === null) {
+    color.value = selectedStop.value.color
   }
-  return colors.length >= 2 ? { colors, stops: positions } : null
+  mode.value = value
 }
 
-function applyModelValue(value: ModelValue): void {
-  if (!value) return
+const GRADIENT_TYPES = ['Linear', 'Radial', 'Conic'] as const
+type GradientType = (typeof GRADIENT_TYPES)[number]
 
-  // Plain hexa color (color mode)
-  if (/^#[0-9A-Fa-f]{8}$/.test(value)) {
+const gradientType = ref<GradientType>('Linear')
+const gradientTypeOptions = [...GRADIENT_TYPES]
+
+function handleGradientTypeChange (value: string) {
+  if ((GRADIENT_TYPES as readonly string[]).includes(value)) {
+    gradientType.value = value as GradientType
+  }
+}
+
+const gradientAngle = ref(90)
+
+const MIN_GRADIENT_STOPS = 2
+const MAX_GRADIENT_STOPS = 8
+
+let stopId = 0
+function createStop (position: number, color: string): GradientStop {
+  return { id: stopId++, position, color }
+}
+
+// Stops live in one array of { id, position, color } kept sorted by position:
+// colors can never detach from their positions, and the selection tracks an id
+// so reordering never retargets it.
+const gradientStops = ref<GradientStop[]>([
+  createStop(0, '#FF98C2FF'),
+  createStop(33, '#4DC1FFFF'),
+  createStop(66, '#D082E8FF'),
+  createStop(100, '#FFFA7AFF')
+])
+
+const gradientSelectedStopId = ref(gradientStops.value[0]!.id)
+
+const selectedStop = computed<GradientStop>(() => {
+  return gradientStops.value.find((stop) => stop.id === gradientSelectedStopId.value) ?? gradientStops.value[0]!
+})
+
+function sortStops () {
+  gradientStops.value = [...gradientStops.value].sort((a, b) => a.position - b.position)
+}
+
+/** Expand #RGB / #RGBA / #RRGGBB to the canonical #RRGGBBAA form. */
+function normalizeHexa (raw: string): string | null {
+  let hex = raw.startsWith('#') ? raw.slice(1) : raw
+  if (/^[0-9a-f]{3,4}$/i.test(hex)) hex = hex.split('').map((c) => c + c).join('')
+  if (/^[0-9a-f]{6}$/i.test(hex)) hex += 'FF'
+  return /^[0-9a-f]{8}$/i.test(hex) ? `#${hex.toUpperCase()}` : null
+}
+
+// Accepted stop grammar: comma-separated `#hex [position%]` segments, hex in
+// 3/4/6/8-digit form, decimal positions rounded to integers, omitted positions
+// interpolated like CSS. All-or-nothing: one bad segment rejects the whole
+// list, so a partial parse can never silently drop stops.
+function parseStops (stopsStr: string): GradientStop[] | null {
+  const segments = stopsStr.split(',').map((segment) => segment.trim())
+  if (segments.length < MIN_GRADIENT_STOPS) return null
+
+  const parsed: { color: string, position: number | null }[] = []
+  for (const segment of segments) {
+    const match = segment.match(/^(#[0-9a-f]{3,8})(?:\s+(-?\d+(?:\.\d+)?)%)?$/i)
+    if (!match) return null
+    const color = normalizeHexa(match[1]!)
+    if (!color) return null
+    parsed.push({ color, position: match[2] === undefined ? null : parseFloat(match[2]!) })
+  }
+
+  // CSS defaulting rules: first stop at 0%, last at 100%, gaps spread evenly,
+  // and a position never below the one before it.
+  parsed[0]!.position ??= 0
+  parsed[parsed.length - 1]!.position ??= 100
+  for (let i = 1; i < parsed.length - 1; i++) {
+    if (parsed[i]!.position !== null) continue
+    let next = i
+    while (parsed[next]!.position === null) next++
+    const start = parsed[i - 1]!.position!
+    const step = (parsed[next]!.position! - start) / (next - i + 1)
+    for (let j = i; j < next; j++) parsed[j]!.position = start + step * (j - i + 1)
+  }
+
+  let previous = 0
+  return parsed.map(({ color, position }) => {
+    previous = Math.max(previous, Math.min(100, Math.max(0, Math.round(position!))))
+    return createStop(previous, color)
+  })
+}
+
+function normalizeAngle (raw: string): number {
+  return ((Math.round(parseFloat(raw)) % 360) + 360) % 360
+}
+
+function applyStops (stops: GradientStop[]): void {
+  gradientStops.value = stops
+  gradientSelectedStopId.value = stops[0]!.id
+  color.value ??= stops[0]!.color
+}
+
+function warnUnsupported (value: string): void {
+  // Locally-typed access: consumers without vite/client ambient types would
+  // fail typecheck on the Vite-specific `import.meta.env`.
+  const env = (import.meta as { env?: { DEV?: boolean } }).env
+  if (env?.DEV) {
+    console.warn(
+      `[ColorPickerWithGradient] Unsupported modelValue "${value}". Accepted: #hex colors and ` +
+      'linear/radial/conic gradients with #hex stops, e.g. "linear-gradient(90deg, #FF0000FF 0%, #0000FFFF 100%)".'
+    )
+  }
+}
+
+function applyModelValue (value: ModelValue): void {
+  if (!value) return
+  const input = value.trim()
+
+  // Plain hex color (color mode)
+  if (input.startsWith('#')) {
+    const hexa = normalizeHexa(input)
+    if (!hexa) return warnUnsupported(value)
     mode.value = 'color'
-    color.value = value
+    color.value = hexa
     return
   }
 
   // linear-gradient(<angle>deg, <stops>)
-  const linearMatch = value.match(/^linear-gradient\((\d+)deg,\s*(.+)\)$/)
+  const linearMatch = input.match(/^linear-gradient\(\s*(-?\d+(?:\.\d+)?)deg\s*,\s*(.+)\)$/i)
   if (linearMatch) {
-    const parsed = parseStops(linearMatch[2])
-    if (!parsed) return
+    const stops = parseStops(linearMatch[2]!)
+    if (!stops) return warnUnsupported(value)
     mode.value = 'gradient'
     gradientType.value = 'Linear'
-    gradientAngle.value = parseInt(linearMatch[1], 10)
-    gradientColors.value = parsed.colors
-    gradientStops.value = parsed.stops
-    gradientSelectedStopIndex.value = 0
+    gradientAngle.value = normalizeAngle(linearMatch[1]!)
+    applyStops(stops)
     return
   }
 
   // radial-gradient(circle at center, <stops>)
-  const radialMatch = value.match(/^radial-gradient\(circle at center,\s*(.+)\)$/)
+  const radialMatch = input.match(/^radial-gradient\(\s*circle\s+at\s+center\s*,\s*(.+)\)$/i)
   if (radialMatch) {
-    const parsed = parseStops(radialMatch[1])
-    if (!parsed) return
+    const stops = parseStops(radialMatch[1]!)
+    if (!stops) return warnUnsupported(value)
     mode.value = 'gradient'
     gradientType.value = 'Radial'
-    gradientColors.value = parsed.colors
-    gradientStops.value = parsed.stops
-    gradientSelectedStopIndex.value = 0
+    applyStops(stops)
     return
   }
 
   // conic-gradient(from <angle>deg, <stops>)
-  const conicMatch = value.match(/^conic-gradient\(from (\d+)deg,\s*(.+)\)$/)
+  const conicMatch = input.match(/^conic-gradient\(\s*from\s+(-?\d+(?:\.\d+)?)deg\s*,\s*(.+)\)$/i)
   if (conicMatch) {
-    const parsed = parseStops(conicMatch[2])
-    if (!parsed) return
+    const stops = parseStops(conicMatch[2]!)
+    if (!stops) return warnUnsupported(value)
     mode.value = 'gradient'
     gradientType.value = 'Conic'
-    gradientAngle.value = parseInt(conicMatch[1], 10)
-    gradientColors.value = parsed.colors
-    gradientStops.value = parsed.stops
-    gradientSelectedStopIndex.value = 0
+    gradientAngle.value = normalizeAngle(conicMatch[1]!)
+    applyStops(stops)
+    return
   }
+
+  warnUnsupported(value)
 }
 
 const externalModel = useVModel(props, emit, applyModelValue)
 
 const currentColor = computed<ModelValue>({
   get: () => {
-    return mode.value === 'color'
-      ? color.value
-      : gradientColors.value[gradientSelectedStopIndex.value]
+    return mode.value === 'color' ? color.value : selectedStop.value.color
   },
-  set: (value: ModelValue) => {
+  set: (value) => {
+    if (value === null) return
     if (mode.value === 'color') {
-      color.value = value as string
+      color.value = value
     } else {
-      gradientColors.value[gradientSelectedStopIndex.value] = value as string
+      // @vuelor/picker >= 1.0.2 round-trips alpha bit-exact, so a selection
+      // echo equals the stored color and this assignment is a no-op.
+      selectedStop.value.color = value
     }
   }
 })
 
+function handleSelectStop (id: number) {
+  if (props.disabled) return
+  gradientSelectedStopId.value = id
+}
+
+// Thumb events resolve the stop by index at event time: reka refocuses the
+// thumb at the crossed index before Vue re-renders, so the render closure's
+// `stop` can be one sort behind.
+function handleSelectStopAt (index: number) {
+  const stop = gradientStops.value[index]
+  if (stop) handleSelectStop(stop.id)
+}
+
+// The stop currently being moved by pointer OR keyboard. reka's mid-move focus
+// handoff (when a thumb crosses a neighbour) fires before it updates the model,
+// so focus-driven selection reads pre-sort state and must be ignored while a
+// move is live — this id keeps the actively-moved stop identified across the
+// handoff. It also breaks position ties in handleSliderChange: when the moved
+// stop sits exactly on top of another, the position diff alone can't tell which
+// of the two moved.
+//
+// Set on pointerdown / arrow keydown (before reka reorders), cleared on
+// pointerup / keyup. Deliberately NOT cleared on blur or value-commit: reka
+// fires both DURING the crossing handoff (blur on the old thumb, valueCommit
+// before the focus + model update), so clearing there would re-null the id
+// mid-crossing and reintroduce the mis-selection.
+let activeStopId: number | null = null
+
+// reka's thumb-moving keys (arrows + page + home/end); other keys leave the
+// stop unmoved so they must not mark it active.
+const SLIDER_KEYS = new Set([
+  'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+  'PageUp', 'PageDown', 'Home', 'End'
+])
+
+function handleThumbPointerDown (index: number) {
+  handleSelectStopAt(index)
+  activeStopId = gradientStops.value[index]?.id ?? null
+}
+
+function handleThumbKeyDown (index: number, event: KeyboardEvent) {
+  if (!SLIDER_KEYS.has(event.key)) return
+  // Runs in the thumb's target phase, before reka's slider keydown handler
+  // reorders, so gradientStops[index] is still the thumb the user is arrowing.
+  activeStopId = gradientStops.value[index]?.id ?? null
+}
+
+function handleThumbFocus (index: number) {
+  // Only a genuine Tab focus (no move in progress) selects the focused stop;
+  // during a crossing, reka's focus handoff must not change the selection.
+  if (activeStopId === null) handleSelectStopAt(index)
+}
+
+function handleInteractionEnd () {
+  activeStopId = null
+}
+
+function handleStopPositionChange (id: number, position: number) {
+  const stop = gradientStops.value.find((s) => s.id === id)
+  if (!stop) return
+  stop.position = position
+  // Typing a position past a neighbour re-sorts the pairs together, keeping
+  // the sorted invariant the slider and serializer rely on.
+  sortStops()
+}
+
+// The engine's hex/opacity fields own alpha preservation and only emit on a
+// genuine change (@vuelor/picker >= 1.0.2), so the stop takes the value as-is.
+function handleStopColorChange (id: number, value: string) {
+  const stop = gradientStops.value.find((s) => s.id === id)
+  if (stop) stop.color = value
+}
+
 function addStop () {
-    const lastIndex = gradientStops.value.length - 1
-    const prevIndex = gradientStops.value.length > 1 ? gradientStops.value.length - 2 : 0
+  if (props.disabled || gradientStops.value.length >= MAX_GRADIENT_STOPS) return
 
-    const newStop = gradientStops.value.length > 1
-      ? ((gradientStops.value[lastIndex] + gradientStops.value[prevIndex]) / 2)
-      : gradientStops.value[lastIndex] <= 50 ? 100 : 0
+  // Split the segment to the right of the selected stop (to the left when the
+  // selected stop is the last one) and make the new midpoint stop active.
+  const stops = gradientStops.value
+  const index = Math.max(0, Math.min(
+    stops.findIndex((stop) => stop.id === gradientSelectedStopId.value),
+    stops.length - 2
+  ))
+  const a = stops[index]!
+  const b = stops[index + 1]!
 
-    const colorA = HexaToRGBA(gradientColors.value[prevIndex])
-    const colorB = HexaToRGBA(gradientColors.value[lastIndex])
-
-    const newColor = RGBAtoHexa({
+  const colorA = HexaToRGBA(a.color)
+  const colorB = HexaToRGBA(b.color)
+  const stop = createStop(
+    Math.round((a.position + b.position) / 2),
+    RGBAtoHexa({
       r: (colorA.r + colorB.r) / 2,
       g: (colorA.g + colorB.g) / 2,
       b: (colorA.b + colorB.b) / 2,
       a: (colorA.a + colorB.a) / 2
     })
+  )
 
-    const insertIndex = (gradientStops.value.length === 1) ? 1 : lastIndex
-    gradientStops.value.splice(insertIndex, 0, Math.round(newStop))
-    gradientStops.value = gradientStops.value.sort((a, b) => a - b)
-    gradientColors.value.splice(insertIndex, 0, newColor)
-};
-
-function removeStop (index: number) {
-  if (gradientStops.value.length < 2) return
-  gradientSelectedStopIndex.value = index > 0 ? index - 1 : 0
-  gradientStops.value.splice(index, 1)
-  gradientColors.value.splice(index, 1)
+  stops.splice(index + 1, 0, stop)
+  gradientSelectedStopId.value = stop.id
 }
 
-function handleSelectStop (index: number) {
-  gradientSelectedStopIndex.value = index
+function removeStop (id: number) {
+  if (props.disabled || gradientStops.value.length <= MIN_GRADIENT_STOPS) return
+  const index = gradientStops.value.findIndex((stop) => stop.id === id)
+  if (index === -1) return
+  gradientStops.value.splice(index, 1)
+  if (gradientSelectedStopId.value === id) {
+    gradientSelectedStopId.value = gradientStops.value[Math.max(0, index - 1)]!.id
+  }
 }
 
 function handleReverseGradient () {
-  gradientColors.value.reverse()
+  if (props.disabled) return
+  // Mirror positions as well as colors so unevenly spaced stops reverse
+  // correctly; the reverse() keeps the array sorted ascending afterwards.
+  gradientStops.value = gradientStops.value
+    .map((stop) => ({ ...stop, position: 100 - stop.position }))
+    .reverse()
 }
 
 function handleRotateGradient () {
+  if (props.disabled) return
   gradientAngle.value = (gradientAngle.value + 90) % 360
 }
 
+const sliderPositions = computed(() => gradientStops.value.map((stop) => stop.position))
+
+// reka-ui re-sorts the value array whenever a thumb crosses another, so the
+// emitted array can't be applied by index. Diff it against the current
+// positions to find the moved value and give it to the right stop.
+function handleSliderChange (positions: number[] | undefined) {
+  if (!positions || props.disabled || positions.length !== gradientStops.value.length) return
+
+  const delta = new Map<number, number>()
+  for (const position of positions) delta.set(position, (delta.get(position) ?? 0) + 1)
+  for (const position of sliderPositions.value) delta.set(position, (delta.get(position) ?? 0) - 1)
+
+  let from: number | undefined
+  let to: number | undefined
+  for (const [position, count] of delta) {
+    if (count < 0) from = position
+    if (count > 0) to = position
+  }
+  if (from === undefined || to === undefined) return
+
+  const candidates = gradientStops.value.filter((stop) => stop.position === from)
+  const moved = candidates.find((stop) => stop.id === activeStopId) ??
+    candidates.find((stop) => stop.id === gradientSelectedStopId.value) ??
+    candidates[0]
+  if (!moved) return
+  moved.position = to
+  // Moving a thumb (pointer or keyboard) selects its stop. This must happen here
+  // rather than in a thumb focus handler: reka focuses the crossed thumb before
+  // it updates the model, so focus-driven selection would read pre-sort state.
+  gradientSelectedStopId.value = moved.id
+  sortStops()
+}
+
 const gradientStopsList = computed(() => {
-  return gradientStops.value.map((value, index) => `${gradientColors.value[index]} ${value}%`).join(', ')
+  return gradientStops.value.map((stop) => `${stop.color} ${stop.position}%`).join(', ')
 })
 
 const trackBackground = computed(() => {
   return `linear-gradient(to right, ${gradientStopsList.value})`
 })
 
-const modelValue = computed(() => {
+const modelValue = computed<ModelValue>(() => {
   if (mode.value === 'color') {
     return color.value
   }
@@ -221,17 +452,24 @@ const modelValue = computed(() => {
       return `radial-gradient(circle at center, ${gradientStopsList.value})`
     case 'Conic':
       return `conic-gradient(from ${gradientAngle.value}deg, ${gradientStopsList.value})`
-    case 'Linear':
     default:
       return `linear-gradient(${gradientAngle.value}deg, ${gradientStopsList.value})`
   }
 })
 
-watch(
-  modelValue,
-  (newValue) => { externalModel.value = newValue },
-  { immediate: true }
-)
+// No immediate flush: emitting during setup would overwrite the parent's value
+// with our defaults before it was parsed. The null guard keeps an untouched
+// color tab from nulling a bound model.
+watch(modelValue, (newValue) => {
+  if (newValue !== null) externalModel.value = newValue
+})
+
+// Position the stop popover to the left of the 240px-wide picker panel (w-60)
+// so it doesn't cover the stop list.
+const STOP_POPOVER_SIDE_OFFSET = 75
+const STOP_POPOVER_ALIGN_OFFSET = -100
+
+const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-vuelor-thumb rounded-[5px] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-vuelor-primary relative after:content-[\'\'] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px]'
 </script>
 
 <template>
@@ -246,7 +484,7 @@ watch(
       <div class="p-4 flex flex-col gap-2">
         <ColorPickerCanvas :type="canvasType" />
         <div class="flex items-center gap-3">
-          <ColorPickerEyeDropper>
+          <ColorPickerEyeDropper type="button" aria-label="Pick color from screen">
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -262,48 +500,67 @@ watch(
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <Select
-            v-model="format"
+          <ColorPickerSelect
+            :model-value="format"
             class="w-[56px]"
             label="Color format"
             placeholder="Format"
             :disabled="props.disabled"
             :options="formatOptions"
+            @update:model-value="handleFormatChange"
           />
           <component :is="INPUTS[format]" />
         </div>
       </div>
       <div class="border-t px-3 py-2 grid grid-cols-9">
         <ColorPickerSwatch
-          v-for="color in swatches"
-          :value="color"
+          v-for="(swatch, i) in swatches"
+          :key="i"
+          :value="swatch"
+          type="button"
+          :aria-label="`Select color ${swatch}`"
           class="m-1"
         />
       </div>
     </DefineColorPickerTemplate>
 
     <TabsRoot
-      v-model="mode"
-      default-value="color"
+      :model-value="mode"
+      @update:model-value="handleModeChange"
     >
       <div class="flex justify-between p-2 border-b">
         <TabsList class="flex gap-1">
-          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-vuelor-input" value="color">
+          <TabsTrigger
+            class="h-6 w-6 rounded-sm data-[state=active]:bg-vuelor-input"
+            value="color"
+            aria-label="Solid color"
+            :disabled="props.disabled"
+          >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path fill="#0000004d" d="M9 9h6v6H9z" />
-              <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3 7V9h6v6zM8 8.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z" />
+              <path fill="currentColor" fill-opacity="0.3" d="M9 9h6v6H9z" />
+              <path fill="currentColor" fill-opacity="0.9" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3 7V9h6v6zM8 8.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z" />
             </svg>
           </TabsTrigger>
-          <TabsTrigger class="h-6 w-6 rounded-sm data-[state=active]:bg-vuelor-input" value="gradient">
+          <TabsTrigger
+            class="h-6 w-6 rounded-sm data-[state=active]:bg-vuelor-input"
+            value="gradient"
+            aria-label="Gradient"
+            :disabled="props.disabled"
+          >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <path fill="#000000e6" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3.75.875a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m3.791.625a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m-1.458.875a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m0 3.12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.458 2.245a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m.625-3.865a.625.625 0 1 1-1.25 0 .625.625 0 0 1 1.25 0M8.875 15.99a.875.875 0 1 0 0-1.75.875.875 0 0 0 0 1.75m.875-4.115a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m5.75-1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m.5 2.623a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
+              <path fill="currentColor" fill-opacity="0.9" fill-rule="evenodd" clip-rule="evenodd" d="M8 7h8a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1M6 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2zm3.75.875a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m3.791.625a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m-1.458.875a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m0 3.12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.458 2.245a.625.625 0 1 0 0-1.25.625.625 0 0 0 0 1.25m.625-3.865a.625.625 0 1 1-1.25 0 .625.625 0 0 1 1.25 0M8.875 15.99a.875.875 0 1 0 0-1.75.875.875 0 0 0 0 1.75m.875-4.115a.875.875 0 1 1-1.75 0 .875.875 0 0 1 1.75 0m5.75-1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m.5 2.623a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
             </svg>
           </TabsTrigger>
         </TabsList>
 
-        <button class="h-6 w-6 rounded-[5px] hover:bg-vuelor-input focus:outline focus:outline-vuelor-primary">
+        <button
+          type="button"
+          aria-label="Close"
+          class="h-6 w-6 rounded-[5px] hover:bg-vuelor-input focus:outline focus:outline-vuelor-primary"
+          @click="emit('close')"
+        >
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path fill="#000000e6" d="M16.224 7.082a.501.501 0 0 1 .694.693l-.065.078L12.707 12l4.146 4.146.064.078a.5.5 0 0 1-.693.694l-.078-.065L12 12.706l-4.147 4.147a.5.5 0 1 1-.707-.707l4.147-4.147-4.147-4.146-.064-.078a.501.501 0 0 1 .693-.693l.078.064L12 11.293l4.146-4.147z" />
+            <path fill="currentColor" d="M16.224 7.082a.501.501 0 0 1 .694.693l-.065.078L12.707 12l4.146 4.146.064.078a.5.5 0 0 1-.693.694l-.078-.065L12 12.706l-4.147 4.147a.5.5 0 1 1-.707-.707l4.147-4.147-4.147-4.146-.064-.078a.501.501 0 0 1 .693-.693l.078.064L12 11.293l4.146-4.147z" />
           </svg>
         </button>
       </div>
@@ -312,21 +569,24 @@ watch(
         <ColorPicker />
       </TabsContent>
       <TabsContent class="pb-3" value="gradient">
-        <div class="sm:hidden border-b">
+        <div v-if="isMounted && !isDesktop" class="sm:hidden border-b">
           <ColorPicker />
         </div>
         <div class="h-12 pl-4 pr-2 flex items-center justify-between gap-2">
-          <Select
-            v-model="gradientType"
+          <ColorPickerSelect
+            :model-value="gradientType"
             class="w-24"
             label="Gradient type"
             placeholder="Type"
             :disabled="props.disabled"
             :options="gradientTypeOptions"
+            @update:model-value="handleGradientTypeChange"
           />
           <div class="flex items-center gap-1">
             <button
-              :disabled="gradientStops.length === 1"
+              type="button"
+              aria-label="Reverse gradient"
+              :disabled="props.disabled"
               class="rounded-[5px] enabled:hover:bg-vuelor-input disabled:opacity-50 focus:outline focus:outline-vuelor-primary"
               @click="handleReverseGradient"
             >
@@ -336,7 +596,9 @@ watch(
             </button>
 
             <button
-              :disabled="gradientType === 'Radial'"
+              type="button"
+              aria-label="Rotate gradient 90 degrees"
+              :disabled="props.disabled || gradientType === 'Radial'"
               class="rounded-[5px] enabled:hover:bg-vuelor-input disabled:opacity-50 focus:outline focus:outline-vuelor-primary"
               @click="handleRotateGradient"
             >
@@ -349,32 +611,44 @@ watch(
 
         <div class="pt-4 px-4">
           <SliderRoot
-            v-model="gradientStops"
+            :model-value="sliderPositions"
+            :disabled="props.disabled"
             class="relative flex items-center select-none touch-none"
-            thumbAlignment="overflow"
+            thumb-alignment="overflow"
+            @update:model-value="handleSliderChange"
           >
             <SliderTrack
               :style="{ background: trackBackground }"
               class="relative grow rounded-[5px] h-8 shadow-vuelor-inner"
             />
+            <!-- Thumbs are keyed by index on purpose: reka pairs each thumb with
+                 modelValue[registration order], so thumb elements must never
+                 reorder. Stop identity lives in the stops array instead. -->
             <SliderThumb
-              v-for="(_, i) in gradientStops.length"
-              aria-label="Stop"
-              :class="twMerge(['flex items-center justify-center w-6 h-6 -mt-8 bg-white drop-shadow-vuelor-thumb rounded-[5px] focus:outline-none relative after:content-[\'\'] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px] after:border-t-white', gradientSelectedStopIndex === i ? 'bg-vuelor-primary after:border-t-vuelor-primary' : ''])"
-              @pointerdown="handleSelectStop(i)"
+              v-for="(stop, i) in gradientStops"
+              :key="i"
+              :aria-label="`Gradient stop ${i + 1} of ${gradientStops.length}`"
+              :class="[THUMB_CLASS, gradientSelectedStopId === stop.id ? 'bg-vuelor-primary after:border-t-vuelor-primary' : 'bg-vuelor-surface after:border-t-vuelor-surface']"
+              @pointerdown="handleThumbPointerDown(i)"
+              @pointerup="handleInteractionEnd"
+              @keydown="handleThumbKeyDown(i, $event)"
+              @keyup="handleInteractionEnd"
+              @focus="handleThumbFocus(i)"
             >
               <ColorPickerSwatch
                 as="span"
-                class="w-3.5 h-3.5 border border-[#0000001a] rounded-sm"
-                :value="gradientColors[i]"
+                class="w-3.5 h-3.5 border border-vuelor-border rounded-sm"
+                :value="stop.color"
               />
             </SliderThumb>
           </SliderRoot>
         </div>
         <div class="h-8 pl-4 pr-2 mt-2 mb-1 flex items-center justify-between">
-          <span class="text-black text-[11px] font-bold">Stops</span>
+          <span class="text-[11px] font-bold">Stops</span>
           <button
-            :disabled="gradientStops.length > 7"
+            type="button"
+            aria-label="Add stop"
+            :disabled="props.disabled || gradientStops.length >= MAX_GRADIENT_STOPS"
             class="rounded-[5px] enabled:hover:bg-vuelor-input disabled:opacity-50 focus:outline focus:outline-vuelor-primary"
             @click="addStop"
           >
@@ -389,45 +663,54 @@ watch(
           </button>
         </div>
         <div
-          v-for="(_, index) in gradientStops"
-          :class="{ 'bg-[#e5f4ff]': gradientSelectedStopIndex === index }"
+          v-for="(stop, index) in gradientStops"
+          :key="stop.id"
+          :class="{ 'bg-vuelor-primary/10': gradientSelectedStopId === stop.id }"
           class="h-8 pl-4 pr-2 flex items-center gap-2"
-          @mousedown="handleSelectStop(index)"
+          @mousedown="handleSelectStop(stop.id)"
+          @focusin="handleSelectStop(stop.id)"
         >
-          <GradientStopInput v-model="gradientStops[index]" />
-          <ColorPickerInputHex class="flex-1" v-model="gradientColors[index]">
+          <GradientStopInput
+            :model-value="stop.position"
+            :label="`Stop ${index + 1} position`"
+            @update:model-value="handleStopPositionChange(stop.id, $event)"
+          />
+          <ColorPickerInputHex
+            class="flex-1"
+            :model-value="stop.color"
+            @update:model-value="handleStopColorChange(stop.id, $event)"
+          >
             <template #before>
-              <PopoverRoot v-if="isDesktop">
+              <PopoverRoot>
                 <PopoverTrigger as-child>
                   <ColorPickerSwatch
-                    :value="gradientColors[index]"
-                    @click="gradientSelectedStopIndex = index"
+                    :value="stop.color"
+                    type="button"
+                    :aria-label="`Edit stop ${index + 1} color`"
                   />
                 </PopoverTrigger>
-                <PopoverPortal>
+                <PopoverPortal v-if="isDesktop">
                   <PopoverContent
                     side="left"
                     align="start"
-                    :alignOffset="-100"
-                    :sideOffset="75"
+                    :alignOffset="STOP_POPOVER_ALIGN_OFFSET"
+                    :sideOffset="STOP_POPOVER_SIDE_OFFSET"
                     data-vuelor-docs
-                    class="bg-white w-60 z-10 rounded-lg shadow-vuelor-card"
+                    class="bg-vuelor-surface w-60 z-10 rounded-lg shadow-vuelor-card"
                   >
                     <ColorPicker />
                   </PopoverContent>
                 </PopoverPortal>
               </PopoverRoot>
-              <ColorPickerSwatch
-                v-else
-                :value="gradientColors[index]"
-                @click="gradientSelectedStopIndex = index"
-              />
             </template>
           </ColorPickerInputHex>
           <button
-            class="rounded-[5px] hover:bg-vuelor-input focus:outline focus:outline-vuelor-primary"
-            :style="{ visibility: gradientStops.length < 2 ? 'hidden' : undefined }"
-            @click="removeStop(index)"
+            type="button"
+            :aria-label="`Remove stop ${index + 1}`"
+            :disabled="props.disabled"
+            class="rounded-[5px] enabled:hover:bg-vuelor-input disabled:opacity-50 focus:outline focus:outline-vuelor-primary"
+            :style="{ visibility: gradientStops.length <= MIN_GRADIENT_STOPS ? 'hidden' : undefined }"
+            @click="removeStop(stop.id)"
             @pointerdown.prevent
           >
             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
