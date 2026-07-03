@@ -7,10 +7,13 @@ import { injectColorPickerContext } from './ColorPickerRoot.vue'
 
 const rootContext = injectColorPickerContext()
 
+// The slider works in whole percents (reka's default 0–100 range); the stored
+// alpha is a 0–1 float. Rounding only happens here on read, so a bound alpha
+// keeps full precision until the user actually drags the thumb.
 const alphaValue = computed({
-  get: () => [rootContext.alpha.value],
+  get: () => [Math.round(rootContext.alpha.value * 100)],
   set: ([value]: number[]) => {
-    rootContext.alpha.value = value as number
+    rootContext.alpha.value = (value as number) / 100
   },
 })
 

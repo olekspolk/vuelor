@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const rootContext = injectColorPickerContext()
 
-const { parseChannelValue, handleAlphaInput, toDisplay } = useChannelInput(
+const { parseChannelValue, handleAlphaInput, toDisplay, alphaDisplay } = useChannelInput(
   () => rootContext.hsv.value,
   (v) => { rootContext.hsv.value = v },
   { hueChannel: 'h' }
@@ -70,7 +70,7 @@ const ui = rootContext.uiSlots('input')
         type="text"
         name="opacity"
         aria-label="Opacity"
-        :value="rootContext.alpha.value"
+        :value="alphaDisplay"
         :disabled="rootContext.disabled.value"
         :class="ui.field(props.ui?.field)"
         @blur="handleAlphaInput"

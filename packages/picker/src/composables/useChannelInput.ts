@@ -1,3 +1,4 @@
+import { computed } from 'vue'
 import { injectColorPickerContext } from '../components/ColorPickerRoot.vue'
 import { clamp } from '../utils/helpers.ts'
 
@@ -34,17 +35,20 @@ export function useChannelInput<T extends Record<string, number>>(
     }
   }
 
+  // Alpha is stored as a 0–1 float but displayed and edited as a 0–100 percent.
+  const alphaDisplay = computed(() => Math.round(rootContext.alpha.value * 100))
+
   function handleAlphaInput(e: Event) {
     const target = e.target as HTMLInputElement
     const intValue = parseInt(target.value, 10)
-    const next = isNaN(intValue) ? rootContext.alpha.value : clamp(intValue, 0, 100)
-    if (rootContext.alpha.value !== next) {
-      rootContext.alpha.value = next
+    const next = isNaN(intValue) ? alphaDisplay.value : clamp(intValue, 0, 100)
+    if (alphaDisplay.value !== next) {
+      rootContext.alpha.value = next / 100
       rootContext.commitValue()
     } else {
       target.value = next.toString()
     }
   }
 
-  return { parseChannelValue, handleAlphaInput, toDisplay }
+  return { parseChannelValue, handleAlphaInput, toDisplay, alphaDisplay }
 }

@@ -33,7 +33,7 @@ const hexValue = computed(() => {
 const alphaValue = computed(() => {
   return hasVModel.value
     ? getAlphaFromHexString(props.modelValue as string)
-    : rootContext.alpha.value
+    : Math.round(rootContext.alpha.value * 100)
 })
 
 function handleHexInput(e: Event) {
@@ -44,7 +44,22 @@ function handleHexInput(e: Event) {
     return
   }
   if (hasVModel.value) {
-    emit('update:modelValue', RGBAtoHexa(rgba))
+    // The hex field edits RGB only — the sibling opacity field owns alpha and
+    // this input shows just the 6 RGB digits. parseHex forces a=1 for 3/6-digit
+    // input, so preserve the bound value's alpha unless the user explicitly
+    // typed an alpha component (4/8-digit). Reading the byte back through
+    // parseHex (not getAlphaFromHexString, which quantizes to whole percents)
+    // keeps a no-op blur bit-exact.
+    const digits = target.value.trim().replace('#', '')
+    const typedAlpha = digits.length === 4 || digits.length === 8
+    const current = props.modelValue ? parseHex(props.modelValue) : null
+    const a = typedAlpha ? rgba.a : current?.a ?? 1
+    const next = RGBAtoHexa({ ...rgba, a })
+    if (next !== props.modelValue) {
+      emit('update:modelValue', next)
+    } else {
+      target.value = hexValue.value as string
+    }
   } else {
     rootContext.rgba.value = rgba
     rootContext.commitValue()
@@ -54,11 +69,25 @@ function handleHexInput(e: Event) {
 function handleAlphaInput(e: Event) {
   const target = e.target as HTMLInputElement
   const intValue = parseInt(target.value, 10)
-  const value = isNaN(intValue)
-    ? rootContext.alpha.value
-    : clamp(intValue, 0, 100)
-  if (rootContext.alpha.value !== value) {
-    rootContext.alpha.value = value
+  if (hasVModel.value) {
+    const currentAlpha = alphaValue.value ?? 100
+    const value = isNaN(intValue) ? currentAlpha : clamp(intValue, 0, 100)
+    // Re-emitting the displayed percent would drift the stored alpha byte, so
+    // treat an unchanged percent (tab-through) as a no-op and only normalize
+    // the field; otherwise compose the bound RGB with the new alpha.
+    if (value === currentAlpha) {
+      target.value = value.toString()
+      return
+    }
+    const current = props.modelValue ? parseHex(props.modelValue) : null
+    const rgb = current ?? { r: 0, g: 0, b: 0, a: 1 }
+    emit('update:modelValue', RGBAtoHexa({ r: rgb.r, g: rgb.g, b: rgb.b, a: value / 100 }))
+    return
+  }
+  const currentPercent = Math.round(rootContext.alpha.value * 100)
+  const value = isNaN(intValue) ? currentPercent : clamp(intValue, 0, 100)
+  if (currentPercent !== value) {
+    rootContext.alpha.value = value / 100
     rootContext.commitValue()
   } else {
     target.value = value.toString()
