@@ -36,6 +36,11 @@ const REGISTRY_JSON = join(DOCS, 'registry.json')
 
 const THEME_ITEM = 'color-picker-theme'
 
+/** Strip docs-site-only markup (theme styling hooks) that must not ship in the registry. */
+function stripDocsOnlyAttrs(src) {
+  return src.replace(/^[ \t]*data-vuelor-docs[ \t]*\r?\n/gm, '').replace(/[ \t]+data-vuelor-docs(?=[\s>])/g, '')
+}
+
 /** Rewrite `../common/X.vue` imports to the @/registry alias; return the rewritten source + helper names. */
 function rewriteHelperImports(src, itemName) {
   const helpers = new Set()
@@ -65,7 +70,7 @@ function deriveDependencies(contents) {
 }
 
 function buildExampleItem(entry) {
-  const src = readFileSync(join(EXAMPLES, entry.file), 'utf8')
+  const src = stripDocsOnlyAttrs(readFileSync(join(EXAMPLES, entry.file), 'utf8'))
   const { rewritten, helpers } = rewriteHelperImports(src, entry.name)
 
   const itemDir = join(STYLE_DIR, entry.name)
@@ -79,7 +84,7 @@ function buildExampleItem(entry) {
   contents.push(rewritten)
 
   for (const helper of helpers) {
-    const helperSrc = readFileSync(join(COMMON, `${helper}.vue`), 'utf8')
+    const helperSrc = stripDocsOnlyAttrs(readFileSync(join(COMMON, `${helper}.vue`), 'utf8'))
     const { rewritten: helperRewritten } = rewriteHelperImports(helperSrc, entry.name)
     writeFileSync(join(itemDir, `${helper}.vue`), helperRewritten)
     files.push({ path: `registry/${STYLE}/${entry.name}/${helper}.vue`, type: 'registry:component' })
