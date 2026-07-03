@@ -5,7 +5,7 @@ Install any of these with `npx shadcn-vue@latest add @vuelor/<name>`. All exampl
 
 | `@vuelor/<name>` | Best for | Composes | Extra npm deps |
 | ---------------- | -------- | -------- | -------------- |
-| `color-picker` | A complete, general-purpose picker | Canvas, eyedropper, hue + alpha sliders, switchable HEX/RGB/HSL/HSB inputs (+ a `Select`) | — |
+| `color-picker` | A complete, general-purpose picker | Canvas, eyedropper, hue + alpha sliders, switchable HEX/RGB/HSL/HSB inputs (+ a `ColorPickerSelect`) | — |
 | `color-picker-mini` | The smallest usable picker | Canvas + hue slider | — |
 | `color-picker-mini-styled` | Showing `ui`-prop style overrides | Canvas + hue slider with custom slot classes | — |
 | `color-picker-mini-vertical` | Compact vertical layout | Canvas with vertical hue + alpha sliders | — |

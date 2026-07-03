@@ -220,7 +220,7 @@
           "type": "registry:component"
         },
         {
-          "path": "color-picker/Select.vue",
+          "path": "color-picker/ColorPickerSelect.vue",
           "type": "registry:component"
         }
       ],
@@ -345,7 +345,7 @@
           "type": "registry:component"
         },
         {
-          "path": "color-picker-gradient/Select.vue",
+          "path": "color-picker-gradient/ColorPickerSelect.vue",
           "type": "registry:component"
         },
         {

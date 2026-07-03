@@ -15,7 +15,7 @@ import {
   type ColorPickerRootEmits
 } from '@vuelor/picker'
 
-import Select from '@/registry/default/color-picker/Select.vue'
+import ColorPickerSelect from '@/registry/default/color-picker/ColorPickerSelect.vue'
 
 const INPUTS = {
   Hex: ColorPickerInputHex,
@@ -61,7 +61,7 @@ const canvasType = computed<'HSL' | 'HSV'>(() => {
       </div>
     </div>
     <div class="flex items-center gap-2">
-      <Select
+      <ColorPickerSelect
         v-model="format"
         class="w-[56px]"
         label="Color Format"

@@ -9,7 +9,7 @@ import { ColorPickerRoot, ColorPickerCanvas, ColorPickerEyeDropper, ColorPickerS
 import { ColorPickerSliderHue, ColorPickerSliderAlpha } from '@vuelor/picker'
 import { HexaToRGBA, RGBAtoHexa, useVModel } from '@vuelor/picker'
 
-import Select from '../common/Select.vue'
+import ColorPickerSelect from '../common/ColorPickerSelect.vue'
 import GradientStopInput from '../common/GradientStopInput.vue'
 
 const [DefineColorPickerTemplate, ColorPicker] = createReusableTemplate()
@@ -500,7 +500,7 @@ const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-
           </div>
         </div>
         <div class="flex items-center gap-2">
-          <Select
+          <ColorPickerSelect
             :model-value="format"
             class="w-[56px]"
             label="Color format"
@@ -573,7 +573,7 @@ const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-
           <ColorPicker />
         </div>
         <div class="h-12 pl-4 pr-2 flex items-center justify-between gap-2">
-          <Select
+          <ColorPickerSelect
             :model-value="gradientType"
             class="w-24"
             label="Gradient type"
