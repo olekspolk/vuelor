@@ -464,10 +464,11 @@ watch(modelValue, (newValue) => {
   if (newValue !== null) externalModel.value = newValue
 })
 
-// Position the stop popover to the left of the 240px-wide picker panel (w-60)
-// so it doesn't cover the stop list.
-const STOP_POPOVER_SIDE_OFFSET = 75
-const STOP_POPOVER_ALIGN_OFFSET = -100
+// The stop-color popover anchors to the panel (not the clicked stop swatch, which
+// sits low in the list), so it always opens tidily to the left of the panel and
+// top-aligned instead of hanging off — and over — the content below.
+const panelRef = ref<HTMLElement>()
+const STOP_POPOVER_SIDE_OFFSET = 12
 
 const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-vuelor-thumb rounded-[5px] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-vuelor-primary relative after:content-[\'\'] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px]'
 </script>
@@ -528,7 +529,7 @@ const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-
       :model-value="mode"
       @update:model-value="handleModeChange"
     >
-      <div class="flex justify-between p-2 border-b">
+      <div ref="panelRef" class="flex justify-between p-2 border-b">
         <TabsList class="flex gap-1">
           <TabsTrigger
             class="h-6 w-6 rounded-sm data-[state=active]:bg-vuelor-input"
@@ -691,9 +692,9 @@ const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-
                 </PopoverTrigger>
                 <PopoverPortal v-if="isDesktop">
                   <PopoverContent
+                    :reference="panelRef"
                     side="left"
                     align="start"
-                    :alignOffset="STOP_POPOVER_ALIGN_OFFSET"
                     :sideOffset="STOP_POPOVER_SIDE_OFFSET"
                     class="bg-vuelor-surface w-60 z-10 rounded-lg shadow-vuelor-card"
                   >
