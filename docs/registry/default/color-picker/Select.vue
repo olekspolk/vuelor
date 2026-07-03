@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import type { AcceptableValue } from 'reka-ui'
 import {
-  AcceptableValue,
   SelectContent,
   SelectItem,
   SelectItemIndicator,
@@ -22,7 +22,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: AcceptableValue): any
+  (e: 'update:modelValue', value: string): void
 }>()
 </script>
 
@@ -30,7 +30,7 @@ const emit = defineEmits<{
   <SelectRoot
     :disabled="props.disabled"
     :modelValue="props.modelValue"
-    @update:modelValue="(value: AcceptableValue) => emit('update:modelValue', value)"
+    @update:modelValue="(value: AcceptableValue) => emit('update:modelValue', value as string)"
   >
     <SelectTrigger
       :aria-label="props.label"

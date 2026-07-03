@@ -6,7 +6,10 @@
 
 export const STYLE = 'default'
 export const NAMESPACE = '@vuelor'
-export const PICKER_VERSION = '^1.0.1'
+// NOTE: bumped ahead of the npm publish — the gradient item's hex/opacity
+// alpha handling depends on @vuelor/picker 1.0.2. Publish the package before
+// deploying the registry so installs can resolve it.
+export const PICKER_VERSION = '^1.0.2'
 export const AUTHOR = 'Vuelor <https://vuelor.dev>'
 export const HOMEPAGE = 'https://vuelor.dev'
 

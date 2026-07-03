@@ -5,7 +5,7 @@
   "author": "Vuelor <https://vuelor.dev>",
   "description": "Minimal color picker — a saturation/brightness canvas with a hue slider.",
   "dependencies": [
-    "@vuelor/picker@^1.0.1",
+    "@vuelor/picker@^1.0.2",
     "reka-ui"
   ],
   "registryDependencies": [
@@ -19,7 +19,7 @@
     }
   ],
   "meta": {
-    "vuelorVersion": "^1.0.1",
+    "vuelorVersion": "^1.0.2",
     "stylingMode": "tailwindcss"
   },
   "docs": "Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the color-picker-theme dependency, but you must ALSO add `@source \"../node_modules/@vuelor/picker\";` to your global CSS (adjust the relative path to where your CSS entry file lives) so Tailwind scans the picker's classes — without it the canvas and sliders get purged. Tailwind v3: instead add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
