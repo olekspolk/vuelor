@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue'
 import { createReusableTemplate, useMediaQuery, useMounted } from '@vueuse/core'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
-import { PopoverContent, PopoverPortal, PopoverRoot, PopoverTrigger } from 'reka-ui'
+import { PopoverContent, PopoverPortal, PopoverRoot } from 'reka-ui'
 import { ColorPickerInputHex, ColorPickerInputHSL, ColorPickerInputRGB, ColorPickerInputHSB } from '@vuelor/picker'
 import { ColorPickerRoot, ColorPickerCanvas, ColorPickerEyeDropper, ColorPickerSwatch } from '@vuelor/picker'
 import { ColorPickerSliderHue, ColorPickerSliderAlpha } from '@vuelor/picker'
@@ -470,6 +470,50 @@ watch(modelValue, (newValue) => {
 const panelRef = ref<HTMLElement>()
 const STOP_POPOVER_SIDE_OFFSET = 12
 
+// One shared popover for every stop, driven by the selection. Per-row popovers
+// would close and reopen (a visible blink at the same anchored position) when
+// clicking another stop's swatch; a single controlled popover stays mounted and
+// its selection-bound content just swaps in place.
+const isStopPopoverOpen = ref(false)
+
+// "Was the popover already showing this stop?" must be sampled at pointerdown:
+// the swatch's target-phase pointerdown runs before the row's bubbled mousedown
+// selects the stop, so by click time the clicked stop is always the selected
+// one and the toggle check could no longer tell swap from toggle-shut.
+let swatchPressWasShowingStop = false
+
+function handleStopSwatchPointerDown (id: number) {
+  swatchPressWasShowingStop = isStopPopoverOpen.value && gradientSelectedStopId.value === id
+}
+
+function handleStopSwatchClick (id: number) {
+  if (!isDesktop.value) {
+    // Mobile has the inline picker; the swatch only selects.
+    handleSelectStop(id)
+    return
+  }
+  // Clicking the swatch of the stop the popover is showing toggles it shut;
+  // any other swatch swaps the content in place. Keyboard activation (no
+  // pointerdown) always opens; Escape is the keyboard close.
+  if (swatchPressWasShowingStop) {
+    isStopPopoverOpen.value = false
+    swatchPressWasShowingStop = false
+    return
+  }
+  handleSelectStop(id)
+  isStopPopoverOpen.value = true
+}
+
+// Swatch clicks swap the popover content in place — they must not count as
+// outside interactions. reka dismisses only when the event is not default-
+// prevented, for both the pointer and focus outside paths.
+function handleStopPopoverInteractOutside (event: CustomEvent<{ originalEvent: Event }>) {
+  const target = event.detail?.originalEvent?.target
+  if (target instanceof Element && target.closest('[data-stop-swatch]')) {
+    event.preventDefault()
+  }
+}
+
 const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-vuelor-thumb rounded-[5px] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-vuelor-primary relative after:content-[\'\'] after:absolute after:top-[100%] after:left-1/2 after:-translate-x-1/2 after:border-l-[6px] after:border-l-transparent after:border-r-[6px] after:border-r-transparent after:border-t-[6px]'
 </script>
 
@@ -682,27 +726,16 @@ const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-
             @update:model-value="handleStopColorChange(stop.id, $event)"
           >
             <template #before>
-              <PopoverRoot>
-                <PopoverTrigger as-child>
-                  <ColorPickerSwatch
-                    :value="stop.color"
-                    type="button"
-                    :aria-label="`Edit stop ${index + 1} color`"
-                  />
-                </PopoverTrigger>
-                <PopoverPortal v-if="isDesktop">
-                  <PopoverContent
-                    :reference="panelRef"
-                    side="left"
-                    align="start"
-                    :sideOffset="STOP_POPOVER_SIDE_OFFSET"
-                    data-vuelor-docs
-                    class="bg-vuelor-surface w-60 z-50 rounded-lg shadow-vuelor-card"
-                  >
-                    <ColorPicker />
-                  </PopoverContent>
-                </PopoverPortal>
-              </PopoverRoot>
+              <ColorPickerSwatch
+                :value="stop.color"
+                type="button"
+                data-stop-swatch
+                aria-haspopup="dialog"
+                :aria-expanded="isStopPopoverOpen && gradientSelectedStopId === stop.id"
+                :aria-label="`Edit stop ${index + 1} color`"
+                @pointerdown="handleStopSwatchPointerDown(stop.id)"
+                @click="handleStopSwatchClick(stop.id)"
+              />
             </template>
           </ColorPickerInputHex>
           <button
@@ -724,6 +757,24 @@ const THUMB_CLASS = 'flex items-center justify-center w-6 h-6 -mt-8 drop-shadow-
             </svg>
           </button>
         </div>
+
+        <!-- Shared stop-color popover: stays mounted while open; clicking another
+             stop's swatch swaps the selection-bound picker content in place. -->
+        <PopoverRoot v-model:open="isStopPopoverOpen">
+          <PopoverPortal v-if="isDesktop">
+            <PopoverContent
+              :reference="panelRef"
+              side="left"
+              align="start"
+              :sideOffset="STOP_POPOVER_SIDE_OFFSET"
+              data-vuelor-docs
+              class="bg-vuelor-surface w-60 z-50 rounded-lg shadow-vuelor-card"
+              @interact-outside="handleStopPopoverInteractOutside"
+            >
+              <ColorPicker />
+            </PopoverContent>
+          </PopoverPortal>
+        </PopoverRoot>
       </TabsContent>
     </TabsRoot>
   </ColorPickerRoot>
