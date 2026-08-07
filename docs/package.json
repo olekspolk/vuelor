@@ -20,6 +20,7 @@
     }
   },
   "dependencies": {
+    "@vuelor/gradient": "workspace:*",
     "@vuelor/picker": "workspace:*",
     "@vueuse/core": "^14.0.0",
     "markdown-it-container": "^4.0.0",

@@ -3,7 +3,8 @@ export default {
   content: [
     './content/**/*.{md,vue}',
     './components/**/*.{js,ts,vue}',
-    './node_modules/@vuelor/picker/dist/index.js'
+    './node_modules/@vuelor/picker/dist/index.js',
+    './node_modules/@vuelor/gradient/dist/index.js'
   ],
   theme: {
     extend: {
