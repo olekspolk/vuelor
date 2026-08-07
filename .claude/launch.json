@@ -1,0 +1,13 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "docs",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "npx vitepress dev --port ${PORT:-5173}"],
+      "cwd": "docs",
+      "port": 5173,
+      "autoPort": true
+    }
+  ]
+}
