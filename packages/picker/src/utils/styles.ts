@@ -6,13 +6,18 @@ type PartialDeep<T> = { [K in keyof T]?: T[K] extends object ? PartialDeep<T[K]>
 
 export type Styling = 'tailwindcss' | 'vanillacss' | 'unstyled'
 
+// Maps a theme group/slot pair to a vanilla CSS class name. Sibling packages
+// (e.g. @vuelor/gradient) pass their own mapper so their vanillacss mode gets
+// its own class namespace instead of vuelor-picker-*.
+export type VanillaClassFn = (group: string, slot: string) => string
+
 function vanillaCssClass(group: string, slot: string): string {
   if (group === 'picker') return `vuelor-picker-${slot}`
   if (group === 'dropper' && slot === 'root') return 'vuelor-picker-eye-dropper'
   return `vuelor-picker-${group}-${slot}`
 }
 
-export function createUiSlots<T extends GroupsConfig>(config: T, global?: PartialDeep<T>, styling: Styling = 'tailwindcss') {
+export function createUiSlots<T extends GroupsConfig>(config: T, global?: PartialDeep<T>, styling: Styling = 'tailwindcss', vanillaClass: VanillaClassFn = vanillaCssClass) {
   return <K extends keyof T>(...groups: K[]) => {
     const ui: Record<string, (...classes: ClassArg[]) => string> = {}
 
@@ -29,7 +34,7 @@ export function createUiSlots<T extends GroupsConfig>(config: T, global?: Partia
           if (styling === 'unstyled') {
             baseClass = ''
           } else if (styling === 'vanillacss') {
-            baseClass = vanillaCssClass(group as string, slotKey)
+            baseClass = vanillaClass(group as string, slotKey)
           } else {
             baseClass = themeValue
           }
