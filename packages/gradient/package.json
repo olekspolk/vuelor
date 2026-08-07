@@ -1,0 +1,64 @@
+{
+  "name": "@vuelor/gradient",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Composable Vue gradient editor — CSS gradient parsing, a useGradient composable and headless GradientPicker components built with Reka UI and Tailwind CSS on top of @vuelor/picker.",
+  "homepage": "https://vuelor.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olekspolk/vuelor.git"
+  },
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm build:lib && pnpm build:types",
+    "build:lib": "vite build",
+    "build:types": "vue-tsc -p tsconfig.json && node ../../scripts/patch-vue-dts.mjs dist",
+    "format": "prettier --write src/",
+    "type-check": "vue-tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "keywords": [
+    "ui",
+    "vue",
+    "nuxt",
+    "reka-ui",
+    "shadcn/vue",
+    "tailwindcss",
+    "color",
+    "gradient",
+    "gradient-picker",
+    "gradient-editor"
+  ],
+  "peerDependencies": {
+    "@vuelor/picker": "^1.1.0",
+    "reka-ui": "^2.5.1",
+    "vue": "^3.2.0"
+  },
+  "dependencies": {
+    "@vuelor/picker": "workspace:^",
+    "reka-ui": "^2.5.1",
+    "vue": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.6",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "prettier": "3.6.2",
+    "typescript": "~5.9.0",
+    "vite": "^7.1.7",
+    "vitest": "^3.2.4",
+    "vue-tsc": "^3.1.0"
+  }
+}
