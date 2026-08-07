@@ -6,10 +6,12 @@
 
 export const STYLE = 'default'
 export const NAMESPACE = '@vuelor'
-// NOTE: bumped ahead of the npm publish — the gradient item's hex/opacity
-// alpha handling depends on @vuelor/picker 1.0.2. Publish the package before
-// deploying the registry so installs can resolve it.
-export const PICKER_VERSION = '^1.0.2'
+// NOTE: bumped ahead of the npm publish — the gradient item is built on
+// @vuelor/gradient, which peer-requires @vuelor/picker 1.1.0 (the version
+// exporting the shared theming machinery). Publish both packages before
+// deploying the registry so installs can resolve them.
+export const PICKER_VERSION = '^1.1.0'
+export const GRADIENT_VERSION = '^0.1.0'
 export const AUTHOR = 'Vuelor <https://vuelor.dev>'
 export const HOMEPAGE = 'https://vuelor.dev'
 
@@ -38,7 +40,7 @@ export const EXAMPLE_ITEMS = [
   { name: 'color-picker-tabs-vertical', file: 'ColorPickerWithTabsVerticalSliders.vue', title: 'Color Picker (Tabs, Vertical)', categories: FORM,
     description: 'Tabbed color picker with a vertical slider layout.' },
   { name: 'color-picker-gradient', file: 'ColorPickerWithGradient.vue', title: 'Color Picker (Gradient)', categories: ['color-picker', 'gradient'],
-    description: 'Multi-stop gradient editor (linear / radial / conic) built on @vuelor/picker.' },
+    description: 'Multi-stop gradient editor (linear / radial / conic) built on @vuelor/gradient and @vuelor/picker.' },
 ]
 
 // Tailwind v4 design tokens the picker's `tailwindcss` styling mode depends on. Shipped once via the
@@ -65,6 +67,14 @@ export const DOCS_NOTE =
   "'./node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. " +
   'Non-Tailwind projects: set styling="vanillacss" on ColorPickerRoot and import ' +
   "'@vuelor/picker/style.css'."
+
+// Appended to the docs note of items that import @vuelor/gradient.
+export const GRADIENT_DOCS_NOTE =
+  ' This item also uses @vuelor/gradient — give it the same treatment: ' +
+  '`@source "../node_modules/@vuelor/gradient";` (Tailwind v4) or ' +
+  "'./node_modules/@vuelor/gradient/dist/index.js' in the content array (Tailwind v3), and " +
+  "styling=\"vanillacss\" on GradientPickerRoot plus '@vuelor/gradient/style.css' in " +
+  'non-Tailwind projects.'
 
 /** Map an example .vue filename to its registry item name ("ColorPickerMini.vue" -> "color-picker-mini"). */
 export function itemNameForFile(file) {
