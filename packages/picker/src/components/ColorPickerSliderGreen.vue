@@ -1,6 +1,6 @@
 <script lang="ts">
 import type { SliderRootProps } from 'reka-ui'
-import type { UiSliderSlots } from '../utils/styles'
+import type { UiSliderSlots } from '../utils/styles.ts'
 
 export interface GreenSliderProps {
   class?: string,

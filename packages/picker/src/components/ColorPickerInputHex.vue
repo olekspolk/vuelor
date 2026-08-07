@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance } from 'vue'
-import type { UiInputSlots } from '../utils/styles'
+import type { UiInputSlots } from '../utils/styles.ts'
 import { clamp } from '../utils/helpers.ts'
 import { RGBAtoHexa } from '../utils/color.ts'
 import { parseHex, getHexColorFromHexString, getAlphaFromHexString } from '../utils/parsers.ts'

@@ -1,5 +1,5 @@
 import { ref, toRaw, computed } from 'vue'
-import type { HSV, HSVA, HSL, HSLA, Hexa, RGB, RGBA, Format, ColorObject } from '../utils/types'
+import type { HSV, HSVA, HSL, HSLA, Hexa, RGB, RGBA, Format, ColorObject } from '../utils/types.ts'
 import { toHex, HSLtoHSV, HSVtoHSL, HSVtoRGB, RGBtoHSV, RGBtoHex, HexToRGB } from '../utils/color.ts'
 import { parseHex, parseRGB, parseRGBA, parseHSL, parseHSLA, parseHSV, parseHSVA } from '../utils/parsers.ts'
 

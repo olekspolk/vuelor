@@ -1,8 +1,8 @@
 <script lang="ts">
 import { createContext } from 'reka-ui'
 import type { Ref } from 'vue'
-import type { ThemeSlots } from '../theme'
-import type { HSV, HSVA, HSL, RGB, RGBA, Format, ColorObject } from '../utils/types'
+import type { ThemeSlots } from '../theme/index.ts'
+import type { HSV, HSVA, HSL, RGB, RGBA, Format, ColorObject } from '../utils/types.ts'
 
 type ColorPickerRootContext = {
   alpha: Ref<number>,
@@ -42,11 +42,11 @@ export type ColorPickerRootEmits = {
 </script>
 
 <script setup lang="ts">
-import theme from '../theme'
+import theme from '../theme/index.ts'
 import { computed, watch } from 'vue'
-import { createUiSlots } from '../utils/styles'
-import { useColor } from '../composables/useColor'
-import { useVModel } from '../composables/useVModel'
+import { createUiSlots } from '../utils/styles.ts'
+import { useColor } from '../composables/useColor.ts'
+import { useVModel } from '../composables/useVModel.ts'
 
 const props = withDefaults(defineProps<ColorPickerRootProps>(), {
   styling: 'tailwindcss',
@@ -67,7 +67,10 @@ const modelValue = useVModel<ModelValue>(props, emit, (value: ModelValue) => {
   if (value === null) {
     color.hexa.value = props.defaultValue
   } else if (objectMismatch || stringMismatch) {
-    if (import.meta.env.DEV) {
+    // process.env.NODE_ENV survives the library build (vite keeps it verbatim
+    // in lib mode), so the warning reaches consumers' dev builds — unlike
+    // import.meta.env.DEV, which the lib build strips for everyone.
+    if (process.env.NODE_ENV !== 'production') {
       const received = typeof value
       const expected = props.format === 'object' ? 'object' : 'string'
       console.warn(

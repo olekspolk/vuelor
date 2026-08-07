@@ -1,6 +1,6 @@
 {
   "name": "@vuelor/picker",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "type": "module",
   "license": "MIT",
   "description": "Vue color picker, built with Reka UI and Tailwind CSS.",
@@ -16,7 +16,7 @@
   "scripts": {
     "build": "pnpm build:lib && pnpm build:types",
     "build:lib": "vite build",
-    "build:types": "vue-tsc -p tsconfig.json",
+    "build:types": "vue-tsc -p tsconfig.json && node ../../scripts/patch-vue-dts.mjs dist",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "type-check": "vue-tsc -p tsconfig.json --noEmit"
@@ -25,8 +25,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./style.css": "./dist/style.css"
   },

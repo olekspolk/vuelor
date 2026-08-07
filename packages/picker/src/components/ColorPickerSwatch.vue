@@ -2,8 +2,8 @@
 import { computed } from 'vue'
 import { Primitive } from 'reka-ui'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
-import { parseHex } from '../utils/parsers'
-import { SVG_MOSAIC_URL } from '../utils/consts'
+import { parseHex } from '../utils/parsers.ts'
+import { SVG_MOSAIC_URL } from '../utils/consts.ts'
 
 const rootContext = injectColorPickerContext()
 
