@@ -27,3 +27,4 @@ pnpm-debug.log*
 # Claude Code local state
 .claude/settings.local.json
 .claude/*.lock
+coverage

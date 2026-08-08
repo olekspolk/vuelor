@@ -3,6 +3,7 @@
 ## Unreleased
 
 ✨ New
+- Docs — a dedicated Gradient section (overview + full API reference) with a new standalone `gradient-picker` registry example demoing the package's own primitives
 - `@vuelor/gradient` 0.1.0 — new package extracting the gradient editor from the ultra example: a framework-agnostic core (`parseGradient`, `serializeGradient`, `parseGradientStops` with CSS position defaulting, `isGradient`, stop math), a `useGradient` composable owning the sorted-stops/selection invariants, and headless components (`GradientPickerRoot`, `GradientPickerSlider` with the reka-ui crossing-selection logic built in, position/angle inputs, add/remove/reverse/rotate buttons, preview) with the same `tailwindcss`/`vanillacss`/`unstyled` styling modes as the picker
 - Gradient stop lists are now split on top-level commas, so the grammar can grow to `rgb()`/`hsl()`/`var()` stops without an API break (stops remain hex-only for now)
 - ColorPicker Ultra rebuilt on `@vuelor/gradient` — the example drops from ~780 to ~430 lines (parsing, stop state and the slider crossing logic now come from the package); the `color-picker-gradient` registry item installs `@vuelor/gradient@^0.1.0`, no longer ships `GradientStopInput.vue`, and its docs note covers the extra Tailwind `@source`/content line for the new package
@@ -21,6 +22,8 @@
 - Shared hex grammar — `@vuelor/picker` exports `parseHex`, and the gradient's `normalizeHexa` delegates to it, so both packages agree on valid hex (including whitespace tolerance) and can't drift
 - Shared design tokens — the vanillacss tokens are single-sourced in `packages/picker/src/style/tokens.css` (scoped to both root classes, with a new `--filter-vuelor-drop-thumb`) and compiled into each package's stylesheet
 - Tests — the left-split, SSR position-input and zero-width `colorAt` assertions are now load-bearing (they fail on the regressions they claim to guard)
+- Theming — `createUiSlots` now teaches tailwind-merge the named vuelor shadow utilities, so `shadow-none`/`shadow-*` overrides properly displace `shadow-vuelor-card|thumb|inner` and `drop-shadow-vuelor-thumb` (previously stylesheet order decided, leaving stray card shadows on nested panels)
+- Test coverage — `@vuelor/picker` gains its first test suite (67 tests: color math, parsers, theming machinery, both composables, SSR smoke, and jsdom interaction tests locking in the 1.0.2 alpha semantics), and `@vuelor/gradient` gains jsdom interaction tests for the slider crossing logic, inputs, buttons and root plumbing (87 tests total); both packages ship a `test:coverage` script — picker 0% → ~98% statements, gradient ~84% → ~99%
 
 🧹 Housekeeping (`@vuelor/picker` 1.1.0)
 - Export `createUiSlots` (with a new optional vanilla-class mapper argument), the `Styling`/`VanillaClassFn`/`UiSliderSlots`/`UiInputSlots` types, and `SVG_MOSAIC_URL`, so sibling packages reuse the theming machinery instead of copying it
