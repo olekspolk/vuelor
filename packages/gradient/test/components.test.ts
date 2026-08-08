@@ -45,7 +45,9 @@ describe('components (SSR smoke)', () => {
     expect(html).toContain('linear-gradient(to right, #FF0000FF 0%, #0000FFFF 100%)')
     expect(html).toContain('linear-gradient(45deg, #FF0000FF 0%, #0000FFFF 100%)')
     expect(html).toContain('45°')
-    expect(html).toContain('0%')
+    // Anchored to the input itself — a bare '0%' would also match the track
+    // CSS and prove nothing about the position field.
+    expect(html).toMatch(/aria-label="Stop position"[^>]*value="0%"/)
     expect(html).toContain('aria-label="Add gradient stop"')
     expect(html).toContain('aria-label="Remove gradient stop"')
     expect(html).toContain('aria-label="Reverse gradient"')

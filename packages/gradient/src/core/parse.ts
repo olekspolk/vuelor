@@ -1,14 +1,15 @@
+import { parseHex, RGBAtoHexa } from '@vuelor/picker'
 import type { GradientStop, ParsedGradient } from './types.ts'
 
 /** A CSS gradient needs at least two stops to be renderable. */
 export const MIN_GRADIENT_STOPS = 2
 
-/** Expand #RGB / #RGBA / #RRGGBB to the canonical #RRGGBBAA form. */
+// Expand #RGB / #RGBA / #RRGGBB to the canonical #RRGGBBAA form. Delegates
+// to the picker's parseHex so both packages agree on what "valid hex" means
+// (including its whitespace tolerance) and can never drift.
 export function normalizeHexa (raw: string): string | null {
-  let hex = raw.startsWith('#') ? raw.slice(1) : raw
-  if (/^[0-9a-f]{3,4}$/i.test(hex)) hex = hex.split('').map((c) => c + c).join('')
-  if (/^[0-9a-f]{6}$/i.test(hex)) hex += 'FF'
-  return /^[0-9a-f]{8}$/i.test(hex) ? `#${hex.toUpperCase()}` : null
+  const rgba = parseHex(raw)
+  return rgba ? RGBAtoHexa(rgba) : null
 }
 
 /** Wrap any angle into the 0–359 range, rounded to whole degrees. */

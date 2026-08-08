@@ -57,6 +57,20 @@ describe('colorAt', () => {
       { position: 50, color: '#0000FFFF' }
     ], 50)).toBe('#FF0000FF')
   })
+
+  it('treats an interior zero-width pair as a hard stop', () => {
+    const hardStop = [
+      { position: 0, color: '#FF0000FF' },
+      { position: 50, color: '#FFFFFFFF' },
+      { position: 50, color: '#000000FF' },
+      { position: 100, color: '#0000FFFF' }
+    ]
+    // At the boundary the first color of the pair wins; just past it the
+    // second side interpolates from the pair's second color — never NaN.
+    expect(colorAt(hardStop, 50)).toBe('#FFFFFFFF')
+    expect(colorAt(hardStop, 51)).toBe('#000005FF')
+    expect(colorAt(hardStop, 49)).toBe('#FFFAFAFF')
+  })
 })
 
 describe('reverseStops', () => {

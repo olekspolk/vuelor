@@ -57,11 +57,19 @@ describe('useGradient', () => {
     })
 
     it('splits the segment to the left when the last stop is selected', () => {
-      const gradient = useGradient()
-      const last = gradient.stops.value[1]!
+      // Three stops so the clamped index is distinguishable from "always
+      // split the first segment": only the [50, 100] segment yields 75.
+      const gradient = useGradient({
+        stops: [
+          { color: '#FF0000FF', position: 0 },
+          { color: '#00FF00FF', position: 50 },
+          { color: '#0000FFFF', position: 100 }
+        ]
+      })
+      const last = gradient.stops.value[2]!
       gradient.select(last.id)
       const added = gradient.addStop()
-      expect(added!.position).toBe(50)
+      expect(added!.position).toBe(75)
     })
 
     it('interpolates the color when adding at an explicit position', () => {

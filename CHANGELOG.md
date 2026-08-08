@@ -18,6 +18,9 @@
 - Validation — `addStop` rejects an invalid color (dev-warn) instead of inserting an opaque-black stop, invalid initial stops fall back to the default gradient with a warning, `setStopColor` dev-warns on dropped input, and an unsupported `defaultValue` now warns like `modelValue`
 - Bounds — documented (and regression-tested) that a parsed model is authoritative: `minStops`/`maxStops` bound only the add/remove interactions
 - Inputs — the field width moved from a hardcoded component class into the theme and the vanilla stylesheet, so `styling="vanillacss"` inputs no longer collapse and `unstyled` mode is truly blank
+- Shared hex grammar — `@vuelor/picker` exports `parseHex`, and the gradient's `normalizeHexa` delegates to it, so both packages agree on valid hex (including whitespace tolerance) and can't drift
+- Shared design tokens — the vanillacss tokens are single-sourced in `packages/picker/src/style/tokens.css` (scoped to both root classes, with a new `--filter-vuelor-drop-thumb`) and compiled into each package's stylesheet
+- Tests — the left-split, SSR position-input and zero-width `colorAt` assertions are now load-bearing (they fail on the regressions they claim to guard)
 
 🧹 Housekeeping (`@vuelor/picker` 1.1.0)
 - Export `createUiSlots` (with a new optional vanilla-class mapper argument), the `Styling`/`VanillaClassFn`/`UiSliderSlots`/`UiInputSlots` types, and `SVG_MOSAIC_URL`, so sibling packages reuse the theming machinery instead of copying it

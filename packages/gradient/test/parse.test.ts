@@ -20,6 +20,10 @@ describe('normalizeHexa', () => {
     expect(normalizeHexa('f00')).toBe('#FF0000FF')
   })
 
+  it('tolerates surrounding whitespace, matching the picker grammar', () => {
+    expect(normalizeHexa('  #f00  ')).toBe('#FF0000FF')
+  })
+
   it('rejects invalid input', () => {
     expect(normalizeHexa('#12345')).toBeNull()
     expect(normalizeHexa('#gggggg')).toBeNull()
