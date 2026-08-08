@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.1
+
+🐞 Bug Fixes
+- Panel foreground — both panel roots paired `bg-vuelor-surface` with no color of their own, so a dark host page bled its light foreground into the inputs, tab labels and `currentColor` icons (white on white). The roots now declare the text color where they declare the light surface, in the `tailwindcss` theme and the `vanillacss` stylesheet of `@vuelor/picker` 1.1.1 and `@vuelor/gradient` 0.1.1 — this hit six of the twelve registry items out of the box, since shadcn-vue ships dark mode by default
+- ColorPicker Ultra — the gradient stop popover needs its own copy of the text color: `PopoverContent` is portaled to `body`, so it never inherits from the picker root
+- Registry — the `color-picker-tabs-vertical` item declared its `format` ref as `string` and then indexed the `INPUTS` map with it, throwing TS7053 under `vue-tsc`; installing it broke `npm run build` in the TypeScript project `shadcn-vue init` scaffolds by default
+- Docs — the shadcn-vue CLI guide told readers to add `@source "../node_modules/@vuelor/picker"`, a path that resolves nowhere from the `src/assets/index.css` the Vite template scaffolds. `@source` fails silently, so every picker class was purged and the canvas and sliders collapsed with no error to go on; the snippet now matches what `init` produces and says what the path is relative to
+- Docs — the CLI guide's items table was missing the `gradient-picker` row
+
 ## 1.1.0
 
 ✨ New
