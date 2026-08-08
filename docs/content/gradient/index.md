@@ -63,7 +63,7 @@ const value = ref('linear-gradient(90deg, #FF98C2FF 0%, #FFFA7AFF 100%)')
 
 `GradientPickerRoot` owns the editor state — sorted stops, an id-tracked selection that survives reorders, the gradient type and angle — and provides it to every child. The state is also exposed to your own template through the default slot:
 
-```vue
+```html
 <GradientPickerRoot v-model="value" v-slot="{ gradient, commitValue }">
   <!-- gradient is the full useGradient() instance -->
   <div v-for="stop in gradient.stops.value" :key="stop.id">
@@ -76,7 +76,7 @@ const value = ref('linear-gradient(90deg, #FF98C2FF 0%, #FFFA7AFF 100%)')
 
 The composable exposes `selectedColor` — a writable ref bridging the selected stop to any color picker. Nest a `ColorPickerRoot` and bind it directly; forward the picker's `valueCommit` so color edits end with a gradient commit too:
 
-```vue
+```html
 <GradientPickerRoot v-model="value" v-slot="{ gradient, commitValue }">
   <GradientPickerSlider />
 

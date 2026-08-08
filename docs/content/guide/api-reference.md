@@ -204,7 +204,7 @@ By default the component is uncontrolled — it reads from and writes to the pic
 | -------- | ----------------------------------------------------------------------------------------- |
 | `before` | Rendered before the hex `#` label inside the first cell. Useful for embedding a `ColorPickerSwatch` as a preview chip. |
 
-```vue
+```html
 <ColorPickerInputHex>
   <template #before>
     <ColorPickerSwatch :value="color" />
@@ -267,7 +267,7 @@ Clicking a swatch **automatically applies** its `value` to the picker and emits 
 | -------- | -------------------------------------------------------- |
 | `select` | Emitted after the color is applied, with the `value` string. Use this to run additional logic (e.g. saving recently used colors). |
 
-```vue
+```html
 <!-- Minimal — just works, no wiring needed -->
 <ColorPickerSwatch value="#FF6900FF" />
 

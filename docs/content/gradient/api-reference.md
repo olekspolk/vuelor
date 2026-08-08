@@ -95,7 +95,7 @@ The multi-thumb stops slider. Dragging or arrowing a thumb moves its stop; cross
 | ------- | ----------------------------------------------------------------------------------------------- |
 | `thumb` | Replaces the default swatch inside each thumb. Scoped props: `{ stop, index, selected }`.       |
 
-```vue
+```html
 <GradientPickerSlider>
   <template #thumb="{ stop, selected }">
     <span :class="selected ? 'ring-2' : ''">{{ stop.position }}</span>
