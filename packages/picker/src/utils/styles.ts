@@ -1,4 +1,17 @@
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+
+// tailwind-merge only knows the built-in shadow scale, so without this the
+// theme's named shadows (shadow-vuelor-card etc.) would survive a consumer's
+// shadow-none/shadow-lg override and stylesheet order would decide — e.g. a
+// nested picker keeping its card shadow despite class="shadow-none".
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      shadow: [{ shadow: ['vuelor-card', 'vuelor-thumb', 'vuelor-inner'] }],
+      'drop-shadow': [{ 'drop-shadow': ['vuelor-thumb'] }]
+    }
+  }
+})
 
 type ClassArg = string | undefined | null | false
 type GroupsConfig = Record<string, Record<string, string>>
