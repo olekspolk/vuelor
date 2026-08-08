@@ -3,6 +3,9 @@
 .vuelor-picker-root {
   width: 15rem;
   background-color: var(--color-vuelor-surface);
+  /* The surface is always light, so the panel declares its own text color — otherwise a dark host
+     page bleeds light text into the inputs and tab labels through inheritance. */
+  color: #000;
   border-radius: 0.8125rem;
   padding: 1rem;
   display: flex;

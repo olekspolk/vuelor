@@ -426,7 +426,7 @@ function handleStopPopoverInteractOutside (event: CustomEvent<{ originalEvent: E
                 align="start"
                 :sideOffset="STOP_POPOVER_SIDE_OFFSET"
                 data-vuelor-docs
-                class="bg-vuelor-surface w-60 z-50 rounded-lg shadow-vuelor-card"
+                class="bg-vuelor-surface text-black w-60 z-50 rounded-lg shadow-vuelor-card"
                 @interact-outside="handleStopPopoverInteractOutside"
               >
                 <ColorPicker />
