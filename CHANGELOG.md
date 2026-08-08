@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.0
 
 ✨ New
 - Docs — a dedicated Gradient section (overview + full API reference) with a new standalone `gradient-picker` registry example demoing the package's own primitives
@@ -8,7 +8,7 @@
 - Gradient stop lists are now split on top-level commas, so the grammar can grow to `rgb()`/`hsl()`/`var()` stops without an API break (stops remain hex-only for now)
 - ColorPicker Ultra rebuilt on `@vuelor/gradient` — the example drops from ~780 to ~430 lines (parsing, stop state and the slider crossing logic now come from the package); the `color-picker-gradient` registry item installs `@vuelor/gradient@^0.1.0`, no longer ships `GradientStopInput.vue`, and its docs note covers the extra Tailwind `@source`/content line for the new package
 
-🐞 Pre-release review fixes
+🐞 Bug Fixes
 - Types — emitted declarations now resolve under `moduleResolution: NodeNext/Node16`: all relative specifiers carry explicit extensions and a post-build step rewrites `.vue` imports in `.d.ts` files to `.vue.js` (both packages; verified with a NodeNext consumer compile)
 - Gradient slider — `activeStopId` is now cleared on `pointercancel` and on window-level `keyup`/`blur`, so an interrupted drag or a key released off-thumb no longer suppresses Tab-focus selection
 - Gradient slider — `valueCommit` is deferred one tick, so keyboard steps commit the post-keystroke gradient instead of a value stale by one step
@@ -25,7 +25,7 @@
 - Theming — `createUiSlots` now teaches tailwind-merge the named vuelor shadow utilities, so `shadow-none`/`shadow-*` overrides properly displace `shadow-vuelor-card|thumb|inner` and `drop-shadow-vuelor-thumb` (previously stylesheet order decided, leaving stray card shadows on nested panels)
 - Test coverage — `@vuelor/picker` gains its first test suite (67 tests: color math, parsers, theming machinery, both composables, SSR smoke, and jsdom interaction tests locking in the 1.0.2 alpha semantics), and `@vuelor/gradient` gains jsdom interaction tests for the slider crossing logic, inputs, buttons and root plumbing (87 tests total); both packages ship a `test:coverage` script — picker 0% → ~98% statements, gradient ~84% → ~99%
 
-🧹 Housekeeping (`@vuelor/picker` 1.1.0)
+🧹 Housekeeping
 - Export `createUiSlots` (with a new optional vanilla-class mapper argument), the `Styling`/`VanillaClassFn`/`UiSliderSlots`/`UiInputSlots` types, and `SVG_MOSAIC_URL`, so sibling packages reuse the theming machinery instead of copying it
 
 ## 1.0.2
