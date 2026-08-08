@@ -82,4 +82,4 @@ gradient.css.value          // 'linear-gradient(90deg, …)'
 
 ## Styling
 
-The components use the same theming system as `@vuelor/picker` — Tailwind classes by default, `styling="vanillacss"` with `import '@vuelor/gradient/style.css'` for non-Tailwind projects, or `styling="unstyled"` for a blank slate. Tailwind v4 users must add `@source "../../node_modules/@vuelor/gradient";` to their global CSS (alongside the same line for the picker), plus the `--drop-shadow-vuelor-thumb` token documented at [vuelor.dev](https://vuelor.dev).
+The components use the same theming system as `@vuelor/picker` — Tailwind classes by default, `styling="vanillacss"` with `import '@vuelor/gradient/style.css'` for non-Tailwind projects, or `styling="unstyled"` for a blank slate. Tailwind v4 users must add `@import "@vuelor/gradient/tailwind.css";` to their global CSS (alongside the same line for the picker) so Tailwind scans the package, plus the `--drop-shadow-vuelor-thumb` token documented at [vuelor.dev](https://vuelor.dev). On versions before 0.2.0 the entry point does not exist yet — use `@source "../../node_modules/@vuelor/gradient";` instead, relative to your CSS file.

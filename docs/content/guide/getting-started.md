@@ -49,13 +49,13 @@ To ensure Tailwind CSS correctly processes the styles used within `@vuelor/picke
 
 ### TailwindCSS v4 (CSS-first)
 
-Add the `@source` directive and your theme variables to your main CSS entry point (e.g., `src/assets/index.css`).
+Import the package's Tailwind entry point and add your theme variables to your main CSS entry point (e.g., `src/assets/index.css`).
 
 ```css
 @import "tailwindcss";
 
 /* 1. Tell Tailwind to scan the package for used classes */
-@source "../../node_modules/@vuelor/picker";
+@import "@vuelor/picker/tailwind.css";
 
 /* 2. Define the Vuelor Design System tokens */
 @theme {
@@ -72,6 +72,11 @@ Add the `@source` directive and your theme variables to your main CSS entry poin
   --drop-shadow-vuelor-thumb: 0px 0px .5px #00000054, 0px 1px 3px #00000026;
 }
 ```
+
+The entry point ships inside the package and registers it as a Tailwind source itself, so the line
+is identical wherever your stylesheet lives. It requires `@vuelor/picker` 1.2.0+ (and
+`@vuelor/gradient` 0.2.0+). On older versions, point Tailwind at the package yourself with
+`@source "../../node_modules/@vuelor/picker";`, counting the `../` segments from your CSS file.
 
 ### TailwindCSS v3 (JavaScript Configuration)
 

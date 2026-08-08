@@ -79,12 +79,20 @@ npx shadcn-vue@latest add https://vuelor.dev/r/color-picker.json
   or the canvas and sliders get purged:
 
   ```css
-  @source "../../node_modules/@vuelor/picker";
+  @import "@vuelor/picker/tailwind.css";
   ```
 
-  `@source` resolves relative to the CSS file itself. The path above is for the Vite project
-  `shadcn-vue init` scaffolds, where the stylesheet lives at `src/assets/index.css` — adjust the
-  number of `../` segments if yours sits somewhere else (`src/index.css` needs `../`).
+  That file ships inside the package and does the registration for you, so the line is the same
+  wherever your stylesheet lives. Keep it with your other `@import`s, above the rest of the CSS.
+  Requires `@vuelor/picker` 1.2.0+ (and `@vuelor/gradient` 0.2.0+ for the gradient editor).
+
+  On older versions, register the path yourself instead. `@source` resolves relative to the CSS file,
+  so count the `../` segments from where yours sits — `src/assets/index.css`, which is what
+  `shadcn-vue init` scaffolds for Vite, needs two:
+
+  ```css
+  @source "../../node_modules/@vuelor/picker";
+  ```
 - **Tailwind v3**: instead add the package to your `content` globs so the utility classes aren't purged —
   `'./node_modules/@vuelor/picker/dist/index.js'`.
 - **No Tailwind**: set `styling="vanillacss"` on `ColorPickerRoot` and import `@vuelor/picker/style.css`.

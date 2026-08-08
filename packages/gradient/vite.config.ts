@@ -1,11 +1,31 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vitest/config'
+import type { Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
+
+// Mirrors @vuelor/picker: ship the Tailwind source registration inside dist so the
+// `@source` path is anchored to this package instead of the consumer's stylesheet.
+const tailwindSourceEntry: Plugin = {
+  name: 'vuelor:tailwind-source-entry',
+  generateBundle() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'tailwind.css',
+      source:
+        '/* Registers this package as a Tailwind v4 source. `@source` resolves relative\n' +
+        '   to this file, so "." is the package\'s own dist no matter where the importing\n' +
+        '   stylesheet lives. Import it once from your CSS entry point:\n' +
+        '   @import "@vuelor/gradient/tailwind.css"; */\n' +
+        '@source ".";\n',
+    })
+  },
+}
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    vue()
+    vue(),
+    tailwindSourceEntry
   ],
   test: {
     coverage: {

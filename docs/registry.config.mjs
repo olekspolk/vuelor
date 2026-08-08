@@ -63,10 +63,12 @@ export const THEME_VARS = {
 export const DOCS_NOTE =
   'Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the ' +
   'color-picker-theme dependency, but you must ALSO add ' +
-  '`@source "../../node_modules/@vuelor/picker";` to your global CSS so Tailwind scans the ' +
-  "picker's classes — without it the canvas and sliders get purged. @source resolves relative to " +
-  'the CSS file itself; the path above is for the src/assets/index.css that `shadcn-vue init` ' +
-  'scaffolds for Vite, so adjust the ../ segments if yours lives elsewhere. Tailwind v3: instead add ' +
+  '`@import "@vuelor/picker/tailwind.css";` to your global CSS so Tailwind scans the ' +
+  "picker's classes — without it the canvas and sliders get purged. That entry point ships inside " +
+  'the package and registers itself, so the line is the same wherever your stylesheet lives; keep ' +
+  'it with your other @imports. Needs @vuelor/picker 1.2.0+ — on older versions add ' +
+  '`@source "../../node_modules/@vuelor/picker";` instead, counting the ../ segments from your CSS ' +
+  'file. Tailwind v3: instead add ' +
   "'./node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. " +
   'Non-Tailwind projects: set styling="vanillacss" on ColorPickerRoot and import ' +
   "'@vuelor/picker/style.css'."
@@ -74,7 +76,8 @@ export const DOCS_NOTE =
 // Appended to the docs note of items that import @vuelor/gradient.
 export const GRADIENT_DOCS_NOTE =
   ' This item also uses @vuelor/gradient — give it the same treatment: ' +
-  '`@source "../../node_modules/@vuelor/gradient";` (Tailwind v4) or ' +
+  '`@import "@vuelor/gradient/tailwind.css";` (Tailwind v4, needs @vuelor/gradient 0.2.0+; older ' +
+  'versions use `@source "../../node_modules/@vuelor/gradient";`) or ' +
   "'./node_modules/@vuelor/gradient/dist/index.js' in the content array (Tailwind v3), and " +
   "styling=\"vanillacss\" on GradientPickerRoot plus '@vuelor/gradient/style.css' in " +
   'non-Tailwind projects.'

@@ -1,6 +1,6 @@
 {
   "name": "@vuelor/picker",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "module",
   "license": "MIT",
   "description": "Vue color picker, built with Reka UI and Tailwind CSS.",
@@ -30,6 +30,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./tailwind.css": "./dist/tailwind.css",
     "./style.css": "./dist/style.css"
   },
   "keywords": [
