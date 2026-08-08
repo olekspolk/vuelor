@@ -41,6 +41,8 @@ export const EXAMPLE_ITEMS = [
     description: 'Tabbed color picker with a vertical slider layout.' },
   { name: 'color-picker-gradient', file: 'ColorPickerWithGradient.vue', title: 'Color Picker (Gradient)', categories: ['color-picker', 'gradient'],
     description: 'Multi-stop gradient editor (linear / radial / conic) built on @vuelor/gradient and @vuelor/picker.' },
+  { name: 'gradient-picker', file: 'GradientPicker.vue', title: 'Gradient Picker', categories: ['color-picker', 'gradient'],
+    description: 'Standalone gradient editor built from @vuelor/gradient primitives, with a nested color picker editing the selected stop.' },
 ]
 
 // Tailwind v4 design tokens the picker's `tailwindcss` styling mode depends on. Shipped once via the

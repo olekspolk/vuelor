@@ -1,0 +1,31 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "gradient-picker",
+  "title": "Gradient Picker",
+  "author": "Vuelor <https://vuelor.dev>",
+  "description": "Standalone gradient editor built from @vuelor/gradient primitives, with a nested color picker editing the selected stop.",
+  "dependencies": [
+    "@vuelor/gradient@^0.1.0",
+    "@vuelor/picker@^1.1.0"
+  ],
+  "registryDependencies": [
+    "@vuelor/color-picker-theme"
+  ],
+  "files": [
+    {
+      "path": "gradient-picker/GradientPicker.vue",
+      "content": "<script lang=\"ts\" setup>\nimport { ref } from 'vue'\nimport {\n  GradientPickerRoot,\n  GradientPickerSlider,\n  GradientPickerPreview,\n  GradientPickerPositionInput,\n  GradientPickerAngleInput,\n  GradientPickerAddStop,\n  GradientPickerRemoveStop,\n  GradientPickerReverse,\n  GradientPickerRotate\n} from '@vuelor/gradient'\nimport { ColorPickerRoot, ColorPickerCanvas } from '@vuelor/picker'\nimport { ColorPickerSliderHue, ColorPickerSliderAlpha, ColorPickerInputHex } from '@vuelor/picker'\n\nconst value = ref('linear-gradient(90deg, #FF98C2FF 0%, #4DC1FFFF 50%, #FFFA7AFF 100%)')\n</script>\n\n<template>\n  <GradientPickerRoot\n    v-slot=\"{ gradient, commitValue }\"\n    v-model=\"value\"\n  >\n    <div class=\"flex items-center justify-between\">\n      <GradientPickerAngleInput />\n      <div class=\"flex items-center gap-1\">\n        <GradientPickerReverse />\n        <GradientPickerRotate />\n        <GradientPickerRemoveStop />\n        <GradientPickerAddStop />\n      </div>\n    </div>\n\n    <div class=\"pt-4\">\n      <GradientPickerSlider />\n    </div>\n\n    <!-- The nested picker edits the selected stop through the selectedColor\n         bridge and forwards its end-of-interaction signal to the gradient. -->\n    <ColorPickerRoot\n      v-model=\"gradient.selectedColor.value\"\n      class=\"w-auto rounded-none bg-transparent p-0 shadow-none\"\n      :ui=\"{ input: { label: 'hidden' } }\"\n      @value-commit=\"commitValue()\"\n    >\n      <ColorPickerCanvas class=\"h-28\" />\n      <ColorPickerSliderHue />\n      <ColorPickerSliderAlpha />\n      <div class=\"flex items-center gap-2\">\n        <GradientPickerPositionInput />\n        <ColorPickerInputHex class=\"flex-1\" />\n      </div>\n    </ColorPickerRoot>\n\n    <GradientPickerPreview />\n  </GradientPickerRoot>\n</template>\n",
+      "type": "registry:component"
+    }
+  ],
+  "meta": {
+    "vuelorVersion": "^1.1.0",
+    "stylingMode": "tailwindcss"
+  },
+  "docs": "Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the color-picker-theme dependency, but you must ALSO add `@source \"../node_modules/@vuelor/picker\";` to your global CSS (adjust the relative path to where your CSS entry file lives) so Tailwind scans the picker's classes — without it the canvas and sliders get purged. Tailwind v3: instead add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'. This item also uses @vuelor/gradient — give it the same treatment: `@source \"../node_modules/@vuelor/gradient\";` (Tailwind v4) or './node_modules/@vuelor/gradient/dist/index.js' in the content array (Tailwind v3), and styling=\"vanillacss\" on GradientPickerRoot plus '@vuelor/gradient/style.css' in non-Tailwind projects.",
+  "categories": [
+    "color-picker",
+    "gradient"
+  ],
+  "type": "registry:block"
+}

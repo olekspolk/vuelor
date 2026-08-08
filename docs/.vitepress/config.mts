@@ -29,6 +29,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/introduction' },
+      { text: 'Gradient', link: '/gradient/' },
       { text: 'Examples', link: '/examples/' },
     ],
 
@@ -41,6 +42,13 @@ export default defineConfig({
           { text: 'shadcn-vue CLI', link: '/guide/cli' },
           { text: 'Customization', link: '/guide/customization' },
           { text: 'API Reference', link: '/guide/api-reference' },
+        ]
+      },
+      {
+        text: 'Gradient',
+        items: [
+          { text: 'Overview', link: '/gradient/' },
+          { text: 'API Reference', link: '/gradient/api-reference' },
         ]
       },
       {
