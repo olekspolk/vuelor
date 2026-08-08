@@ -73,14 +73,15 @@ jobs:
           fi
 
   # After the packages are published, pin the registry to them, regenerate, and commit back
-  # to main. The push to main triggers the Deploy workflow, so the live registry is rebuilt
-  # against the new releases.
+  # to main, then deploy so the live registry is rebuilt against the new releases.
   sync-registry:
     needs: publish
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
+      # Needed to dispatch the deploy workflow below.
+      actions: write
 
     steps:
       - name: Checkout main
@@ -114,15 +115,30 @@ jobs:
         run: pnpm --filter docs registry:build
 
       - name: Commit and push if changed
+        id: sync
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/registry.config.mjs docs/registry.json docs/registry docs/content/public/r
           if git diff --staged --quiet; then
             echo "Registry already up to date — nothing to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
           else
             PICKER=$(node -p "require('./packages/picker/package.json').version")
             GRADIENT=$(node -p "require('./packages/gradient/package.json').version")
             git commit -m "chore(registry): regenerate for @vuelor/picker@$PICKER and @vuelor/gradient@$GRADIENT"
             git push origin HEAD:main
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # A push authenticated with GITHUB_TOKEN does not start other workflow runs -
+      # GitHub suppresses them to prevent loops - so the commit above never reaches
+      # the live site through Deploy's `on: push` trigger. workflow_dispatch is an
+      # explicit exception to that rule, so dispatch the deploy directly. Only when
+      # something was actually pushed: with nothing to commit, main is unchanged and
+      # whatever push put the release commit there has already deployed it.
+      - name: Deploy the regenerated registry
+        if: steps.sync.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref main
