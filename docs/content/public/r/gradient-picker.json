@@ -5,8 +5,8 @@
   "author": "Vuelor <https://vuelor.dev>",
   "description": "Standalone gradient editor built from @vuelor/gradient primitives, with a nested color picker editing the selected stop.",
   "dependencies": [
-    "@vuelor/gradient@^0.1.1",
-    "@vuelor/picker@^1.1.1"
+    "@vuelor/gradient@^0.2.0",
+    "@vuelor/picker@^1.2.0"
   ],
   "registryDependencies": [
     "@vuelor/color-picker-theme"
@@ -19,7 +19,7 @@
     }
   ],
   "meta": {
-    "vuelorVersion": "^1.1.1",
+    "vuelorVersion": "^1.2.0",
     "stylingMode": "tailwindcss"
   },
   "docs": "Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the color-picker-theme dependency, but you must ALSO add `@import \"@vuelor/picker/tailwind.css\";` to your global CSS so Tailwind scans the picker's classes — without it the canvas and sliders get purged. That entry point ships inside the package and registers itself, so the line is the same wherever your stylesheet lives; keep it with your other @imports. Needs @vuelor/picker 1.2.0+ — on older versions add `@source \"../../node_modules/@vuelor/picker\";` instead, counting the ../ segments from your CSS file. Tailwind v3: instead add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'. This item also uses @vuelor/gradient — give it the same treatment: `@import \"@vuelor/gradient/tailwind.css\";` (Tailwind v4, needs @vuelor/gradient 0.2.0+; older versions use `@source \"../../node_modules/@vuelor/gradient\";`) or './node_modules/@vuelor/gradient/dist/index.js' in the content array (Tailwind v3), and styling=\"vanillacss\" on GradientPickerRoot plus '@vuelor/gradient/style.css' in non-Tailwind projects.",

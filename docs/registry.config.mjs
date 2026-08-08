@@ -10,8 +10,8 @@ export const NAMESPACE = '@vuelor'
 // @vuelor/gradient, which peer-requires @vuelor/picker 1.1.0 (the version
 // exporting the shared theming machinery). Publish both packages before
 // deploying the registry so installs can resolve them.
-export const PICKER_VERSION = '^1.1.1'
-export const GRADIENT_VERSION = '^0.1.1'
+export const PICKER_VERSION = '^1.2.0'
+export const GRADIENT_VERSION = '^0.2.0'
 export const AUTHOR = 'Vuelor <https://vuelor.dev>'
 export const HOMEPAGE = 'https://vuelor.dev'
 

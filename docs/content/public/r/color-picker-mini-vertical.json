@@ -5,7 +5,7 @@
   "author": "Vuelor <https://vuelor.dev>",
   "description": "Mini color picker with the hue and alpha sliders arranged vertically beside the canvas.",
   "dependencies": [
-    "@vuelor/picker@^1.1.1",
+    "@vuelor/picker@^1.2.0",
     "reka-ui"
   ],
   "registryDependencies": [
@@ -19,7 +19,7 @@
     }
   ],
   "meta": {
-    "vuelorVersion": "^1.1.1",
+    "vuelorVersion": "^1.2.0",
     "stylingMode": "tailwindcss"
   },
   "docs": "Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the color-picker-theme dependency, but you must ALSO add `@import \"@vuelor/picker/tailwind.css\";` to your global CSS so Tailwind scans the picker's classes — without it the canvas and sliders get purged. That entry point ships inside the package and registers itself, so the line is the same wherever your stylesheet lives; keep it with your other @imports. Needs @vuelor/picker 1.2.0+ — on older versions add `@source \"../../node_modules/@vuelor/picker\";` instead, counting the ../ segments from your CSS file. Tailwind v3: instead add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
