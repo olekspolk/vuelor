@@ -28,7 +28,7 @@
       "description": "Minimal color picker — a saturation/brightness canvas with a hue slider.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -47,7 +47,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -58,7 +58,7 @@
       "description": "Mini color picker with a rounded canvas and custom slider thumb styling applied through the ui prop.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -77,7 +77,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -88,7 +88,7 @@
       "description": "Mini color picker with the hue and alpha sliders arranged vertically beside the canvas.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -107,7 +107,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -118,7 +118,7 @@
       "description": "Vertical mini color picker with custom ui-prop styling overrides.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -137,7 +137,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -148,7 +148,7 @@
       "description": "HSL color picker built from individual hue, saturation, lightness and alpha sliders.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -167,7 +167,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -178,7 +178,7 @@
       "description": "RGB color picker built from individual red, green, blue and alpha sliders.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -197,7 +197,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -208,7 +208,7 @@
       "description": "Full color picker with an eyedropper, hue + alpha sliders and switchable HEX / RGB / HSL / HSB inputs.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -231,7 +231,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -242,7 +242,7 @@
       "description": "Hex input that opens a Reka UI popover containing a canvas, eyedropper and sliders.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -261,7 +261,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -272,7 +272,7 @@
       "description": "Color picker whose HEX / RGB / HSL / HSB inputs are organized behind Reka UI tabs.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -291,7 +291,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -302,7 +302,7 @@
       "description": "Tabbed color picker with a vertical slider layout.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/picker@^1.1.1",
         "reka-ui"
       ],
       "registryDependencies": [
@@ -321,7 +321,7 @@
         "input"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -332,8 +332,8 @@
       "description": "Multi-stop gradient editor (linear / radial / conic) built on @vuelor/gradient and @vuelor/picker.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/gradient@^0.1.0",
-        "@vuelor/picker@^1.1.0",
+        "@vuelor/gradient@^0.1.1",
+        "@vuelor/picker@^1.1.1",
         "@vueuse/core",
         "reka-ui"
       ],
@@ -356,7 +356,7 @@
         "gradient"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     },
@@ -367,8 +367,8 @@
       "description": "Standalone gradient editor built from @vuelor/gradient primitives, with a nested color picker editing the selected stop.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/gradient@^0.1.0",
-        "@vuelor/picker@^1.1.0"
+        "@vuelor/gradient@^0.1.1",
+        "@vuelor/picker@^1.1.1"
       ],
       "registryDependencies": [
         "@vuelor/color-picker-theme"
@@ -385,7 +385,7 @@
         "gradient"
       ],
       "meta": {
-        "vuelorVersion": "^1.1.0",
+        "vuelorVersion": "^1.1.1",
         "stylingMode": "tailwindcss"
       }
     }

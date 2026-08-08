@@ -5,7 +5,7 @@
   "author": "Vuelor <https://vuelor.dev>",
   "description": "Color picker whose HEX / RGB / HSL / HSB inputs are organized behind Reka UI tabs.",
   "dependencies": [
-    "@vuelor/picker@^1.1.0",
+    "@vuelor/picker@^1.1.1",
     "reka-ui"
   ],
   "registryDependencies": [
@@ -19,7 +19,7 @@
     }
   ],
   "meta": {
-    "vuelorVersion": "^1.1.0",
+    "vuelorVersion": "^1.1.1",
     "stylingMode": "tailwindcss"
   },
   "docs": "Tailwind v4 (shadcn-vue default): the vuelor-* tokens are installed automatically via the color-picker-theme dependency, but you must ALSO add `@source \"../../node_modules/@vuelor/picker\";` to your global CSS so Tailwind scans the picker's classes — without it the canvas and sliders get purged. @source resolves relative to the CSS file itself; the path above is for the src/assets/index.css that `shadcn-vue init` scaffolds for Vite, so adjust the ../ segments if yours lives elsewhere. Tailwind v3: instead add './node_modules/@vuelor/picker/dist/index.js' to your tailwind.config content array. Non-Tailwind projects: set styling=\"vanillacss\" on ColorPickerRoot and import '@vuelor/picker/style.css'.",
