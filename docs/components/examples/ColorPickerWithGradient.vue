@@ -256,7 +256,7 @@ function handleStopPopoverInteractOutside (event: CustomEvent<{ originalEvent: E
   >
     <ColorPickerRoot
       :model-value="mode === 'color' ? color : gradient.selectedColor.value"
-      class="block p-0"
+      class="block p-0 text-black"
       :class="props.class"
       :disabled="props.disabled"
       :ui="{ input: { label: 'hidden', field: 'max-w-12' } }"
