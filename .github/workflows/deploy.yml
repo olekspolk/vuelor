@@ -36,8 +36,12 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # The docs site imports @vuelor/picker (workspace:*) from its built dist, so build it first.
-      - name: Build @vuelor/picker
-        run: pnpm --filter @vuelor/picker build
+      # The docs site bundles both workspace packages from their dist output,
+      # so both must be built before vitepress runs.
+      - name: Build packages
+        run: |
+          pnpm --filter @vuelor/picker build
+          pnpm --filter @vuelor/gradient build
 
       # docs:build runs `registry:build` (regenerates registry.json + content/public/r) then `vitepress build`.
       - name: Build docs site
