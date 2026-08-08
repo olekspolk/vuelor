@@ -68,18 +68,23 @@ npx shadcn-vue@latest add https://vuelor.dev/r/color-picker.json
 | `add @vuelor/color-picker-tabs` | Inputs organized behind tabs |
 | `add @vuelor/color-picker-tabs-vertical` | Tabbed picker with vertical sliders |
 | `add @vuelor/color-picker-gradient` | Multi-stop linear/radial/conic gradient editor |
+| `add @vuelor/gradient-picker` | Standalone gradient editor with a nested picker for the selected stop |
 | `add @vuelor/color-picker-theme` | Just the Tailwind v4 design tokens (added automatically by every picker above) |
 
 ## Theming notes
 
 - **Tailwind v4** (the shadcn-vue default): the `vuelor-*` color and shadow tokens are added to your
   global stylesheet automatically through the `color-picker-theme` dependency. You also need to let
-  Tailwind scan the package — Tailwind v4 ignores `node_modules`, so add this to your CSS entry file
-  (adjust the relative path to where it lives), or the canvas and sliders get purged:
+  Tailwind scan the package — Tailwind v4 ignores `node_modules`, so add this to your CSS entry file,
+  or the canvas and sliders get purged:
 
   ```css
-  @source "../node_modules/@vuelor/picker";
+  @source "../../node_modules/@vuelor/picker";
   ```
+
+  `@source` resolves relative to the CSS file itself. The path above is for the Vite project
+  `shadcn-vue init` scaffolds, where the stylesheet lives at `src/assets/index.css` — adjust the
+  number of `../` segments if yours sits somewhere else (`src/index.css` needs `../`).
 - **Tailwind v3**: instead add the package to your `content` globs so the utility classes aren't purged —
   `'./node_modules/@vuelor/picker/dist/index.js'`.
 - **No Tailwind**: set `styling="vanillacss"` on `ColorPickerRoot` and import `@vuelor/picker/style.css`.

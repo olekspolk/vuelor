@@ -1,6 +1,8 @@
 export default {
   picker: {
-    root: 'w-60 bg-vuelor-surface shadow-vuelor-card rounded-[13px] p-4 flex flex-col gap-2'
+    // The surface is always light, so the panel declares its own text color — otherwise a dark host
+    // page bleeds light text into the inputs and tab labels through inheritance.
+    root: 'w-60 bg-vuelor-surface text-black shadow-vuelor-card rounded-[13px] p-4 flex flex-col gap-2'
   },
   dropper: {
     root: 'enabled:hover:bg-black/5 disabled:opacity-50 rounded-[5px] focus-within:outline-1 focus-within:outline-vuelor-primary p-1'

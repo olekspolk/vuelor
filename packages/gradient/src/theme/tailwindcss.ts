@@ -1,6 +1,8 @@
 export default {
   root: {
-    root: 'w-60 bg-vuelor-surface shadow-vuelor-card rounded-[13px] p-4 flex flex-col gap-3'
+    // The surface is always light, so the panel declares its own text color — otherwise a dark host
+    // page bleeds light text into the angle/position inputs through inheritance.
+    root: 'w-60 bg-vuelor-surface text-black shadow-vuelor-card rounded-[13px] p-4 flex flex-col gap-3'
   },
   slider: {
     root: 'relative w-full flex items-center select-none touch-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',

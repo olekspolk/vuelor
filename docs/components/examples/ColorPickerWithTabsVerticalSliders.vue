@@ -31,7 +31,7 @@ const INPUTS = {
   hsb: ColorPickerInputHSB
 }
 
-const format = ref<string>('rgb')
+const format = ref<keyof typeof INPUTS>('rgb')
 
 const canvasType = computed<'HSL' | 'HSV'>(() => {
   return format.value === 'hsl' ? 'HSL' : 'HSV'
