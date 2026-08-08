@@ -11,6 +11,7 @@ import ColorPickerWithTabs from './examples/ColorPickerWithTabs.vue'
 import ColorPickerWithTabsVerticalSliders from './examples/ColorPickerWithTabsVerticalSliders.vue'
 import ColorPickerPopover from './examples/ColorPickerPopover.vue'
 import ColorPickerWithGradient from './examples/ColorPickerWithGradient.vue'
+import GradientPicker from './examples/GradientPicker.vue'
 
 const color = ref(null)
 
@@ -26,6 +27,7 @@ const examples = [
   { component: ColorPickerWithTabsVerticalSliders, file: 'ColorPickerWithTabsVerticalSliders.vue', bound: true },
   { component: ColorPickerPopover, file: 'ColorPickerPopover.vue', bound: true },
   { component: ColorPickerWithGradient, file: 'ColorPickerWithGradient.vue', bound: false },
+  { component: GradientPicker, file: 'GradientPicker.vue', bound: false },
 ].map((e) => ({
   ...e,
   command: `npx shadcn-vue@latest add ${NAMESPACE}/${itemNameForFile(e.file)}`,
