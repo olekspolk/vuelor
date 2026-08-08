@@ -9,7 +9,7 @@ export default {
     thumbSwatch: 'relative overflow-hidden w-3.5 h-3.5 border border-vuelor-border rounded-sm'
   },
   input: {
-    group: 'flex gap-[1px] rounded-[5px] hover:outline-1 outline-vuelor-border focus-within:outline-1 focus-within:outline-vuelor-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:outline-none',
+    group: 'w-12 flex gap-[1px] rounded-[5px] hover:outline-1 outline-vuelor-border focus-within:outline-1 focus-within:outline-vuelor-primary data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:outline-none',
     item: 'flex flex-1 items-center px-1 gap-1 bg-vuelor-input rounded-[5px]',
     field: 'w-full min-w-5 h-6 text-[11px] focus:outline-none'
   },

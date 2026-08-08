@@ -52,6 +52,24 @@ describe('components (SSR smoke)', () => {
     expect(html).toContain('aria-label="Rotate gradient 90 degrees"')
   })
 
+  it('renders an inert position input for a stale stop-id', async () => {
+    const app = createSSRApp({
+      render: () => h(
+        GradientPickerRoot,
+        {},
+        { default: () => h(GradientPickerPositionInput, { stopId: 999, label: 'Stale stop' }) }
+      )
+    })
+
+    const html = await renderToString(app)
+
+    // A provided-but-unresolved id must not fall back to the selected stop:
+    // the input renders disabled and empty instead.
+    expect(html).toContain('aria-label="Stale stop"')
+    expect(html).toMatch(/aria-label="Stale stop"[^>]*disabled/)
+    expect(html).not.toMatch(/aria-label="Stale stop"[^>]*value="0%"/)
+  })
+
   it('renders vanillacss class names in vanillacss mode', async () => {
     const app = createSSRApp({
       render: () => h(

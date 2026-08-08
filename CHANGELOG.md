@@ -13,6 +13,11 @@
 - Gradient slider — `valueCommit` is deferred one tick, so keyboard steps commit the post-keystroke gradient instead of a value stale by one step
 - Dev warnings — `import.meta.env.DEV` guards replaced with `process.env.NODE_ENV !== 'production'` in both roots, so the unsupported-value warnings survive the library build and reach consumers' dev builds
 - Theming — the gradient root's `ui` group renamed from `picker` to `root` (`:ui="{ root: { root } }"`) before the key freezes into the published API; `exports` maps now list `types` first
+- Position input — a provided `stop-id` that no longer resolves now renders the input inert instead of silently retargeting edits to the selected stop
+- `valueCommit` contract — commits deduplicate against the last committed value (parent writes reset the baseline), the inputs only move/commit on genuine changes (no more Enter+blur doubles or no-edit blur commits), the default slot exposes `commitValue`, and the ultra example commits type switches and stop-color edits through it
+- Validation — `addStop` rejects an invalid color (dev-warn) instead of inserting an opaque-black stop, invalid initial stops fall back to the default gradient with a warning, `setStopColor` dev-warns on dropped input, and an unsupported `defaultValue` now warns like `modelValue`
+- Bounds — documented (and regression-tested) that a parsed model is authoritative: `minStops`/`maxStops` bound only the add/remove interactions
+- Inputs — the field width moved from a hardcoded component class into the theme and the vanilla stylesheet, so `styling="vanillacss"` inputs no longer collapse and `unstyled` mode is truly blank
 
 🧹 Housekeeping (`@vuelor/picker` 1.1.0)
 - Export `createUiSlots` (with a new optional vanilla-class mapper argument), the `Styling`/`VanillaClassFn`/`UiSliderSlots`/`UiInputSlots` types, and `SVG_MOSAIC_URL`, so sibling packages reuse the theming machinery instead of copying it

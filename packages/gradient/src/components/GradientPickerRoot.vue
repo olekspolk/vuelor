@@ -22,9 +22,13 @@ export interface GradientPickerRootProps {
   /** Applied when modelValue is null/absent, mirroring ColorPickerRoot. */
   defaultValue?: string,
   modelValue?: ModelValue,
-  /** Read once at mount; never below 2, the CSS gradient minimum. */
+  /**
+   * Read once at mount; never below 2, the CSS gradient minimum. Bounds the
+   * remove-stop interaction only — a parsed modelValue keeps however many
+   * stops it declares.
+   */
   minStops?: number,
-  /** Read once at mount. */
+  /** Read once at mount; bounds the add-stop interaction only. */
   maxStops?: number
 }
 
@@ -53,27 +57,37 @@ const emit = defineEmits<GradientPickerRootEmits>()
 
 const gradient = useGradient({ minStops: props.minStops, maxStops: props.maxStops })
 
-function warnUnsupported (value: string): void {
+function warnUnsupported (prop: 'modelValue' | 'defaultValue', value: string): void {
   // process.env.NODE_ENV survives the library build (vite keeps it verbatim in
   // lib mode), so the consumer's own bundler decides dev vs prod — unlike
   // import.meta.env.DEV, which the lib build resolves to false at package
   // build time and strips for everyone.
   if (process.env.NODE_ENV !== 'production') {
     console.warn(
-      `[GradientPickerRoot] Unsupported modelValue "${value}". Accepted: linear/radial/conic ` +
+      `[GradientPickerRoot] Unsupported ${prop} "${value}". Accepted: linear/radial/conic ` +
       'gradients with #hex stops, e.g. "linear-gradient(90deg, #FF0000FF 0%, #0000FFFF 100%)".'
     )
   }
 }
 
+// valueCommit marks the END of a user interaction, so identical re-commits
+// (Enter then blur on an input, a drag ending where it started) deduplicate
+// against the last committed value. A parent write resets the baseline: a
+// later interaction landing back on a previously committed value must still
+// commit relative to what the parent last set.
+let lastCommittedValue: ModelValue = null
+
 const modelValue = useVModel<ModelValue>(props, emit, (value: ModelValue) => {
   if (value === null) {
-    gradient.setFromCSS(props.defaultValue)
+    if (!gradient.setFromCSS(props.defaultValue)) {
+      warnUnsupported('defaultValue', props.defaultValue)
+    }
   } else if (!gradient.setFromCSS(value)) {
     // Keep the current editor state: resetting on a bad value would throw
     // away the user's stops mid-edit.
-    warnUnsupported(value)
+    warnUnsupported('modelValue', value)
   }
+  lastCommittedValue = gradient.css.value
 })
 
 // No immediate flush: emitting during setup would overwrite the parent's
@@ -85,24 +99,32 @@ const disabled = computed(() => props.disabled)
 const uiSlots = createUiSlots(theme.tailwindcss, props.ui, props.styling, gradientVanillaClass)
 const ui = uiSlots('root')
 
+function commitValue (): void {
+  if (props.disabled) return
+  const value = gradient.css.value
+  if (value === lastCommittedValue) return
+  lastCommittedValue = value
+  emit('valueCommit', value)
+}
+
 provideGradientPickerContext({
   ...gradient,
   uiSlots,
   disabled,
-  commitValue: () => {
-    if (!props.disabled) {
-      emit('valueCommit', gradient.css.value)
-    }
-  }
+  commitValue
 })
 
 defineExpose({
-  gradient
+  gradient,
+  commitValue
 })
 </script>
 
 <template>
   <div :class="ui.root(props.class)">
-    <slot :gradient="gradient" />
+    <slot
+      :gradient="gradient"
+      :commitValue="commitValue"
+    />
   </div>
 </template>

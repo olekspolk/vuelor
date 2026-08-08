@@ -12,9 +12,13 @@ export interface UseGradientOptions {
   type?: GradientType,
   angle?: number,
   stops?: GradientStop[],
-  /** Floor for removeStop; never below 2, the CSS gradient minimum. */
+  /**
+   * Interaction floor for removeStop; never below 2, the CSS gradient
+   * minimum. setFromCSS treats a parsed model as authoritative and keeps
+   * however many stops it declares.
+   */
   minStops?: number,
-  /** Ceiling for addStop; never below minStops. */
+  /** Interaction ceiling for addStop; setFromCSS may load more. */
   maxStops?: number
 }
 
@@ -24,6 +28,14 @@ const DEFAULT_STOPS: GradientStop[] = [
   { color: '#FF98C2FF', position: 0 },
   { color: '#FFFA7AFF', position: 100 }
 ]
+
+function warnInvalidColor (source: string, color: string): void {
+  // process.env.NODE_ENV survives the library build, so the warning reaches
+  // consumers' dev builds and is stripped from their production bundles.
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn(`[useGradient] ${source} ignored invalid color "${color}". Expected 3/4/6/8-digit hex, e.g. "#FF0000FF".`)
+  }
+}
 
 export function useGradient (options: UseGradientOptions = {}) {
   const minStops = Math.max(MIN_GRADIENT_STOPS, options.minStops ?? MIN_GRADIENT_STOPS)
@@ -44,9 +56,15 @@ export function useGradient (options: UseGradientOptions = {}) {
     return [...list].sort((a, b) => a.position - b.position)
   }
 
-  const initialStops = (options.stops?.length ?? 0) >= MIN_GRADIENT_STOPS
-    ? options.stops!
-    : DEFAULT_STOPS
+  // All-or-nothing like the parser: partially valid initial stops would
+  // otherwise be silently patched with black placeholders.
+  const providedStops = options.stops ?? []
+  const providedStopsValid = providedStops.length >= MIN_GRADIENT_STOPS &&
+    providedStops.every((stop) => normalizeHexa(stop.color) !== null)
+  if (providedStops.length > 0 && !providedStopsValid && process.env.NODE_ENV !== 'production') {
+    console.warn('[useGradient] Invalid initial stops (need >= 2 stops with hex colors); falling back to the default gradient.')
+  }
+  const initialStops = providedStopsValid ? providedStops : DEFAULT_STOPS
 
   // Stops live in one array of { id, position, color } kept sorted by
   // position: colors can never detach from their positions, and the selection
@@ -97,13 +115,20 @@ export function useGradient (options: UseGradientOptions = {}) {
   }
 
   function setStopColor (id: number, color: string): void {
-    const stop = stops.value.find((s) => s.id === id)
     const hexa = normalizeHexa(color)
-    if (stop && hexa) stop.color = hexa
+    if (!hexa) return warnInvalidColor('setStopColor', color)
+    const stop = stops.value.find((s) => s.id === id)
+    if (stop) stop.color = hexa
   }
 
   function addStop (position?: number, color?: string): ManagedGradientStop | null {
     if (!canAddStop.value) return null
+    // Consistent with setStopColor: an invalid color rejects the mutation
+    // instead of silently inserting an opaque-black stop.
+    if (color !== undefined && normalizeHexa(color) === null) {
+      warnInvalidColor('addStop', color)
+      return null
+    }
 
     const list = stops.value
     let stop: ManagedGradientStop
@@ -149,7 +174,11 @@ export function useGradient (options: UseGradientOptions = {}) {
     angle.value = normalizeAngle(angle.value + degrees)
   }
 
-  /** Parse a CSS gradient and replace the whole editor state. */
+  /**
+   * Parse a CSS gradient and replace the whole editor state. The parsed
+   * model is authoritative: its stop count is not clamped to minStops /
+   * maxStops, which only bound the addStop / removeStop interactions.
+   */
   function setFromCSS (input: string): boolean {
     const parsed = parseGradient(input)
     if (!parsed) return false

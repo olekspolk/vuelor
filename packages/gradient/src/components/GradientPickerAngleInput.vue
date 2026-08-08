@@ -30,8 +30,12 @@ function commit (event: Event) {
   if (match) {
     const value = normalizeAngle(match[1]!)
     target.value = `${value}°`
-    rootContext.angle.value = value
-    rootContext.commitValue()
+    // Only a genuine change writes and commits; re-parsing canonical text
+    // (blur after Enter, or an untouched field) is a no-op.
+    if (value !== rootContext.angle.value) {
+      rootContext.angle.value = value
+      rootContext.commitValue()
+    }
   } else {
     target.value = `${rootContext.angle.value}°`
   }
@@ -43,7 +47,7 @@ const ui = rootContext.uiSlots('input')
 <template>
   <div
     :data-disabled="isDisabled ? '' : undefined"
-    :class="ui.group('w-12', props.ui?.group, props.class)"
+    :class="ui.group(props.ui?.group, props.class)"
   >
     <div :class="ui.item(props.ui?.item)">
       <input

@@ -30,6 +30,16 @@ describe('useGradient', () => {
     expect(gradient.stops.value).toHaveLength(2)
   })
 
+  it('falls back to defaults when any initial stop color is invalid', () => {
+    const gradient = useGradient({
+      stops: [
+        { color: 'red', position: 0 },
+        { color: '#00f', position: 100 }
+      ]
+    })
+    expect(gradient.stops.value.map((s) => s.color)).toEqual(['#FF98C2FF', '#FFFA7AFF'])
+  })
+
   describe('addStop', () => {
     it('splits the segment right of the selected stop at its midpoint', () => {
       const gradient = useGradient({
@@ -74,6 +84,12 @@ describe('useGradient', () => {
       expect(gradient.canAddStop.value).toBe(false)
       expect(gradient.addStop()).toBeNull()
       expect(gradient.stops.value).toHaveLength(3)
+    })
+
+    it('rejects an invalid color instead of inserting a black stop', () => {
+      const gradient = useGradient()
+      expect(gradient.addStop(50, 'red')).toBeNull()
+      expect(gradient.stops.value).toHaveLength(2)
     })
   })
 
@@ -169,6 +185,18 @@ describe('useGradient', () => {
       const gradient = useGradient({ angle: 45 })
       gradient.setFromCSS('radial-gradient(circle at center, #f00, #00f)')
       expect(gradient.angle.value).toBe(45)
+    })
+
+    it('treats the parsed model as authoritative over maxStops', () => {
+      const gradient = useGradient({ maxStops: 4 })
+      expect(gradient.setFromCSS(
+        'linear-gradient(90deg, #f00 0%, #0f0 20%, #00f 40%, #ff0 60%, #f0f 80%, #0ff 100%)'
+      )).toBe(true)
+      expect(gradient.stops.value).toHaveLength(6)
+      // The interaction bounds still hold afterwards: no more adds, and
+      // removals can trim back toward the floor.
+      expect(gradient.canAddStop.value).toBe(false)
+      expect(gradient.canRemoveStop.value).toBe(true)
     })
   })
 

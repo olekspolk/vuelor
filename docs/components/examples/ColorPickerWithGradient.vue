@@ -107,9 +107,13 @@ const GRADIENT_TYPE_LABELS: Record<GradientType, string> = {
 }
 const gradientTypeOptions = Object.values(GRADIENT_TYPE_LABELS)
 
-function handleGradientTypeChange (gradient: UseGradientReturn, value: string) {
+function handleGradientTypeChange (gradient: UseGradientReturn, commit: () => void, value: string) {
   const type = value.toLowerCase() as GradientType
-  if (type in GRADIENT_TYPE_LABELS) gradient.type.value = type
+  if (!(type in GRADIENT_TYPE_LABELS)) return
+  gradient.type.value = type
+  // Switching the type is a finished interaction; the root's commitValue
+  // dedupes, so a re-selection of the current type stays silent.
+  commit()
 }
 
 function warnUnsupported (value: string): void {
@@ -178,6 +182,20 @@ function handleSelectStop (gradient: UseGradientReturn, id: number) {
   gradient.select(id)
 }
 
+// The per-row hex fields emit when an edit lands (blur/Enter), so each
+// emission is a finished stop-color interaction.
+function handleStopColorChange (gradient: UseGradientReturn, commit: () => void, id: number, value: string) {
+  gradient.setStopColor(id, value)
+  commit()
+}
+
+// Canvas drags, sliders, inputs and swatches editing the selected stop
+// signal their end through the picker's own valueCommit; forward it to the
+// gradient's commit. In color mode the gradient editor is not involved.
+function handlePickerColorCommit (commit: () => void) {
+  if (mode.value === 'gradient') commit()
+}
+
 // The stop-color popover anchors to the panel (not the clicked stop swatch, which
 // sits low in the list), so it always opens tidily to the left of the panel and
 // top-aligned instead of hanging off — and over — the content below.
@@ -231,7 +249,7 @@ function handleStopPopoverInteractOutside (event: CustomEvent<{ originalEvent: E
 
 <template>
   <GradientPickerRoot
-    v-slot="{ gradient }"
+    v-slot="{ gradient, commitValue }"
     v-model="gradientValue"
     :disabled="props.disabled"
     class="block w-auto gap-0 rounded-none bg-transparent p-0 shadow-none"
@@ -243,6 +261,7 @@ function handleStopPopoverInteractOutside (event: CustomEvent<{ originalEvent: E
       :disabled="props.disabled"
       :ui="{ input: { label: 'hidden', field: 'max-w-12' } }"
       @update:model-value="handlePickerColorChange(gradient, $event)"
+      @value-commit="handlePickerColorCommit(commitValue)"
     >
       <DefineColorPickerTemplate>
         <div class="p-4 flex flex-col gap-2">
@@ -344,7 +363,7 @@ function handleStopPopoverInteractOutside (event: CustomEvent<{ originalEvent: E
               placeholder="Type"
               :disabled="props.disabled"
               :options="gradientTypeOptions"
-              @update:model-value="handleGradientTypeChange(gradient, $event)"
+              @update:model-value="handleGradientTypeChange(gradient, commitValue, $event)"
             />
             <div class="flex items-center gap-1">
               <GradientPickerReverse />
@@ -374,7 +393,7 @@ function handleStopPopoverInteractOutside (event: CustomEvent<{ originalEvent: E
             <ColorPickerInputHex
               class="flex-1"
               :model-value="stop.color"
-              @update:model-value="gradient.setStopColor(stop.id, $event)"
+              @update:model-value="handleStopColorChange(gradient, commitValue, stop.id, $event)"
             >
               <template #before>
                 <ColorPickerSwatch
