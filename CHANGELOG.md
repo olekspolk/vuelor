@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0
+
+✨ New
+- Tailwind source registration ships with the packages — `@vuelor/picker` 1.2.0 and `@vuelor/gradient` 0.2.0 each export a `tailwind.css` entry point containing `@source "."`. Because `@source` resolves relative to the file it appears in, the path is anchored to the package's own `dist` instead of the consumer's stylesheet, so registration is now one line that is identical in every project: `@import "@vuelor/picker/tailwind.css"`. The previous `@source "../../node_modules/@vuelor/picker"` still works and is unchanged for anyone who prefers it — the new form only removes the need to count `../` segments, which silently purged the entire picker when miscounted (Tailwind v4 ignores `node_modules`, and a path that resolves nowhere produces no error)
+
+🧹 Housekeeping
+- Docs, both package READMEs and the post-install note the shadcn-vue CLI prints now lead with the entry-point import, with the `@source` form kept as the pre-1.2.0 fallback
+
 ## 1.1.1
 
 🐞 Bug Fixes

@@ -1,6 +1,6 @@
 {
   "name": "@vuelor/gradient",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "type": "module",
   "license": "MIT",
   "description": "Composable Vue gradient editor — CSS gradient parsing, a useGradient composable and headless GradientPicker components built with Reka UI and Tailwind CSS on top of @vuelor/picker.",
@@ -29,6 +29,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./tailwind.css": "./dist/tailwind.css",
     "./style.css": "./dist/style.css"
   },
   "keywords": [

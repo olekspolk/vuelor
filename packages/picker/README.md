@@ -80,7 +80,7 @@ Update the `index.css` file:
 
 ```css
 @import "tailwindcss";
-@source "../../node_modules/@vuelor/picker";
+@import "@vuelor/picker/tailwind.css";
 
 @theme {
   --color-vuelor-primary: #0d99ff;
