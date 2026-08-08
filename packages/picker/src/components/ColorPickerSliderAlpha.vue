@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SliderRootProps } from 'reka-ui'
-import type { UiSliderSlots } from '../utils/styles'
+import type { UiSliderSlots } from '../utils/styles.ts'
 import { SliderRoot, SliderThumb, SliderTrack } from 'reka-ui'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 

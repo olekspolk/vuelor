@@ -1,4 +1,4 @@
-name: Publish @vuelor/picker
+name: Publish packages
 
 on:
   release:
@@ -30,18 +30,51 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build @vuelor/picker
-        run: pnpm --filter @vuelor/picker build
+      # Dependency order matters: @vuelor/gradient builds and publishes against
+      # the picker's fresh dist (workspace:^ is rewritten to the picker's real
+      # version by pnpm at pack time).
+      - name: Build packages
+        run: |
+          pnpm --filter @vuelor/picker build
+          pnpm --filter @vuelor/gradient build
 
+      - name: Test packages
+        run: |
+          pnpm --filter @vuelor/picker test
+          pnpm --filter @vuelor/gradient test
+
+      # Each package publishes only when its package.json version is not on npm
+      # yet, so a picker-only or gradient-only release (or a re-run) never fails
+      # on an already-published sibling.
       - name: Publish @vuelor/picker to npm
         working-directory: packages/picker
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm publish --access public --no-git-checks
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if [ -n "$(npm view "$NAME@$VERSION" version 2>/dev/null || true)" ]; then
+            echo "$NAME@$VERSION is already on npm — skipping."
+          else
+            pnpm publish --access public --no-git-checks
+          fi
 
-  # After a new @vuelor/picker is published, pin the registry to it, regenerate, and commit back
-  # to main. The push to main triggers the Deploy workflow, so the live registry is rebuilt against
-  # the new release.
+      - name: Publish @vuelor/gradient to npm
+        working-directory: packages/gradient
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          NAME=$(node -p "require('./package.json').name")
+          VERSION=$(node -p "require('./package.json').version")
+          if [ -n "$(npm view "$NAME@$VERSION" version 2>/dev/null || true)" ]; then
+            echo "$NAME@$VERSION is already on npm — skipping."
+          else
+            pnpm publish --access public --no-git-checks
+          fi
+
+  # After the packages are published, pin the registry to them, regenerate, and commit back
+  # to main. The push to main triggers the Deploy workflow, so the live registry is rebuilt
+  # against the new releases.
   sync-registry:
     needs: publish
     runs-on: ubuntu-latest
@@ -69,11 +102,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Pin registry to the released @vuelor/picker version
+      - name: Pin registry to the released package versions
         run: |
-          VERSION=$(node -p "require('./packages/picker/package.json').version")
-          echo "Pinning registry to @vuelor/picker@^$VERSION"
-          sed -i "s/export const PICKER_VERSION = '[^']*'/export const PICKER_VERSION = '^$VERSION'/" docs/registry.config.mjs
+          PICKER=$(node -p "require('./packages/picker/package.json').version")
+          GRADIENT=$(node -p "require('./packages/gradient/package.json').version")
+          echo "Pinning registry to @vuelor/picker@^$PICKER and @vuelor/gradient@^$GRADIENT"
+          sed -i "s/export const PICKER_VERSION = '[^']*'/export const PICKER_VERSION = '^$PICKER'/" docs/registry.config.mjs
+          sed -i "s/export const GRADIENT_VERSION = '[^']*'/export const GRADIENT_VERSION = '^$GRADIENT'/" docs/registry.config.mjs
 
       - name: Regenerate registry
         run: pnpm --filter docs registry:build
@@ -86,7 +121,8 @@ jobs:
           if git diff --staged --quiet; then
             echo "Registry already up to date — nothing to commit."
           else
-            VERSION=$(node -p "require('./packages/picker/package.json').version")
-            git commit -m "chore(registry): regenerate for @vuelor/picker@$VERSION"
+            PICKER=$(node -p "require('./packages/picker/package.json').version")
+            GRADIENT=$(node -p "require('./packages/gradient/package.json').version")
+            git commit -m "chore(registry): regenerate for @vuelor/picker@$PICKER and @vuelor/gradient@$GRADIENT"
             git push origin HEAD:main
           fi

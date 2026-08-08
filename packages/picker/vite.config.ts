@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
 
 // https://vite.dev/config/
@@ -7,6 +7,13 @@ export default defineConfig({
   plugins: [
     vue()
   ],
+  test: {
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{ts,vue}'],
+      exclude: ['src/env.d.ts']
+    }
+  },
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')

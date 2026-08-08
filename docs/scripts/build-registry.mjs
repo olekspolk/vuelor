@@ -18,11 +18,13 @@ import {
   STYLE,
   NAMESPACE,
   PICKER_VERSION,
+  GRADIENT_VERSION,
   AUTHOR,
   HOMEPAGE,
   EXAMPLE_ITEMS,
   THEME_VARS,
   DOCS_NOTE,
+  GRADIENT_DOCS_NOTE,
 } from '../registry.config.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -66,7 +68,11 @@ function deriveDependencies(contents) {
   specs.delete('vue') // always present in a Vue project; not worth declaring
   return [...specs]
     .sort()
-    .map((s) => (s === '@vuelor/picker' ? `@vuelor/picker@${PICKER_VERSION}` : s))
+    .map((s) => {
+      if (s === '@vuelor/picker') return `@vuelor/picker@${PICKER_VERSION}`
+      if (s === '@vuelor/gradient') return `@vuelor/gradient@${GRADIENT_VERSION}`
+      return s
+    })
 }
 
 function buildExampleItem(entry) {
@@ -91,16 +97,19 @@ function buildExampleItem(entry) {
     contents.push(helperRewritten)
   }
 
+  const dependencies = deriveDependencies(contents)
+  const usesGradient = dependencies.some((d) => d.startsWith('@vuelor/gradient'))
+
   return {
     name: entry.name,
     type: 'registry:block',
     title: entry.title,
     description: entry.description,
     author: AUTHOR,
-    dependencies: deriveDependencies(contents),
+    dependencies,
     registryDependencies: [`${NAMESPACE}/${THEME_ITEM}`],
     files,
-    docs: DOCS_NOTE,
+    docs: usesGradient ? DOCS_NOTE + GRADIENT_DOCS_NOTE : DOCS_NOTE,
     categories: entry.categories,
     meta: { vuelorVersion: PICKER_VERSION, stylingMode: 'tailwindcss' },
   }

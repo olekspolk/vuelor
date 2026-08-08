@@ -1,5 +1,7 @@
 # API Reference
 
+This page covers `@vuelor/picker`. For the gradient editor — its components, `useGradient()` composable and parsing core — see the [Gradient API Reference](/gradient/api-reference).
+
 ## Components
 
 | Name                              | Description                                                                                          |

@@ -1,0 +1,22 @@
+/* Design tokens shared by every Vuelor package's vanillacss mode. Declared
+   once here and compiled into each package's stylesheet, so the values can
+   never drift between sibling panels. Override them on these selectors (or
+   on each root class) to theme all panels at once. */
+:where(.vuelor-picker-root, .vuelor-gradient-root) {
+  --color-vuelor-primary: #0d99ff;
+  --color-vuelor-surface: #ffffff;
+  --color-vuelor-border: #e6e6e6;
+  --color-vuelor-shadow-inner: #0000001a;
+  --color-vuelor-input-bg: #f5f5f5;
+  --color-vuelor-button-bg--hover: #0000000d;
+
+  --opacity-vuelor-disabled: 0.5;
+
+  --shadow-vuelor-card: 0 0.125rem 0.3125rem 0 #00000026, 0 0.625rem 1rem 0 #0000001f, 0 0 0.03125rem 0 #0000001f;
+  --shadow-vuelor-thumb: 0 0 0.03125rem rgba(0, 0, 0, .18), 0 0.1875rem 0.5rem rgba(0, 0, 0, .1), 0 0.0625rem 0.1875rem rgba(0, 0, 0, .1);
+  --shadow-vuelor-inner: inset 0 0 0 0.0625rem var(--color-vuelor-shadow-inner);
+
+  /* The gradient slider thumbs shadow via filter: drop-shadow (a box-shadow
+     cannot follow the pointer triangle), so their shadow is its own token. */
+  --filter-vuelor-drop-thumb: drop-shadow(0 0 0.03125rem #00000054) drop-shadow(0 0.0625rem 0.1875rem #00000026);
+}

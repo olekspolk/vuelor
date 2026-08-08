@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { UiInputSlots } from '../utils/styles'
+import type { UiInputSlots } from '../utils/styles.ts'
 import { injectColorPickerContext } from './ColorPickerRoot.vue'
 import { useChannelInput } from '../composables/useChannelInput.ts'
 

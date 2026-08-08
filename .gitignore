@@ -23,3 +23,8 @@ pnpm-debug.log*
 
 */.vitepress/cache
 */.vitepress/dist
+
+# Claude Code local state
+.claude/settings.local.json
+.claude/*.lock
+coverage

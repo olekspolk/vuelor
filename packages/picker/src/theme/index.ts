@@ -1,4 +1,4 @@
-import tailwindcss from '../theme/tailwindcss'
+import tailwindcss from './tailwindcss.ts'
 
 export default {
   tailwindcss

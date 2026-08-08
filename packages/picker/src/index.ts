@@ -1,8 +1,12 @@
 import './style/index.css'
-export * from './utils/color'
-export type * from './utils/types'
+export * from './utils/color.ts'
+export type * from './utils/types.ts'
 
 export { useVModel } from './composables/useVModel.ts'
+export { parseHex } from './utils/parsers.ts'
+export { createUiSlots } from './utils/styles.ts'
+export type { Styling, VanillaClassFn, UiSliderSlots, UiInputSlots } from './utils/styles.ts'
+export { SVG_MOSAIC_URL } from './utils/consts.ts'
 export { injectColorPickerContext } from './components/ColorPickerRoot.vue'
 
 export { default as ColorPickerRoot } from './components/ColorPickerRoot.vue'
