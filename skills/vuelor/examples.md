@@ -1,8 +1,8 @@
 # Vuelor registry catalog
 
 Install any of these with `npx shadcn-vue@latest add @vuelor/<name>`. All examples depend on
-`@vuelor/color-picker-theme` (added automatically) and on `@vuelor/picker` + `reka-ui`; the gradient
-items also install `@vuelor/gradient`.
+`@vuelor/color-picker-theme` (added automatically) and on `@vuelor/picker` (plus `reka-ui` where the
+example composes Reka primitives directly); the gradient items also install `@vuelor/gradient`.
 
 | `@vuelor/<name>` | Best for | Composes | Extra npm deps |
 | ---------------- | -------- | -------- | -------------- |
