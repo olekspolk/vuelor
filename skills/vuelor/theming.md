@@ -1,11 +1,11 @@
 # Theming Vuelor
 
-`ColorPickerRoot` has a `styling` prop with three modes (default `tailwindcss`):
+`ColorPickerRoot` and `GradientPickerRoot` share a `styling` prop with three modes (default `tailwindcss`):
 
 | `styling` | How it's styled | What the consumer must provide |
 | --------- | --------------- | ------------------------------ |
 | `tailwindcss` (default) | Tailwind utility classes that reference `vuelor-*` design tokens | the `vuelor-*` tokens (see below) |
-| `vanillacss` | Plain CSS scoped to `.vuelor-picker-root` | `import '@vuelor/picker/style.css'` once |
+| `vanillacss` | Plain CSS scoped to `.vuelor-picker-root` / `.vuelor-gradient-root` | `import '@vuelor/picker/style.css'` (and `'@vuelor/gradient/style.css'` for the gradient editor) once |
 | `unstyled` | No built-in classes at all | your own styles |
 
 ## Tailwind mode tokens
@@ -28,24 +28,30 @@ The picker's utility classes (`bg-vuelor-primary`, `bg-vuelor-surface`, `bg-vuel
 ```
 
 - **Installed via the CLI?** These are added automatically through the `@vuelor/color-picker-theme`
-  registry dependency — do nothing.
+  registry dependency — but Tailwind still needs to scan the packages: add
+  `@source "../node_modules/@vuelor/picker";` (and `@vuelor/gradient` when used) to the global CSS
+  in v4 setups.
 - **Tailwind v3** (manual setup): define the same tokens under `theme.extend.colors` /
   `theme.extend.boxShadow` (and `dropShadow`), AND add `'./node_modules/@vuelor/picker/dist/index.js'`
-  to your `content` array so the `vuelor-*` classes are not purged.
+  (plus `'./node_modules/@vuelor/gradient/dist/index.js'` when used) to your `content` array so the
+  `vuelor-*` classes are not purged.
 
 ## Vanilla mode variables (different, larger set)
 
-`@vuelor/picker/style.css` scopes everything to `.vuelor-picker-root` and exposes these CSS variables —
-note `--color-vuelor-input-bg` (not `-input`) and the extra entries that have no Tailwind equivalent:
+The design tokens are single-sourced in `@vuelor/picker` and compiled into both packages'
+stylesheets, declared on `:where(.vuelor-picker-root, .vuelor-gradient-root)` — note
+`--color-vuelor-input-bg` (not `-input`) and the extra entries that have no Tailwind equivalent:
 
 ```
 --color-vuelor-primary, --color-vuelor-surface, --color-vuelor-border,
 --color-vuelor-input-bg, --color-vuelor-shadow-inner, --color-vuelor-button-bg--hover,
 --opacity-vuelor-disabled,
---shadow-vuelor-card, --shadow-vuelor-thumb, --shadow-vuelor-inner
+--shadow-vuelor-card, --shadow-vuelor-thumb, --shadow-vuelor-inner,
+--filter-vuelor-drop-thumb   (gradient slider thumbs)
 ```
 
-Override them per instance by setting these variables on the root element (or a wrapper).
+Override them on those root selectors (or per instance on a wrapper) — one override rethemes
+picker and gradient panels together.
 
 ## Per-component overrides
 

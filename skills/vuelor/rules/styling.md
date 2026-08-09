@@ -3,6 +3,8 @@
 Restyle any part without forking it by passing class overrides through the `ui` prop. `ui` is a
 partial map of **theme slots**; each slot has named sub-parts:
 
+`ColorPickerRoot` slots:
+
 | Slot | Sub-parts (class targets) |
 | ---- | ------------------------- |
 | `picker` | `root` |
@@ -12,6 +14,16 @@ partial map of **theme slots**; each slot has named sub-parts:
 | `slider` | `root`, `track` |
 | `input` | `group`, `item`, `label`, `field` |
 | `swatch` | `root`, `alpha` |
+
+`GradientPickerRoot` slots (same mechanism, its own groups):
+
+| Slot | Sub-parts (class targets) |
+| ---- | ------------------------- |
+| `root` | `root` |
+| `slider` | `root`, `track`, `thumb` (selected state via `[data-selected]`), `thumbSwatch` |
+| `input` | `group`, `item`, `field` |
+| `button` | `root` (all four action buttons) |
+| `preview` | `root` |
 
 ```vue
 <ColorPickerRoot
@@ -44,7 +56,7 @@ This means you can nudge one utility (e.g. `rounded-lg`) without restating the w
 ## Choosing a styling mode
 
 - Keep the default `styling="tailwindcss"` in Tailwind projects (and provide the `vuelor-*` tokens — see [theming.md](../theming.md)).
-- Use `styling="vanillacss"` + `import '@vuelor/picker/style.css'` when the project has no Tailwind; override the `.vuelor-picker-root` CSS variables to retheme.
+- Use `styling="vanillacss"` + `import '@vuelor/picker/style.css'` (and `'@vuelor/gradient/style.css'` for the gradient editor) when the project has no Tailwind; the design tokens are declared once on `:where(.vuelor-picker-root, .vuelor-gradient-root)`, so overriding them rethemes both panels.
 - Use `styling="unstyled"` to drop all built-in classes and start from scratch (then style via `ui`/`class`).
 
 ## Don'ts

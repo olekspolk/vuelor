@@ -1,7 +1,8 @@
 # Vuelor registry catalog
 
 Install any of these with `npx shadcn-vue@latest add @vuelor/<name>`. All examples depend on
-`@vuelor/color-picker-theme` (added automatically) and on `@vuelor/picker` + `reka-ui`.
+`@vuelor/color-picker-theme` (added automatically) and on `@vuelor/picker` + `reka-ui`; the gradient
+items also install `@vuelor/gradient`.
 
 | `@vuelor/<name>` | Best for | Composes | Extra npm deps |
 | ---------------- | -------- | -------- | -------------- |
@@ -15,7 +16,8 @@ Install any of these with `npx shadcn-vue@latest add @vuelor/<name>`. All exampl
 | `color-picker-popover` | A trigger that opens a picker | Hex input + Reka UI Popover wrapping canvas, eyedropper, sliders | — |
 | `color-picker-tabs` | Format switching via tabs | Reka UI Tabs over HEX/RGB/HSL/HSB inputs | — |
 | `color-picker-tabs-vertical` | Tabs + vertical sliders | Tabs with a vertical slider layout | — |
-| `color-picker-gradient` | A full gradient editor | Multi-stop linear/radial/conic editor, swatches, color + gradient tabs | `@vueuse/core`, `tailwind-merge` |
+| `color-picker-gradient` | Solid color + gradient in one panel | Tabs switching a full color picker and a multi-stop linear/radial/conic editor built on `@vuelor/gradient`, with swatches and a stop-color popover | `@vuelor/gradient`, `@vueuse/core` |
+| `gradient-picker` | A standalone gradient editor | `GradientPickerRoot` + stops slider, angle/position inputs, add/remove/reverse/rotate, live preview, and a nested color picker for the selected stop | `@vuelor/gradient` |
 | `color-picker-theme` | Tokens only | The Tailwind v4 `vuelor-*` color + shadow tokens | — |
 
 ## Picking the right one
@@ -24,7 +26,7 @@ Install any of these with `npx shadcn-vue@latest add @vuelor/<name>`. All exampl
 - "small" / "compact" / "inline" → `color-picker-mini` (or the `-vertical` variants).
 - "a button/swatch that opens a picker" → `color-picker-popover`.
 - "RGB sliders" / "HSL sliders" / "per-channel" → `color-picker-sliders-rgb` / `color-picker-sliders-hsl`.
-- "gradient" / "multi-stop" / "linear/radial/conic" → `color-picker-gradient`.
+- "gradient" / "multi-stop" / "linear/radial/conic" → `gradient-picker` for a gradient-only editor; `color-picker-gradient` when solid colors and gradients share one panel (Figma-style tabs).
 - "tabs to switch formats" → `color-picker-tabs` (or `-vertical`).
 
 After installing, mount the component and bind `v-model`. See [rules/composition.md](./rules/composition.md).

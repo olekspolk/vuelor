@@ -1,16 +1,17 @@
 ---
 name: vuelor
-description: Add, compose, and style Vuelor color pickers (the @vuelor/picker headless library and its @vuelor shadcn-vue registry) in Vue and Nuxt apps. Use when the user wants a color picker, gradient picker, or eyedropper, mentions "@vuelor/picker" or "vuelor", or works in a project whose components.json lists an @vuelor registry.
+description: Add, compose, and style Vuelor color and gradient pickers (the @vuelor/picker and @vuelor/gradient headless libraries and their @vuelor shadcn-vue registry) in Vue and Nuxt apps. Use when the user wants a color picker, gradient picker/editor, or eyedropper, mentions "@vuelor/picker", "@vuelor/gradient" or "vuelor", or works in a project whose components.json lists an @vuelor registry.
 user-invocable: false
 allowed-tools: Bash(npx shadcn-vue@latest *), Bash(pnpm dlx shadcn-vue@latest *), Bash(bunx --bun shadcn-vue@latest *)
 ---
 
 # Vuelor
 
-Vuelor is a flexible, accessible, Tailwind-ready color picker for Vue 3, built on [Reka UI](https://reka-ui.com). It ships in two complementary forms:
+Vuelor is a flexible, accessible, Tailwind-ready color picker for Vue 3, built on [Reka UI](https://reka-ui.com). It ships in three complementary forms:
 
-- **`@vuelor/picker`** — a headless library of building-block components you compose yourself.
-- **the `@vuelor` shadcn-vue registry** — ready-made example pickers you install with the shadcn-vue CLI and then own as editable source.
+- **`@vuelor/picker`** — a headless library of color-picker building blocks you compose yourself.
+- **`@vuelor/gradient`** — a headless gradient editor built on the picker: CSS gradient parsing/serializing, a `useGradient()` composable, and `GradientPicker*` components (`v-model` is a CSS gradient string).
+- **the `@vuelor` shadcn-vue registry** — ready-made example pickers and editors you install with the shadcn-vue CLI and then own as editable source.
 
 ## When to use this skill
 
@@ -32,13 +33,13 @@ Adding or embedding a color/gradient picker in a Vue or Nuxt app; composing the 
 1. Confirm the project is shadcn-vue-initialized (a valid `components.json` exists). If not, the user must run `npx shadcn-vue@latest init` first — `add` cannot run without it.
 2. Ensure `@vuelor` is in the `registries` map of `components.json`. If missing, add `"@vuelor": "https://vuelor.dev/r/{name}.json"`. (See [install.md](./install.md).)
 3. Pick the item that matches intent — mini / sliders / popover / tabs / gradient — from [examples.md](./examples.md).
-4. Run `npx shadcn-vue@latest add @vuelor/<name>`. This also installs `@vuelor/picker` (+ `reka-ui`, and `@vueuse/core`/`tailwind-merge` for the gradient editor) and adds the `vuelor-*` design tokens via the `color-picker-theme` dependency.
+4. Run `npx shadcn-vue@latest add @vuelor/<name>`. This also installs `@vuelor/picker` (+ `reka-ui`; gradient items add `@vuelor/gradient`, and the ultra editor `@vueuse/core`) and adds the `vuelor-*` design tokens via the `color-picker-theme` dependency.
 5. Import the copied component and bind it with `v-model`.
 
 ## Critical rules
 
-- **Every picker part must live inside `<ColorPickerRoot>`.** The root manages color state and provides it via context; a part rendered outside the root will throw.
-- **Bind the value with `v-model` on `ColorPickerRoot`.** The value type follows the `format` prop — `hexa` (an `#RRGGBBAA` string) by default; `object` returns a full color object (`{ hex, hexa, rgb, rgba, hsl, hsla, hsv, hsva }`).
+- **Every picker part must live inside `<ColorPickerRoot>`, and every `GradientPicker*` part inside `<GradientPickerRoot>`.** Each root manages its state and provides it via context; a part rendered outside its root will throw. The two roots nest freely (a color picker editing the selected stop goes inside the gradient root).
+- **Bind the value with `v-model` on the root.** `ColorPickerRoot`'s value type follows the `format` prop — `hexa` (an `#RRGGBBAA` string) by default; `object` returns a full color object (`{ hex, hexa, rgb, rgba, hsl, hsla, hsv, hsva }`). `GradientPickerRoot`'s value is always a CSS gradient string (`linear-gradient(90deg, #FF0000FF 0%, …)`).
 - **Style through the `ui` prop or the `styling` prop — never fork the engine.** See [rules/styling.md](./rules/styling.md).
 - **Installed examples need the `vuelor-*` Tailwind tokens.** With the CLI they arrive automatically via `@vuelor/color-picker-theme`. For manual installs, Tailwind v3, or non-Tailwind apps, see [theming.md](./theming.md).
 - **Never hand-fetch component files from GitHub.** Always use the shadcn-vue CLI (or MCP) so dependencies, import aliases, and tokens are wired correctly.

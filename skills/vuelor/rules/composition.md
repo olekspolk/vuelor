@@ -18,7 +18,8 @@ parts are exported from `@vuelor/picker`.
 
 Sliders accept Reka UI orientation via `orientation="vertical"`.
 
-Utilities also exported: `HexaToRGBA`, `RGBAtoHexa`, `useVModel`, `injectColorPickerContext`.
+Utilities also exported: `HexaToRGBA`, `RGBAtoHexa`, `parseHex`, `useVModel`, `createUiSlots`,
+`injectColorPickerContext`.
 
 ## `ColorPickerRoot` props
 
@@ -81,10 +82,49 @@ const forwarded = useForwardPropsEmits(props, emits)
 </template>
 ```
 
+## Composing the gradient editor (`@vuelor/gradient`)
+
+The gradient package follows the same pattern with its own root. `v-model` on `GradientPickerRoot`
+is a CSS gradient string (`linear-gradient(<angle>deg, …)`, `radial-gradient(circle at center, …)`,
+`conic-gradient(from <angle>deg, …)` with `#hex [position%]` stops).
+
+| Component | Purpose |
+| --------- | ------- |
+| `GradientPickerRoot` | Required wrapper. Owns stops/selection/type/angle; emits `update:modelValue` + deduplicated `valueCommit`. |
+| `GradientPickerSlider` | Multi-thumb stops slider; crossing a neighbour keeps color and selection attached. `#thumb` slot for custom thumbs. |
+| `GradientPickerPositionInput` / `GradientPickerAngleInput` | `NN%` / `NN°` fields (angle disables itself for radial). |
+| `GradientPickerAddStop` / `…RemoveStop` / `…Reverse` / `…Rotate` | Pre-wired action buttons with icons and disabled logic. |
+| `GradientPickerPreview` | Element whose background renders the gradient (`track` prop for the flat strip). |
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import { GradientPickerRoot, GradientPickerSlider, GradientPickerAngleInput } from '@vuelor/gradient'
+const value = ref('linear-gradient(90deg, #FF98C2FF 0%, #FFFA7AFF 100%)')
+</script>
+
+<template>
+  <GradientPickerRoot v-model="value" v-slot="{ gradient, commitValue }">
+    <GradientPickerAngleInput />
+    <div class="pt-4"><GradientPickerSlider /></div>
+    <!-- Edit the selected stop with a nested color picker: -->
+    <ColorPickerRoot v-model="gradient.selectedColor.value" @value-commit="commitValue()">
+      …
+    </ColorPickerRoot>
+  </GradientPickerRoot>
+</template>
+```
+
+The default slot exposes `gradient` (the full `useGradient()` engine: `stops`, `selectedStop`,
+`selectedColor`, `css`, `addStop()`, `removeStop()`, `reverse()`, `rotate()`, `setFromCSS()`, …) and
+`commitValue` — call it after mutating the engine from custom UI so `valueCommit` fires. The core is
+also usable without components: `parseGradient`, `serializeGradient`, `isGradient`, `useGradient`
+are plain exports.
+
 ## Reading state in a custom child part
 
 A custom part rendered inside the root can read live color state and the `ui` slot helpers from
-context — this is how the gradient editor's percentage input works:
+context (the gradient root has the equivalent `injectGradientPickerContext`):
 
 ```ts
 import { injectColorPickerContext } from '@vuelor/picker'

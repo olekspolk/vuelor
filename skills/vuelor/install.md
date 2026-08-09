@@ -36,7 +36,7 @@ npx shadcn-vue@latest add https://vuelor.dev/r/color-picker.json
 Each `add`:
 
 - copies the example SFC (and any bundled helper such as `ColorPickerSelect.vue`) into the components directory, rewriting `@/registry/...` imports to the project's alias;
-- installs npm dependencies (`@vuelor/picker`, `reka-ui`, plus `@vueuse/core` for the gradient editor);
+- installs npm dependencies (`@vuelor/picker`, `reka-ui`; gradient items add `@vuelor/gradient`, and `color-picker-gradient` also `@vueuse/core`);
 - adds the `vuelor-*` design tokens via the `@vuelor/color-picker-theme` dependency.
 
 > Note: `registryDependencies` inside Vuelor items are namespace-prefixed (`@vuelor/color-picker-theme`).
