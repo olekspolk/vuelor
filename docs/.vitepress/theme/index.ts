@@ -1,19 +1,23 @@
 import { h } from 'vue'
-import DefaultTheme from 'vitepress/theme'
-import HeroColorPicker from '../../components/HeroColorPicker.vue'
+// -without-fonts: we ship Montserrat + Figtree instead of the default Inter.
+import DefaultTheme from 'vitepress/theme-without-fonts'
+import '@fontsource-variable/montserrat'
+import '@fontsource-variable/figtree'
+
+import VuelorHome from '../../components/home/VuelorHome.vue'
 import ColorPickerShowcase from '../../components/Showcase.vue'
 import ComponentDemo from '../../components/ComponentDemo.vue'
 import InstallTerminal from '../../components/InstallTerminal.vue'
 import GitHubStarButton from '../../components/GitHubStarButton.vue'
 
-import './style.css'
 import './vars.css'
+import './style.css'
 
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
+    app.component('VuelorHome', VuelorHome)
     app.component('ComponentDemo', ComponentDemo)
-    app.component('HeroColorPicker', HeroColorPicker)
     app.component('ColorPickerShowcase', ColorPickerShowcase)
     app.component('InstallTerminal', InstallTerminal)
 
@@ -27,7 +31,6 @@ export default {
   },
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'home-hero-image': () => h(HeroColorPicker),
       'nav-bar-content-after': () => h(GitHubStarButton)
     })
   }
