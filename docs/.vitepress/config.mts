@@ -24,6 +24,8 @@ export default defineConfig({
     ['meta', { name: 'twitter:image', content: 'https://vuelor.dev/og.jpg' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
+  // The site's design system is dark-only.
+  appearance: 'force-dark',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [

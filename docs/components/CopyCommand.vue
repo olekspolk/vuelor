@@ -24,20 +24,17 @@ const copy = async () => {
     :title="command"
     :aria-label="`Copy command: ${command}`"
     @click="copy"
-    class="group flex w-full items-center gap-2.5 bg-[var(--vp-c-bg-soft)] px-3.5 py-2.5 text-left transition-colors hover:bg-[var(--vp-c-bg-mute)]"
+    class="vuelor-cmd group flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left transition-colors hover:bg-white/[0.04]"
   >
-    <span aria-hidden="true" class="select-none font-mono text-xs text-[var(--vp-c-brand-1)]">$</span>
-    <code class="min-w-0 flex-1 truncate font-mono text-xs text-[var(--vp-c-text-2)]">{{ command }}</code>
+    <span aria-hidden="true" class="select-none font-mono text-xs text-ember">$</span>
+    <code class="min-w-0 flex-1 truncate font-mono text-xs text-bone/90">{{ command }}</code>
     <span
-      class="flex shrink-0 items-center gap-1.5 text-xs font-medium transition-colors"
-      :class="copied ? 'text-emerald-500' : 'text-[var(--vp-c-text-3)] group-hover:text-[var(--vp-c-text-1)]'"
+      aria-live="polite"
+      class="flex shrink-0 items-center gap-1.5 font-display text-[0.65rem] font-bold tracking-[0.2em] uppercase transition-colors"
+      :class="copied ? 'text-ember' : 'text-ash group-hover:text-bone'"
     >
-      <svg v-if="copied" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg v-if="copied" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M20 6 9 17l-5-5" />
-      </svg>
-      <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="9" width="13" height="13" rx="2" />
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
       </svg>
       {{ copied ? 'Copied' : 'Copy' }}
     </span>

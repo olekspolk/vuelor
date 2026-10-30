@@ -29,22 +29,26 @@ const copyToClipboard = async () => {
 </script>
 
 <template>
-  <div class="my-4 overflow-hidden rounded-lg border border-[var(--vp-c-divider)] bg-[var(--vp-c-bg)]">
+  <div class="my-5 overflow-hidden rounded-2xl border border-line bg-ink-raised/40">
 
-    <div v-if="installCommand" class="border-b border-[var(--vp-c-divider)]">
+    <div v-if="installCommand" class="border-b border-line">
       <CopyCommand :command="installCommand" />
     </div>
 
-    <div data-vuelor-docs class="flex items-center justify-center border-b border-[var(--vp-c-divider)] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#374151_1px,transparent_1px)] p-10">
+    <div data-vuelor-docs class="vuelor-demo-stage flex items-center justify-center border-b border-line p-10">
       <slot name="demo"></slot>
     </div>
 
-    <div class="relative bg-[var(--vp-c-bg-alt)] text-sm">
-      <div class="flex items-center justify-between border-b border-[var(--vp-c-divider)] bg-[var(--vp-c-bg-soft)] px-4 py-2">
-        <span class="text-xs font-semibold text-[var(--vp-c-text-2)]">{{ props.path }}</span>
-        <button @click="copyToClipboard" class="flex items-center justify-center rounded p-1 text-[var(--vp-c-text-2)] hover:bg-[var(--vp-c-gray-dimm)]">
-           <span v-if="!copied">Copy</span>
-           <span v-else class="text-emerald-500">Copied!</span>
+    <div class="relative bg-[var(--vp-code-block-bg)] text-sm">
+      <div class="flex items-center justify-between border-b border-line bg-ink-raised/70 px-4 py-2">
+        <span class="font-mono text-xs text-ash">{{ props.path }}</span>
+        <button
+          @click="copyToClipboard"
+          class="flex items-center justify-center rounded p-1 font-display text-[0.65rem] font-bold tracking-[0.2em] uppercase transition-colors"
+          :class="copied ? 'text-ember' : 'text-ash hover:text-bone'"
+        >
+          <span v-if="!copied">Copy</span>
+          <span v-else>Copied</span>
         </button>
       </div>
 

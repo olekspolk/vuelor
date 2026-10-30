@@ -1,3 +1,112 @@
+/**
+ * Vuelor docs theme.
+ *
+ * Palette:  ink #1a1a1a · ink-raised #212124 · ember #ee3c4b · bone #f3efec
+ *           ash #8f8c96 · line #2f2f2f
+ * Type:     Montserrat (display) · Figtree (body)
+ * The site is dark-only (appearance: force-dark), so every token lives on :root.
+ */
+
 :root {
-  --vp-home-hero-image-filter: blur(80px);
+  /* -- Palette ------------------------------------------------------------ */
+  --vuelor-ink: #1a1a1a;
+  --vuelor-ink-raised: #212124;
+  --vuelor-night: #0b0519;
+  --vuelor-abyss: #05030b;
+  --vuelor-ember: #ee3c4b;
+  --vuelor-ember-bright: #ff4a59;
+  --vuelor-ember-deep: #8b1e2c;
+  --vuelor-bone: #f3efec;
+  --vuelor-ash: #8f8c96;
+  --vuelor-line: #2f2f2f;
+
+  --vuelor-ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* -- Typography ---------------------------------------------------------- */
+  --vuelor-font-display: 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-base: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* -- Brand --------------------------------------------------------------- */
+  --vp-c-brand-1: var(--vuelor-ember);
+  --vp-c-brand-2: var(--vuelor-ember-bright);
+  --vp-c-brand-3: var(--vuelor-ember);
+  --vp-c-brand-soft: rgba(238, 60, 75, 0.16);
+
+  /* -- Backgrounds --------------------------------------------------------- */
+  --vp-c-bg: var(--vuelor-ink);
+  --vp-c-bg-alt: #161617;
+  --vp-c-bg-soft: var(--vuelor-ink-raised);
+  --vp-c-bg-elv: var(--vuelor-ink-raised);
+
+  /* -- Borders ------------------------------------------------------------- */
+  --vp-c-border: var(--vuelor-line);
+  --vp-c-divider: var(--vuelor-line);
+  --vp-c-gutter: var(--vuelor-line);
+
+  /* -- Text ---------------------------------------------------------------- */
+  --vp-c-text-1: var(--vuelor-bone);
+  --vp-c-text-2: var(--vuelor-ash);
+  --vp-c-text-3: #767380;
+
+  /* -- Nav ------------------------------------------------------------------ */
+  --vp-nav-bg-color: rgba(26, 26, 26, 0.7);
+  --vp-nav-logo-height: 26px;
+  --vp-sidebar-bg-color: var(--vp-c-bg-alt);
+
+  /* -- Buttons (VPButton: used on docs pages' prev/next etc.) -------------- */
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--vuelor-bone);
+  --vp-button-brand-bg: var(--vuelor-ember);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--vuelor-bone);
+  --vp-button-brand-hover-bg: var(--vuelor-ember-bright);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: var(--vuelor-bone);
+  --vp-button-brand-active-bg: var(--vuelor-ember-deep);
+
+  --vp-button-alt-border: rgba(255, 255, 255, 0.15);
+  --vp-button-alt-text: var(--vuelor-bone);
+  --vp-button-alt-bg: transparent;
+  --vp-button-alt-hover-border: var(--vuelor-ember);
+  --vp-button-alt-hover-text: var(--vuelor-bone);
+  --vp-button-alt-hover-bg: transparent;
+  --vp-button-alt-active-border: var(--vuelor-ember);
+  --vp-button-alt-active-text: var(--vuelor-bone);
+  --vp-button-alt-active-bg: rgba(238, 60, 75, 0.15);
+
+  /* -- Code ----------------------------------------------------------------- */
+  --vp-code-block-bg: #141415;
+  --vp-code-copy-code-bg: var(--vuelor-ink-raised);
+  --vp-code-copy-code-hover-bg: #2a2a2e;
+  --vp-code-copy-code-border-color: var(--vuelor-line);
+  --vp-code-copy-code-hover-border-color: var(--vuelor-ember);
+  --vp-code-tab-divider: var(--vuelor-line);
+  --vp-code-tab-active-bar-color: var(--vuelor-ember);
+  --vp-code-color: var(--vuelor-ember-bright);
+  --vp-code-bg: rgba(238, 60, 75, 0.12);
+
+  /* -- Custom blocks (::: tip / info / warning / danger) -------------------- */
+  --vp-custom-block-tip-border: rgba(238, 60, 75, 0.45);
+  --vp-custom-block-tip-text: var(--vuelor-bone);
+  --vp-custom-block-tip-bg: rgba(238, 60, 75, 0.08);
+  --vp-custom-block-tip-code-bg: rgba(238, 60, 75, 0.14);
+
+  --vp-custom-block-info-border: var(--vuelor-line);
+  --vp-custom-block-info-text: var(--vuelor-bone);
+  --vp-custom-block-info-bg: var(--vuelor-ink-raised);
+  --vp-custom-block-info-code-bg: #2a2a2e;
+
+  --vp-custom-block-warning-border: rgba(227, 179, 65, 0.45);
+  --vp-custom-block-warning-text: var(--vuelor-bone);
+  --vp-custom-block-warning-bg: rgba(227, 179, 65, 0.08);
+
+  --vp-custom-block-danger-border: var(--vuelor-ember);
+  --vp-custom-block-danger-text: var(--vuelor-bone);
+  --vp-custom-block-danger-bg: rgba(139, 30, 44, 0.25);
+
+  /* -- Misc ------------------------------------------------------------------ */
+  --vp-c-gray-1: #3a3a3e;
+  --vp-c-gray-2: #2f2f33;
+  --vp-c-gray-3: #26262a;
+  --vp-c-gray-soft: rgba(255, 255, 255, 0.08);
 }

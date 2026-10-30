@@ -35,21 +35,21 @@ const examples = [
 </script>
 
 <template>
-  <div class="grid gap-3 sm:grid-cols-1 md:grid-cols-2">
+  <div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 md:gap-5">
     <div
       v-for="ex in examples"
       :key="ex.command"
-      class="flex flex-col overflow-hidden rounded-xl border border-[var(--vp-c-divider)] bg-[var(--vp-c-bg)]"
+      class="flex flex-col overflow-hidden rounded-2xl border border-line bg-ink-raised/70"
     >
       <div
         data-vuelor-docs
-        class="flex flex-1 items-center justify-center bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] px-3 py-12 dark:bg-[radial-gradient(#374151_1px,transparent_1px)]"
+        class="vuelor-demo-stage flex flex-1 items-center justify-center px-3 py-12"
       >
         <component :is="ex.component" v-if="ex.bound" v-model="color" format="object" />
         <component :is="ex.component" v-else />
       </div>
 
-      <div class="border-t border-[var(--vp-c-divider)]">
+      <div class="border-t border-line">
         <CopyCommand :command="ex.command" />
       </div>
     </div>

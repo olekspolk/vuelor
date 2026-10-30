@@ -91,10 +91,10 @@ onUnmounted(() => {
 .vuelor-term {
   max-width: 640px;
   margin: 0 auto;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  background: #0d1117;
-  border: 1px solid #30363d;
+  background: #141415;
+  border: 1px solid var(--vuelor-line);
   box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.45);
   font-family: var(--vp-font-family-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
   text-align: left;
@@ -105,8 +105,8 @@ onUnmounted(() => {
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
+  background: rgb(33 33 36 / 0.7);
+  border-bottom: 1px solid var(--vuelor-line);
 }
 .vuelor-term__dot {
   width: 12px;
@@ -120,7 +120,7 @@ onUnmounted(() => {
 .vuelor-term__title {
   margin-left: 8px;
   font-size: 12px;
-  color: #768390;
+  color: var(--vuelor-ash);
 }
 
 .vuelor-term__body {
@@ -128,17 +128,17 @@ onUnmounted(() => {
   min-height: 210px;
   font-size: 13.5px;
   line-height: 1.85;
-  color: #adbac7;
+  color: var(--vuelor-ash);
 }
-.vuelor-term__cmd { color: #e6edf3; white-space: pre-wrap; word-break: break-all; }
-.vuelor-term__prompt { color: #2f81f7; margin-right: 8px; font-weight: 600; }
+.vuelor-term__cmd { color: var(--vuelor-bone); white-space: pre-wrap; word-break: break-all; }
+.vuelor-term__prompt { color: var(--vuelor-ember); margin-right: 8px; font-weight: 600; }
 .vuelor-term__caret {
   display: inline-block;
   width: 8px;
   height: 1.05em;
   margin-left: 2px;
   vertical-align: text-bottom;
-  background: #e6edf3;
+  background: var(--vuelor-bone);
   animation: vuelor-blink 1s steps(1) infinite;
 }
 @keyframes vuelor-blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
@@ -146,13 +146,13 @@ onUnmounted(() => {
 .vuelor-term__row { animation: vuelor-rise 0.28s ease both; }
 @keyframes vuelor-rise { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 .vuelor-term__out { display: flex; align-items: baseline; gap: 8px; }
-.vuelor-term__check { color: #3fb950; }
-.vuelor-term__note { color: #636e7b; }
-.vuelor-term__file { color: #768390; padding-left: 22px; }
+.vuelor-term__check { color: var(--vuelor-ember); }
+.vuelor-term__note { color: #767380; }
+.vuelor-term__file { color: #767380; padding-left: 22px; }
 
 .vuelor-term__done {
   margin-top: 10px;
-  color: #3fb950;
+  color: var(--vuelor-bone);
   animation: vuelor-rise 0.28s ease both;
 }
 

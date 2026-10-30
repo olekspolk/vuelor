@@ -72,14 +72,16 @@ onMounted(async () => {
   border: 1px solid var(--vp-c-border);
   border-radius: 16px;
   overflow: hidden;
-  font-size: 13px;
-  font-weight: 600;
+  font-family: var(--vuelor-font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--vp-c-text-1);
   background-color: var(--vp-c-bg-soft);
   text-decoration: none;
   transition: border-color 0.25s, background-color 0.25s;
-  /* space from the appearance toggle that precedes it in the nav */
-  margin-left: 12px;
+  margin-left: 16px;
 }
 .gh-star:hover {
   border-color: var(--vp-c-brand-1);
@@ -106,7 +108,7 @@ onMounted(async () => {
   border-color: var(--vp-c-brand-1);
 }
 .gh-star__icon {
-  color: #e3b341;
+  color: var(--vuelor-ember);
   flex-shrink: 0;
 }
 .gh-star__num {
