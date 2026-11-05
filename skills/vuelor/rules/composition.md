@@ -85,8 +85,11 @@ const forwarded = useForwardPropsEmits(props, emits)
 ## Composing the gradient editor (`@vuelor/gradient`)
 
 The gradient package follows the same pattern with its own root. `v-model` on `GradientPickerRoot`
-is a CSS gradient string (`linear-gradient(<angle>deg, …)`, `radial-gradient(circle at center, …)`,
-`conic-gradient(from <angle>deg, …)` with `#hex [position%]` stops).
+is a CSS gradient string. It emits `linear-gradient(<angle>deg, …)`, `radial-gradient(circle at center, …)`
+or `conic-gradient(from <angle>deg, …)` with `#RRGGBBAA N%` stops, and also reads `to <side>`/`to <corner>`,
+omitted directions, `turn`/`rad`/`grad` angles and `rgb()`/`rgba()`/`hsl()`/`hsla()`/named stop colors
+(`@vuelor/gradient` 0.3.0+). Gate a gradient mode on `canParseGradient(value)`, not `isGradient(value)`:
+the latter is only a prefix check.
 
 | Component | Purpose |
 | --------- | ------- |
@@ -118,8 +121,8 @@ const value = ref('linear-gradient(90deg, #FF98C2FF 0%, #FFFA7AFF 100%)')
 The default slot exposes `gradient` (the full `useGradient()` engine: `stops`, `selectedStop`,
 `selectedColor`, `css`, `addStop()`, `removeStop()`, `reverse()`, `rotate()`, `setFromCSS()`, …) and
 `commitValue` — call it after mutating the engine from custom UI so `valueCommit` fires. The core is
-also usable without components: `parseGradient`, `serializeGradient`, `isGradient`, `useGradient`
-are plain exports.
+also usable without components: `parseGradient`, `serializeGradient`, `isGradient`, `canParseGradient`,
+`normalizeColor`, `useGradient` are plain exports.
 
 ## Reading state in a custom child part
 

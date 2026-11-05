@@ -228,12 +228,14 @@ The framework-agnostic layer under the composable — importable without touchin
 
 | Function                                | Description                                                                          |
 | --------------------------------------- | ------------------------------------------------------------------------------------ |
-| `parseGradient(input)`                  | Parses a supported gradient string into `{ type, angle?, stops }`, or `null`.        |
-| `serializeGradient(gradient)`           | Emits exactly the grammar `parseGradient` accepts, so values round-trip.             |
+| `parseGradient(input)`                  | Parses a supported gradient string into a canonical `{ type, angle?, stops }` (`#RRGGBBAA` stops, angle 0–359), or `null`. Accepts angle units, `to <side>`/`to <corner>` and omitted directions. |
+| `serializeGradient(gradient)`           | Emits the canonical form (`deg` angles, `#RRGGBBAA` stops); parse → serialize → parse is stable. |
 | `parseGradientStops(list)`              | Parses a stop list with CSS position-defaulting rules; all-or-nothing, `null` on any bad segment. |
 | `serializeGradientStops(stops)`         | `'#RRGGBBAA 0%, #RRGGBBAA 100%'`                                                     |
 | `stopsToTrackCSS(stops, direction?)`    | Flat strip (`linear-gradient(to right, …)`) for tracks and previews.                 |
-| `isGradient(input)`                     | Loose shape check for dispatching a color-or-gradient model; `parseGradient` stays the authority. |
+| `isGradient(input)`                     | Cheap prefix check for dispatching a color-or-gradient model; does not guarantee `parseGradient` succeeds. |
+| `canParseGradient(input)`               | `parseGradient(input) !== null` — check this before switching an editor into gradient mode. |
+| `normalizeColor(raw)`                   | Canonicalizes a stop color (`#hex`, `rgb()`/`rgba()`, `hsl()`/`hsla()`, `transparent`, basic named colors) to `#RRGGBBAA`, or `null`. |
 | `normalizeHexa(raw)`                    | Canonicalizes 3/4/6/8-digit hex (optional `#`, whitespace-tolerant) to `#RRGGBBAA`, or `null`. Shares the picker's `parseHex` grammar. |
 | `normalizeAngle(raw)`                   | Wraps any number or numeric string into 0–359, rounded.                              |
 | `mixHexa(a, b, t?)`                     | Linear RGBA mix of two hexa colors (`t` defaults to 0.5).                            |
