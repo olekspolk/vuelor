@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## @vuelor/gradient 0.3.0
 
 ✨ New
 - `@vuelor/gradient` 0.3.0 — `parseGradient` reads the gradients other tools write, not only the ones it emits. Additive: everything that parsed before parses to the same result, and the output stays canonical (`#RRGGBBAA` stops, a `deg` angle in 0–359), so `serializeGradient` normalizes the new forms instead of reproducing them, and parse → serialize → parse is stable
