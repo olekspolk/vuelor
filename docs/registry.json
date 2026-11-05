@@ -332,7 +332,7 @@
       "description": "Multi-stop gradient editor (linear / radial / conic) built on @vuelor/gradient and @vuelor/picker.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/gradient@^0.2.0",
+        "@vuelor/gradient@^0.3.0",
         "@vuelor/picker@^1.2.0",
         "@vueuse/core",
         "reka-ui"
@@ -367,7 +367,7 @@
       "description": "Standalone gradient editor built from @vuelor/gradient primitives, with a nested color picker editing the selected stop.",
       "author": "Vuelor <https://vuelor.dev>",
       "dependencies": [
-        "@vuelor/gradient@^0.2.0",
+        "@vuelor/gradient@^0.3.0",
         "@vuelor/picker@^1.2.0"
       ],
       "registryDependencies": [
