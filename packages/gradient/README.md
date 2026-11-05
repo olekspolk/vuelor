@@ -59,13 +59,13 @@ const value = ref('linear-gradient(90deg, #FF98C2FF 0%, #FFFA7AFF 100%)')
 </template>
 ```
 
-`v-model` is a CSS gradient string. Supported grammar (what the serializer emits, so values round-trip):
+`v-model` is a CSS gradient string. The editor emits one canonical form per type:
 
 - `linear-gradient(<angle>deg, <stops>)`
 - `radial-gradient(circle at center, <stops>)`
 - `conic-gradient(from <angle>deg, <stops>)`
 
-with stops as `#hex [position%]` (3/4/6/8-digit hex, missing positions interpolated like CSS).
+with stops as `#RRGGBBAA <position>%`. It reads more than it emits: linear directions as `deg`/`turn`/`rad`/`grad` angles, `to <side>`/`to <corner>` (corners map to fixed 45° diagonals) or omitted (`180deg`); conic `from` with the same units, or omitted (`0deg`); and stop colors as `#hex`, `rgb()`/`rgba()` and `hsl()`/`hsla()` in comma or space syntax, `transparent` or the basic named colors. Missing positions are interpolated like CSS. Anything else parses to `null` and leaves the editor untouched, so `isGradient()` (a prefix check) is not enough before switching into gradient mode: use `canParseGradient()`.
 
 ## Use the parts without components
 

@@ -19,17 +19,22 @@ Copy a complete, editable editor straight into your project with the shadcn-vue 
 
 ## The model
 
-`v-model` on `GradientPickerRoot` is a **CSS gradient string**. The supported grammar is exactly what the serializer emits, so values always round-trip:
+`v-model` on `GradientPickerRoot` is a **CSS gradient string**. The editor emits one canonical form per type:
 
-| Type   | Grammar                                        | Example                                          |
+| Type   | Emitted form                                   | Example                                          |
 | ------ | ---------------------------------------------- | ------------------------------------------------ |
 | Linear | `linear-gradient(<angle>deg, <stops>)`         | `linear-gradient(90deg, #FF0000FF 0%, #0000FFFF 100%)` |
 | Radial | `radial-gradient(circle at center, <stops>)`   | `radial-gradient(circle at center, #FF0000FF 0%, #0000FFFF 100%)` |
 | Conic  | `conic-gradient(from <angle>deg, <stops>)`     | `conic-gradient(from 45deg, #FF0000FF 0%, #0000FFFF 100%)` |
 
-Stops are `#hex [position%]` segments: 3/4/6/8-digit hex in any case, decimal positions rounded to integers, and omitted positions interpolated with CSS defaulting rules (first stop at 0%, last at 100%, gaps spread evenly). Parsing is all-or-nothing — one bad segment rejects the whole value, warns in dev, and leaves the editor state untouched, so a bad write can never silently drop stops.
+It reads more than it emits:
 
-Values are **canonicalized on write**: bind `#f00`-style shorthands and the emitted model comes back as `#FF0000FF 0%` form one tick later, matching `ColorPickerRoot`'s behavior.
+- **Directions** — the linear direction can be any angle (`deg`, `turn`, `rad`, `grad`), `to <side>` or `to <corner>` in either word order, or omitted (`180deg`, like CSS). Corners map to fixed 45° diagonals (`to top right` → `45deg`); CSS aims them at the box's real corner, so that is an approximation. A conic `from` takes the same angle units and defaults to `0deg`. Conic `at <position>` and radial shapes other than `circle at center` are not supported.
+- **Stops** — `<color> [position%]` segments. Colors are 3/4/6/8-digit `#hex`, `rgb()`/`rgba()` and `hsl()`/`hsla()` in comma or space syntax (`rgb(11 3 0 / 30%)`, with 0–255 or percentage channels and a 0–1 or percentage alpha), `transparent`, and the 16 basic named colors. Decimal positions are rounded to integers, and omitted positions are interpolated with CSS defaulting rules (first stop at 0%, last at 100%, gaps spread evenly). A position in any unit other than `%` is rejected.
+
+Parsing is all-or-nothing — one bad segment rejects the whole value, warns in dev, and leaves the editor state untouched without emitting, so a bad write can never silently drop stops or overwrite the stored value.
+
+Values are **canonicalized on write**: bind `#f00`-style shorthands, `rgba()` stops or a `to top` direction and the emitted model comes back as `#FF0000FF 0%` stops with a `deg` angle one tick later, matching `ColorPickerRoot`'s behavior. The value the editor is mounted with is not re-emitted: it is normalized on the first edit.
 
 ## Compose an editor
 
@@ -115,7 +120,7 @@ gradient.reverse()        // mirrors positions, colors stay attached
 gradient.css.value        // 'linear-gradient(45deg, ...)'
 ```
 
-`isGradient(value)` is the dispatch helper for models that can hold either a plain color or a gradient — exactly how the [ColorPicker Ultra](/examples/color-picker-ultra) example switches between its solid and gradient tabs.
+`isGradient(value)` is a cheap prefix check for models that can hold either a plain color or a gradient. It does not promise that `parseGradient` succeeds, so use `canParseGradient(value)` before switching an editor into gradient mode — the [ColorPicker Ultra](/examples/color-picker-ultra) example parses before switching between its solid and gradient tabs.
 
 See the [API Reference](/gradient/api-reference) for the full component, composable and core-function surface.
 
