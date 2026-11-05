@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+✨ New
+- `@vuelor/gradient` 0.3.0 — `parseGradient` reads the gradients other tools write, not only the ones it emits. Additive: everything that parsed before parses to the same result, and the output stays canonical (`#RRGGBBAA` stops, a `deg` angle in 0–359), so `serializeGradient` normalizes the new forms instead of reproducing them, and parse → serialize → parse is stable
+  - Stop colors: `rgb()`/`rgba()` and `hsl()`/`hsla()` in the comma or the space syntax with an optional `/ alpha` (`rgba(0,0,0,0.245)`, `rgb(11 3 0 / 30%)`), with 0–255 or percentage channels, a 0–1 or percentage alpha, and `rgb()` taking 4 arguments like `rgba()`; plus `transparent` and the 16 basic named colors. Alpha rounds halves up, so `0.30` is `4D`, not `4C`
+  - Linear directions: `to top`/`right`/`bottom`/`left`, the four corners in either word order (mapped to fixed 45/135/225/315° diagonals — CSS aims them at the box's real corner, so this is an approximation), an omitted direction (`180deg`, as in CSS), and `turn`/`rad`/`grad` angles
+  - Conic: `from` takes the same angle units (`from 0.25turn` → `90deg`) and can be omitted (`0deg`); `at <position>` is still unsupported
+  - A color the parser does not know, a position in a unit other than `%`, or an empty stop list (`linear-gradient(180deg, )`) still returns `null` for the whole value, so a stop is never silently dropped
+- `canParseGradient(value)` — `parseGradient(value) !== null`, for consumers that must know before switching into gradient mode; `isGradient` stays a cheap prefix check and is now documented as not guaranteeing a parse
+- `normalizeColor(raw)` — canonicalizes any accepted stop color to `#RRGGBBAA`, or `null`
+
+🧹 Housekeeping
+- Tests pin that `GradientPickerRoot` neither falls back to the default gradient nor emits when its `modelValue` cannot be parsed, at mount or on a later write, so opening the editor on an unsupported value can never overwrite it; and that a model in the new syntax is not rewritten until the first edit
+
 ## 1.2.0
 
 ✨ New
