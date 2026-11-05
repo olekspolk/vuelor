@@ -65,7 +65,7 @@ function warnUnsupported (prop: 'modelValue' | 'defaultValue', value: string): v
   if (process.env.NODE_ENV !== 'production') {
     console.warn(
       `[GradientPickerRoot] Unsupported ${prop} "${value}". Accepted: linear/radial/conic ` +
-      'gradients with #hex stops, e.g. "linear-gradient(90deg, #FF0000FF 0%, #0000FFFF 100%)".'
+      'gradients with #hex, rgb() or hsl() stops, e.g. "linear-gradient(90deg, #FF0000FF 0%, #0000FFFF 100%)".'
     )
   }
 }

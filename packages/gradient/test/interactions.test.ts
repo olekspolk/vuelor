@@ -66,10 +66,47 @@ describe('GradientPickerRoot', () => {
   it('warns and keeps state for an unsupported model write', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const wrapper = mountEditor()
-    await wrapper.setProps({ modelValue: 'linear-gradient(to right, #f00, #00f)' })
+    await wrapper.setProps({ modelValue: 'linear-gradient(180deg, )' })
+    await nextTick()
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('Unsupported modelValue'))
     expect(wrapper.findAll('[aria-label^="Gradient stop"]')).toHaveLength(4)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('valueCommit')).toBeUndefined()
     warn.mockRestore()
+  })
+
+  // Falling back to the defaults and emitting them would overwrite the
+  // parent's stored value as soon as the editor opens.
+  it('never replaces an unparseable model it was mounted with', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const wrapper = mountEditor({ modelValue: 'linear-gradient(180deg, )' })
+    await nextTick()
+    await nextTick()
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('Unsupported modelValue'))
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    expect(wrapper.emitted('valueCommit')).toBeUndefined()
+
+    await wrapper.setProps({ modelValue: 'radial-gradient(ellipse at top, #f00, #00f)' })
+    await nextTick()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+
+    // A user edit is the first thing allowed to write the model.
+    await wrapper.get('[aria-label="Add gradient stop"]').trigger('click')
+    expect(wrapper.emitted('update:modelValue')).toHaveLength(1)
+    expect(wrapper.emitted('valueCommit')).toHaveLength(1)
+    warn.mockRestore()
+  })
+
+  it('loads an rgba / to-side model without rewriting it until the first edit', async () => {
+    const wrapper = mountEditor({
+      modelValue: 'linear-gradient(to top, rgba(11,3,0,0.30) 0%, rgba(11,3,0,0.18) 45%, rgba(11,3,0,0) 100%)'
+    })
+    await nextTick()
+    expect(wrapper.findAll('[aria-label^="Gradient stop"]')).toHaveLength(3)
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+
+    await wrapper.get('[aria-label="Rotate gradient 90 degrees"]').trigger('click')
+    expect(lastModel(wrapper)).toBe('linear-gradient(90deg, #0B03004D 0%, #0B03002E 45%, #0B030000 100%)')
   })
 
   it('warns about an unparseable defaultValue', () => {
